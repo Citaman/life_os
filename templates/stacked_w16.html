@@ -1,0 +1,366 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+
+{% block title %}W16 — Tâches par pilier{% endblock %}
+
+{% block extra_css %}
+.chart-wrap {
+  position: relative;
+  height: 340px;
+}
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.pilier-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--badge-accent);
+}
+.pilier-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--badge-accent);
+}
+.pilier-badge-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.pilier-badge-count {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--badge-accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.pilier-badge-label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.grand-total {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.grand-total strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.insight-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+.insight-card {
+  background: #F9FAFB;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+}
+.insight-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.insight-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.insight-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+@media (max-width: 640px) {
+  .insight-row { grid-template-columns: 1fr; }
+  .badges-row { gap: 8px; }
+}
+{% endblock %}
+
+{% block content %}
+{# ── Hardcoded W16 stacked data (spec V2.0) ────────────────────────── #}
+{# Pilier order: Intérieur, Famille, Pro & Fi, Création, Spirituel     #}
+{# Days: L M M J V S D                                                   #}
+{%- set w16 = {
+  "labels": ["L", "M", "M", "J", "V", "S", "D"],
+  "piliers": [
+    { "name": "Intérieur", "slug": "interieur",
+      "data": [2, 1, 2, 1, 2, 1, 1] },
+    { "name": "Famille",   "slug": "famille",
+      "data": [1, 1, 2, 1, 1, 3, 2] },
+    { "name": "Pro & Fi",  "slug": "pro_fi",
+      "data": [1, 2, 1, 2, 2, 0, 0] },
+    { "name": "Création",  "slug": "creation",
+      "data": [2, 1, 2, 1, 2, 2, 1] },
+    { "name": "Spirituel", "slug": "spirituel",
+      "data": [1, 2, 1, 1, 1, 2, 2] }
+  ]
+} -%}
+
+{# ── Section header ───────────────────────────────────────────────────── #}
+{{ m.section_header(
+    eyebrow="PLANNING W16",
+    title="Tâches complétées par pilier",
+    subtitle="Semaine du 13 au 19 avril 2026 · répartition quotidienne"
+) }}
+
+{# ── Chart card ───────────────────────────────────────────────────────── #}
+<div class="card">
+  <div class="chart-wrap">
+    <canvas id="stackedChart"></canvas>
+  </div>
+
+  {# Custom legend #}
+  <div class="legend-row">
+    {% for p in w16.piliers %}
+    <div class="legend-item">
+      <span class="legend-dot" style="background: {{ snap.piliers[p.slug].accent }};"></span>
+      {{ p.name }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{# ── Pilier badges + totals ────────────────────────────────────────────── #}
+<div class="badges-row">
+  {% for p in w16.piliers %}
+  {%- set total = p.data | sum -%}
+  <div class="pilier-badge" style="--badge-accent: {{ snap.piliers[p.slug].accent }};">
+    <div>
+      <div class="pilier-badge-count">{{ total }}</div>
+      <div class="pilier-badge-label">tâches</div>
+    </div>
+    <div>
+      <div class="pilier-badge-name">{{ p.name }}</div>
+      <div style="display:flex; gap:2px; margin-top:6px;">
+        {% for v in p.data %}
+        <div style="width:14px; height:{{ [v * 5, 2]|max }}px; background:{{ snap.piliers[p.slug].accent }}; border-radius:2px; opacity: {{ 0.4 + v * 0.15 }};"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{# Grand total #}
+<div class="grand-total">
+  <strong>50</strong> tâches complétées en W16 · sur 7 jours
+</div>
+
+{# ── Insight row ──────────────────────────────────────────────────────── #}
+<div class="insight-row" style="margin-top:24px;">
+  <div class="insight-card">
+    <div class="insight-label">Journée la plus chargée</div>
+    <div class="insight-value">Mercredi &amp; Samedi</div>
+    <div class="insight-sub">8 tâches chacun</div>
+  </div>
+  <div class="insight-card">
+    <div class="insight-label">Journée la plus légère</div>
+    <div class="insight-value">Jeudi &amp; Dimanche</div>
+    <div class="insight-sub">6 tâches chacun</div>
+  </div>
+  <div class="insight-card">
+    <div class="insight-label">Week-end actif</div>
+    <div class="insight-value">S&thinsp;=&thinsp;8 · D&thinsp;=&thinsp;6</div>
+    <div class="insight-sub">14 tâches hors semaine</div>
+  </div>
+</div>
+
+{# ── Chart.js ─────────────────────────────────────────────────────────── #}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  /* ── Palette from snap ──────────────────────────────────────── */
+  var accents = {
+    interieur: "{{ snap.piliers.interieur.accent }}",
+    famille:   "{{ snap.piliers.famille.accent }}",
+    pro_fi:    "{{ snap.piliers.pro_fi.accent }}",
+    creation:  "{{ snap.piliers.creation.accent }}",
+    spirituel: "{{ snap.piliers.spirituel.accent }}"
+  };
+  var tints = {
+    interieur: "{{ snap.piliers.interieur.tint_light }}",
+    famille:   "{{ snap.piliers.famille.tint_light }}",
+    pro_fi:    "{{ snap.piliers.pro_fi.tint_light }}",
+    creation:  "{{ snap.piliers.creation.tint_light }}",
+    spirituel: "{{ snap.piliers.spirituel.tint_light }}"
+  };
+
+  /* ── W16 data (matches Jinja vars above) ────────────────────── */
+  var labels = ["L", "M", "M", "J", "V", "S", "D"];
+  var series = [
+    { slug: "interieur", label: "Intérieur",  data: [2, 1, 2, 1, 2, 1, 1] },
+    { slug: "famille",   label: "Famille",    data: [1, 1, 2, 1, 1, 3, 2] },
+    { slug: "pro_fi",    label: "Pro & Fi",   data: [1, 2, 1, 2, 2, 0, 0] },
+    { slug: "creation",  label: "Création",   data: [2, 1, 2, 1, 2, 2, 1] },
+    { slug: "spirituel", label: "Spirituel",  data: [1, 2, 1, 1, 1, 2, 2] }
+  ];
+
+  /* ── Rounded-top border radius plugin ───────────────────────── */
+  /* Only the topmost non-zero segment gets rounded corners        */
+  var roundedTopPlugin = {
+    id: "roundedTop",
+    afterDatasetsDraw: function () { /* no-op, handled via borderRadius */ }
+  };
+
+  /* Build datasets — rounded corners only on top segment each bar */
+  var datasets = series.map(function (s, idx) {
+    var isTop = (idx === series.length - 1); /* spirituel = topmost layer */
+    return {
+      label:           s.label,
+      data:            s.data,
+      backgroundColor: accents[s.slug],
+      borderColor:     accents[s.slug],
+      borderWidth:     0,
+      borderRadius:    isTop ? 6 : 0,
+      borderSkipped:   false,
+      hoverBackgroundColor: accents[s.slug],
+      categoryPercentage: 0.72,
+      barPercentage:      0.88
+    };
+  });
+
+  /* ── Render ──────────────────────────────────────────────────── */
+  var ctx = document.getElementById("stackedChart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: { labels: labels, datasets: datasets },
+    options: {
+      responsive:          true,
+      maintainAspectRatio: false,
+      animation: { duration: 600, easing: "easeOutQuart" },
+      plugins: {
+        legend: { display: false }, /* custom HTML legend */
+        tooltip: {
+          mode:      "index",
+          intersect: false,
+          backgroundColor: "#FFFFFF",
+          borderColor:     "#E5E7EB",
+          borderWidth:     1,
+          titleColor:      "#1A1A1A",
+          bodyColor:       "#6B7280",
+          titleFont:       { family: "Inter", weight: "700", size: 13 },
+          bodyFont:        { family: "Inter", size: 12 },
+          padding:         12,
+          callbacks: {
+            title: function (items) {
+              var dayMap = { L: "Lundi", M: "Mardi / Mercredi", J: "Jeudi", V: "Vendredi", S: "Samedi", D: "Dimanche" };
+              return dayMap[items[0].label] || items[0].label;
+            },
+            label: function (item) {
+              if (item.raw === 0) return null;
+              return "  " + item.dataset.label + " : " + item.raw;
+            },
+            footer: function (items) {
+              var total = items.reduce(function (s, i) { return s + i.raw; }, 0);
+              return "Total : " + total + " tâches";
+            },
+            afterFooter: function () { return ""; }
+          }
+        },
+        /* Inline data labels using the chartjs-plugin-datalabels is not
+           bundled in 4.4.1 UMD; we draw them manually via afterDraw */
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false },
+          border: { display: false },
+          ticks: {
+            font:  { family: "Inter", size: 12, weight: "600" },
+            color: "#6B7280"
+          }
+        },
+        y: {
+          stacked: true,
+          min:    0,
+          max:    10,
+          border: { display: false },
+          grid: {
+            color:     "#F3F4F6",
+            lineWidth: 1
+          },
+          ticks: {
+            stepSize: 2,
+            font:     { family: "Inter", size: 11 },
+            color:    "#9CA3AF"
+          }
+        }
+      }
+    },
+    plugins: [
+      /* Draw count labels inside each bar segment if value > 0 */
+      {
+        id: "segmentLabels",
+        afterDatasetsDraw: function (chart) {
+          var ctx = chart.ctx;
+          chart.data.datasets.forEach(function (dataset, i) {
+            var meta = chart.getDatasetMeta(i);
+            if (meta.hidden) return;
+            meta.data.forEach(function (bar, j) {
+              var val = dataset.data[j];
+              if (!val || val === 0) return;
+              var props = bar.getProps(["x", "y", "width", "height"], true);
+              if (props.height < 14) return; /* skip tiny segments */
+              ctx.save();
+              ctx.textAlign    = "center";
+              ctx.textBaseline = "middle";
+              ctx.font         = "600 11px Inter, system-ui, sans-serif";
+              ctx.fillStyle    = "rgba(255,255,255,0.92)";
+              ctx.fillText(val, props.x, props.y + props.height / 2);
+              ctx.restore();
+            });
+          });
+        }
+      }
+    ]
+  });
+})();
+</script>
+{% endblock %}

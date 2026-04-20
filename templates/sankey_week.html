@@ -1,0 +1,345 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Life OS — Flux Sankey Semaine{% endblock %}
+
+{% block extra_css %}
+.sankey-wrap {
+  min-width: 800px;
+  overflow-x: auto;
+}
+.sankey-inner {
+  position: relative;
+  width: 100%;
+}
+#sankey-svg {
+  display: block;
+  width: 100%;
+  height: 520px;
+}
+.sankey-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  align-items: center;
+}
+.sankey-legend-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+.stats-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: #F9FAFB;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.stat-total {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.stat-total span {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-right: 4px;
+}
+.pilier-badge-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.sankey-card-header {
+  margin-bottom: 18px;
+}
+.sankey-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.sankey-card-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+{% endblock %}
+
+{% block content %}
+{{ m.section_header(
+    eyebrow="FLUX DE TEMPS",
+    title="Flux Sankey — Semaine W" ~ snap.current_week,
+    subtitle="168 h totales · où part réellement le temps"
+) }}
+
+<div class="card">
+  <div class="sankey-card-header">
+    <div class="sankey-card-title">Sankey · Week 168h — Piliers — Activités</div>
+    <div class="sankey-card-sub">Flux d'allocation du temps · Visualisation relationnelle</div>
+  </div>
+
+  <div class="sankey-wrap">
+    <div class="sankey-inner">
+      <svg id="sankey-svg"></svg>
+    </div>
+  </div>
+
+  <div class="sankey-legend" id="sankey-legend"></div>
+
+  <div class="stats-row">
+    <div class="stat-total"><span>{{ snap.time_week.total }}h</span> cette semaine</div>
+    <div class="pilier-badge-row" id="top-badges"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script>
+(function () {
+  /* ── raw data from Jinja ── */
+  const timeWeek = {{ snap.time_week | tojson }};
+
+  /* ── colour map: cat → accent colour ── */
+  const CAT_COLORS = {
+    "Sommeil":      "#60A5FA",
+    "AVIV Travail": "#374151",
+    "Admin / autre":"#9CA3AF",
+    "Famille":      "{{ snap.piliers.famille.accent }}",
+    "Spirituel":    "{{ snap.piliers.spirituel.accent }}",
+    "Intérieur":    "{{ snap.piliers.interieur.accent }}",
+    "Création":     "{{ snap.piliers.creation.accent }}",
+  };
+  const CAT_LIGHT = {
+    "Sommeil":      "#DBEAFE",
+    "AVIV Travail": "#D1D5DB",
+    "Admin / autre":"#F3F4F6",
+    "Famille":      "#F2D0D0",
+    "Spirituel":    "#ECD9A8",
+    "Intérieur":    "#D4E5DB",
+    "Création":     "#DDCEE7",
+  };
+
+  /* ── build nodes + links ── */
+  function buildGraph(buckets) {
+    const nodes = [];
+    const links = [];
+    const idxOf = {};
+
+    function addNode(name, cat) {
+      if (idxOf[name] === undefined) {
+        idxOf[name] = nodes.length;
+        nodes.push({ name, cat: cat || name });
+      }
+      return idxOf[name];
+    }
+
+    const rootIdx = addNode("Semaine 168 h", "__root__");
+
+    for (const b of buckets) {
+      const catIdx = addNode(b.cat, b.cat);
+      links.push({ source: rootIdx, target: catIdx, value: b.hours });
+
+      if (b.subs && b.subs.length > 0) {
+        for (const s of b.subs) {
+          /* de-dupe sub names that could clash across buckets */
+          const subKey = b.cat + "||" + s.name;
+          const subIdx = addNode(subKey, b.cat);
+          nodes[subIdx]._displayName = s.name;
+          links.push({ source: catIdx, target: subIdx, value: s.hours });
+        }
+      }
+    }
+
+    return { nodes, links };
+  }
+
+  /* ── colour resolver ── */
+  function nodeColor(d) {
+    if (d.cat === "__root__") return "#1A1A1A";
+    return CAT_COLORS[d.cat] || "#9CA3AF";
+  }
+
+  /* ── render ── */
+  function renderSankey() {
+    const container = document.getElementById("sankey-svg");
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const W = Math.max(rect.width || 0, 800);
+    const H = 520;
+
+    if (W < 100) {
+      setTimeout(renderSankey, 100);
+      return;
+    }
+
+    const margin = { top: 14, right: 180, bottom: 14, left: 14 };
+    const innerW = W - margin.left - margin.right;
+    const innerH = H - margin.top - margin.bottom;
+
+    const svg = d3.select("#sankey-svg")
+      .attr("width", W)
+      .attr("height", H)
+      .attr("viewBox", `0 0 ${W} ${H}`);
+
+    svg.selectAll("*").remove();
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const { nodes: rawNodes, links: rawLinks } = buildGraph(timeWeek.buckets);
+
+    const sankey = d3.sankey()
+      .nodeId(d => d.index)
+      .nodeWidth(18)
+      .nodePadding(12)
+      .extent([[0, 0], [innerW, innerH]]);
+
+    const graph = sankey({
+      nodes: rawNodes.map((d, i) => ({ ...d, index: i })),
+      links: rawLinks.map(l => ({ ...l })),
+    });
+
+    /* ── links ── */
+    const linkG = g.append("g").attr("fill", "none");
+
+    linkG.selectAll("path")
+      .data(graph.links)
+      .join("path")
+      .attr("d", d3.sankeyLinkHorizontal())
+      .attr("stroke", d => {
+        const cat = graph.nodes[d.target.index]
+          ? graph.nodes[d.target.index].cat
+          : "__root__";
+        return CAT_COLORS[cat] || "#9CA3AF";
+      })
+      .attr("stroke-width", d => Math.max(1, d.width))
+      .attr("stroke-opacity", 0.28)
+      .on("mouseover", function () {
+        d3.select(this).attr("stroke-opacity", 0.55);
+      })
+      .on("mouseout", function () {
+        d3.select(this).attr("stroke-opacity", 0.28);
+      })
+      .append("title")
+      .text(d => {
+        const src = d.source._displayName || d.source.name;
+        const tgt = d.target._displayName || d.target.name;
+        return `${src} → ${tgt}\n${d.value} h`;
+      });
+
+    /* ── nodes ── */
+    const nodeG = g.append("g");
+
+    nodeG.selectAll("rect")
+      .data(graph.nodes)
+      .join("rect")
+      .attr("x", d => d.x0)
+      .attr("y", d => d.y0)
+      .attr("width", d => d.x1 - d.x0)
+      .attr("height", d => Math.max(1, d.y1 - d.y0))
+      .attr("fill", d => nodeColor(d))
+      .attr("rx", 3)
+      .attr("ry", 3)
+      .append("title")
+      .text(d => {
+        const label = d._displayName || d.name;
+        return `${label}\n${d.value} h`;
+      });
+
+    /* ── labels ── */
+    nodeG.selectAll("text")
+      .data(graph.nodes)
+      .join("text")
+      .attr("x", d => d.x1 < innerW / 2 ? d.x1 + 8 : d.x0 - 8)
+      .attr("y", d => (d.y0 + d.y1) / 2)
+      .attr("dy", "0.35em")
+      .attr("text-anchor", d => d.x1 < innerW / 2 ? "start" : "end")
+      .attr("font-family", "Inter, system-ui, sans-serif")
+      .attr("font-size", 11)
+      .attr("font-weight", 600)
+      .attr("fill", "#1A1A1A")
+      .text(d => {
+        const label = d._displayName || d.name;
+        return `${label} ${d.value}h`;
+      });
+
+    /* ── legend ── */
+    const legendEl = document.getElementById("sankey-legend");
+    if (legendEl) {
+      legendEl.innerHTML = "";
+      const span0 = document.createElement("span");
+      span0.className = "sankey-legend-label";
+      span0.textContent = "Piliers :";
+      legendEl.appendChild(span0);
+
+      const cats = timeWeek.buckets.map(b => b.cat);
+      for (const cat of cats) {
+        const item = document.createElement("span");
+        item.className = "legend-item";
+        const dot = document.createElement("span");
+        dot.className = "legend-dot";
+        dot.style.background = CAT_COLORS[cat] || "#9CA3AF";
+        item.appendChild(dot);
+        item.appendChild(document.createTextNode(cat));
+        legendEl.appendChild(item);
+      }
+    }
+
+    /* ── top badges ── */
+    const badgesEl = document.getElementById("top-badges");
+    if (badgesEl) {
+      badgesEl.innerHTML = "";
+      const sorted = [...timeWeek.buckets].sort((a, b) => b.hours - a.hours).slice(0, 3);
+      for (const b of sorted) {
+        const pill = document.createElement("span");
+        pill.className = "pilier-pill";
+        pill.style.background = CAT_LIGHT[b.cat] || "#F3F4F6";
+        pill.style.color = CAT_COLORS[b.cat] || "#6B7280";
+        pill.textContent = `${b.cat} · ${b.hours}h`;
+        badgesEl.appendChild(pill);
+      }
+    }
+  }
+
+  window.addEventListener("load", function () {
+    const container = document.getElementById("sankey-svg");
+    if (!container) return;
+    const w = container.getBoundingClientRect().width;
+    if (w > 100) {
+      renderSankey();
+    } else {
+      setTimeout(renderSankey, 100);
+    }
+  });
+})();
+</script>
+{% endblock %}

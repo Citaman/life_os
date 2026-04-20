@@ -1,0 +1,356 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Progression T2 2026 — Évolution habit completion{% endblock %}
+
+{% block extra_css %}
+.chart-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+.chart-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.chart-eyebrow svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--muted);
+  stroke-width: 2;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-name {
+  color: var(--muted);
+  margin-right: 2px;
+}
+.legend-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+@media (max-width: 768px) {
+  .insights-grid { grid-template-columns: 1fr; }
+}
+
+.insight-card {
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  border-left: 3px solid var(--insight-color, var(--border));
+}
+.insight-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.insight-value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--insight-color, var(--text));
+  margin-bottom: 4px;
+}
+.insight-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.insight-alert .insight-value {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+{% endblock %}
+
+{% block content %}
+{# ── Raw data ─────────────────────────────────────────────── #}
+{% set hw     = snap.historic_weekly_12w %}
+{% set weeks  = hw.weeks %}
+{% set series = hw.series %}
+{% set n      = weeks | length %}
+
+{# Pilier definitions in display order #}
+{% set piliers_def = [
+  {"name": "Intérieur",       "slug": "interieur",  "accent": snap.piliers.interieur.accent},
+  {"name": "Famille",         "slug": "famille",    "accent": snap.piliers.famille.accent},
+  {"name": "Pro & Financier", "slug": "pro_fi",     "accent": snap.piliers.pro_fi.accent},
+  {"name": "Création",        "slug": "creation",   "accent": snap.piliers.creation.accent},
+  {"name": "Spirituel",       "slug": "spirituel",  "accent": snap.piliers.spirituel.accent}
+] %}
+
+{# ── Compute insights (Jinja2-safe, no negative index) ───── #}
+{# We build derived data: last_val and first_val per pilier    #}
+{# using the `last` and `first` filters                        #}
+
+{% set ns = namespace(
+  best_name="",
+  best_val=0,
+  best_accent="#6B7280",
+  prog_name="",
+  prog_delta=0,
+  prog_accent="#6B7280",
+  prog_first=0,
+  prog_last=0,
+  alert_parts=[]
+) %}
+
+{% for p in piliers_def %}
+  {% if p.name in series %}
+    {% set vals      = series[p.name] %}
+    {% set last_val  = vals | last %}
+    {% set first_val = vals | first %}
+
+    {# Meilleur W16 #}
+    {% if last_val > ns.best_val %}
+      {% set ns.best_val    = last_val %}
+      {% set ns.best_name   = p.name %}
+      {% set ns.best_accent = p.accent %}
+    {% endif %}
+
+    {# Plus forte progression #}
+    {% set delta = last_val - first_val %}
+    {% if delta > ns.prog_delta %}
+      {% set ns.prog_delta  = delta %}
+      {% set ns.prog_name   = p.name %}
+      {% set ns.prog_accent = p.accent %}
+      {% set ns.prog_first  = first_val %}
+      {% set ns.prog_last   = last_val %}
+    {% endif %}
+
+    {# Alerte: drop >= 5 pts from W15 (index -2) to W16 (last) #}
+    {# Use slice to get second-to-last value safely              #}
+    {% set penultimate = vals | list %}
+    {% if penultimate | length >= 2 %}
+      {% set prev_val = penultimate[penultimate | length - 2] %}
+      {% if prev_val - last_val >= 5 %}
+        {% set part = p.name ~ ": " ~ prev_val ~ "% → " ~ last_val ~ "% (" ~ (last_val - prev_val) ~ " pts)" %}
+        {% set ns.alert_parts = ns.alert_parts + [part] %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{# ── Section header ───────────────────────────────────────── #}
+{{ m.section_header(
+  eyebrow="PROGRESSION T2 2026",
+  title="Évolution habit completion",
+  subtitle="W05 → W16 · 5 piliers · 12 semaines"
+) }}
+
+{# ── Chart card ───────────────────────────────────────────── #}
+<div class="card">
+
+  <div class="chart-eyebrow">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2 18 9 11 14 16 22 7"/>
+      <polyline points="17 7 22 7 22 12"/>
+    </svg>
+    Evolution hebdomadaire W05-W16 · 5 piliers
+  </div>
+
+  <div class="chart-canvas-wrapper">
+    <canvas id="areaT2Chart"></canvas>
+  </div>
+
+  {# ── Legend ──────────────────────────────────────────────── #}
+  <div class="legend-row">
+    {% for p in piliers_def %}
+    {% if p.name in series %}
+    <div class="legend-item">
+      <div class="legend-dot" style="background: {{ p.accent }};"></div>
+      <span class="legend-name">{{ p.name }}</span>
+      <span class="legend-value" style="color: {{ p.accent }};">{{ series[p.name] | last }}%</span>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+</div>
+
+{# ── Insights ─────────────────────────────────────────────── #}
+<div class="insights-grid">
+
+  <div class="insight-card" style="--insight-color: {{ ns.best_accent }};">
+    <div class="insight-label">Meilleur pilier W16</div>
+    <div class="insight-value">{{ ns.best_val }}%</div>
+    <div class="insight-desc">{{ ns.best_name }} — score le plus élevé en semaine courante</div>
+  </div>
+
+  <div class="insight-card" style="--insight-color: {{ ns.prog_accent }};">
+    <div class="insight-label">Plus forte progression T2</div>
+    <div class="insight-value">+{{ ns.prog_delta }} pts</div>
+    <div class="insight-desc">{{ ns.prog_name }} — de {{ ns.prog_first }}% (W05) à {{ ns.prog_last }}% (W16)</div>
+  </div>
+
+  {% if ns.alert_parts %}
+  <div class="insight-card insight-alert" style="--insight-color: #B91C1C;">
+    <div class="insight-label">Alerte chute W15 → W16</div>
+    <div class="insight-value">
+      {% for part in ns.alert_parts %}{{ part }}{% if not loop.last %}<br>{% endif %}{% endfor %}
+    </div>
+    <div class="insight-desc">Chute de 5 pts ou plus sur une semaine — vigilance requise</div>
+  </div>
+  {% else %}
+  <div class="insight-card" style="--insight-color: #047857;">
+    <div class="insight-label">Stabilite W15 → W16</div>
+    <div class="insight-value">Aucune alerte</div>
+    <div class="insight-desc">Aucun pilier n'a chuté de 5 pts ou plus entre W15 et W16</div>
+  </div>
+  {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Chart === 'undefined') return;
+
+  var ctx = document.getElementById('areaT2Chart').getContext('2d');
+
+  var weeks     = {{ snap.historic_weekly_12w.weeks | tojson }};
+  var rawSeries = {{ snap.historic_weekly_12w.series | tojson }};
+
+  var pilierOrder = [
+    { name: "Int\u00e9rieur",       accent: "{{ snap.piliers.interieur.accent }}" },
+    { name: "Famille",              accent: "{{ snap.piliers.famille.accent }}" },
+    { name: "Pro \u0026 Financier", accent: "{{ snap.piliers.pro_fi.accent }}" },
+    { name: "Cr\u00e9ation",        accent: "{{ snap.piliers.creation.accent }}" },
+    { name: "Spirituel",            accent: "{{ snap.piliers.spirituel.accent }}" }
+  ];
+
+  function hexToRgba(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16);
+    var g = parseInt(hex.slice(3, 5), 16);
+    var b = parseInt(hex.slice(5, 7), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+
+  var datasets = pilierOrder
+    .filter(function (p) { return rawSeries[p.name] !== undefined; })
+    .map(function (p) {
+      return {
+        label:              p.name,
+        data:               rawSeries[p.name],
+        borderColor:        p.accent,
+        backgroundColor:    hexToRgba(p.accent, 0.12),
+        fill:               'origin',
+        tension:            0.3,
+        pointRadius:        3,
+        pointHoverRadius:   5,
+        pointBackgroundColor: p.accent,
+        pointBorderColor:   '#ffffff',
+        pointBorderWidth:   1.5,
+        borderWidth:        2
+      };
+    });
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels:   weeks,
+      datasets: datasets
+    },
+    options: {
+      responsive:          true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode:      'index',
+        intersect: false
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#ffffff',
+          borderColor:     '#E5E7EB',
+          borderWidth:     1,
+          titleColor:      '#1A1A1A',
+          bodyColor:       '#6B7280',
+          titleFont: { family: 'Inter', size: 12, weight: '600' },
+          bodyFont:  { family: 'Inter', size: 12 },
+          padding:   10,
+          boxPadding: 4,
+          callbacks: {
+            label: function (ctx) {
+              return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + '%';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            color:       '#F3F4F6',
+            drawBorder:  false
+          },
+          ticks: {
+            font:  { family: 'Inter', size: 11 },
+            color: '#6B7280'
+          },
+          border: { display: false }
+        },
+        y: {
+          min: 20,
+          max: 100,
+          grid: {
+            color:      '#F3F4F6',
+            drawBorder: false
+          },
+          ticks: {
+            stepSize: 20,
+            font:     { family: 'Inter', size: 11 },
+            color:    '#6B7280',
+            callback: function (val) { return val + '%'; }
+          },
+          border: { display: false }
+        }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}
+

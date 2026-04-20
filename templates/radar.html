@@ -1,0 +1,503 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+
+{% block title %}Radar · Équilibre 5 piliers{% endblock %}
+
+{% block extra_css %}
+/* ── Radar page layout ── */
+.radar-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.radar-card {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 0;
+  align-items: start;
+  padding: 0;
+  overflow: hidden;
+}
+
+.radar-left {
+  padding: 32px 24px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+}
+
+.radar-right {
+  padding: 32px 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.radar-right-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* ── Legend key ── */
+.radar-poly-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.radar-poly-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.poly-line-sample {
+  width: 28px;
+  height: 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.poly-line-sample.actuel {
+  background: #6B3FA0;
+}
+
+.poly-line-sample.cible {
+  height: 0;
+  border-top: 2px dashed #9CA3AF;
+  background: none;
+}
+
+/* ── Balance table ── */
+.balance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.balance-table th {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+
+.balance-table th:first-child {
+  text-align: left;
+}
+
+.balance-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #F3F4F6;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.balance-table td:first-child {
+  text-align: left;
+}
+
+.balance-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.balance-table tbody tr:hover {
+  background: rgba(0,0,0,0.012);
+}
+
+.pilier-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.pilier-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.val-actuel {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.val-cible {
+  color: var(--muted);
+}
+
+.gap-zero {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.gap-alert-high {
+  color: #EF4444;
+  font-weight: 700;
+}
+
+.gap-alert-mid {
+  color: #D97706;
+  font-weight: 600;
+}
+
+/* ── Biggest gap callout ── */
+.gap-callout {
+  margin-top: 20px;
+  padding: 16px 18px;
+  background: #FAFAFA;
+  border-radius: 10px;
+  border-left: 3px solid var(--callout-accent, #6B3FA0);
+}
+
+.gap-callout-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.gap-callout-pilier {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--callout-accent, #6B3FA0);
+  margin-bottom: 4px;
+}
+
+.gap-callout-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── SVG chart label ── */
+.radar-svg-wrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+@media (max-width: 720px) {
+  .radar-card {
+    grid-template-columns: 1fr;
+  }
+  .radar-left {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 24px;
+  }
+  .radar-right {
+    padding: 24px;
+  }
+}
+{% endblock %}
+
+{% block content %}
+{# ── Data prep ── #}
+{%- set piliers_order = ['interieur', 'famille', 'pro_fi', 'creation', 'spirituel'] -%}
+{%- set piliers = snap.piliers -%}
+
+{#
+  Pure Jinja2 radar SVG math.
+  5-axis radar, axis 0 starts at top (-90°).
+  Angles in degrees: -90, -90+72, -90+144, -90+216, -90+288
+  = -90, -18, 54, 126, 198 (degrees)
+
+  We precompute the cos/sin using Taylor is too complex.
+  Instead we define exact values for each axis position.
+  angle_i = (i * 72 - 90) degrees converted to radians:
+    i=0: -90°  → cos=-0°= 0,     sin=-1   → (cx, cy - r)
+    i=1: -18°  → cos= 0.9511,    sin=-0.309
+    i=2:  54°  → cos= 0.5878,    sin= 0.809
+    i=3: 126°  → cos=-0.5878,    sin= 0.809
+    i=4: 198°  → cos=-0.9511,    sin=-0.309
+#}
+
+{%- set cx = 200 -%}
+{%- set cy = 200 -%}
+{%- set R = 150 -%}
+
+{# Precomputed unit vectors (cos, sin) for each axis, starting top, clockwise #}
+{%- set axes_cos = [0.0, 0.9511, 0.5878, -0.5878, -0.9511] -%}
+{%- set axes_sin = [-1.0, -0.3090, 0.8090, 0.8090, -0.3090] -%}
+
+{# Build actuel and cible values lists #}
+{%- set actuel_vals = [] -%}
+{%- set cible_vals = [] -%}
+{%- for slug in piliers_order -%}
+  {%- set _ = actuel_vals.append(piliers[slug].radar.actuel) -%}
+  {%- set _ = cible_vals.append(piliers[slug].radar.cible) -%}
+{%- endfor -%}
+
+{# Build polygon point strings #}
+{# Actuel polygon points #}
+{%- set actuel_pts = [] -%}
+{%- for i in range(5) -%}
+  {%- set r = actuel_vals[i] / 100 * R -%}
+  {%- set px = cx + r * axes_cos[i] -%}
+  {%- set py = cy + r * axes_sin[i] -%}
+  {%- set _ = actuel_pts.append(px|round(2)|string ~ ',' ~ py|round(2)|string) -%}
+{%- endfor -%}
+
+{# Cible polygon points #}
+{%- set cible_pts = [] -%}
+{%- for i in range(5) -%}
+  {%- set r = cible_vals[i] / 100 * R -%}
+  {%- set px = cx + r * axes_cos[i] -%}
+  {%- set py = cy + r * axes_sin[i] -%}
+  {%- set _ = cible_pts.append(px|round(2)|string ~ ',' ~ py|round(2)|string) -%}
+{%- endfor -%}
+
+{# Grid ring polygon points (per pct level) #}
+{%- set grid_levels = [20, 40, 60, 80, 100] -%}
+
+{# Label positions — slightly beyond R (at 118% of R) #}
+{%- set label_r_factor = 1.22 -%}
+
+{# Find pilier with biggest gap #}
+{%- set biggest_gap_slug = piliers_order[0] -%}
+{%- set biggest_gap_val = piliers[piliers_order[0]].radar.gap -%}
+{%- for slug in piliers_order -%}
+  {%- if piliers[slug].radar.gap > biggest_gap_val -%}
+    {%- set biggest_gap_slug = slug -%}
+    {%- set biggest_gap_val = piliers[slug].radar.gap -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="radar-page">
+
+  {{ m.section_header(
+    eyebrow="ÉQUILIBRE SYSTÉMIQUE",
+    title="Équilibre des 5 piliers",
+    subtitle="Progression actuelle vs objectif cible"
+  ) }}
+
+  <div class="card radar-card">
+
+    {# ── Left: SVG radar ── #}
+    <div class="radar-left">
+      <div class="radar-svg-wrap">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"
+             style="width:100%;height:auto;display:block;">
+
+          {# ── Defs: gradient fill for actuel polygon ── #}
+          <defs>
+            <radialGradient id="actuelGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#6B3FA0" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#6B3FA0" stop-opacity="0.08"/>
+            </radialGradient>
+          </defs>
+
+          {# ── Grid rings ── #}
+          {%- for pct in grid_levels -%}
+            {%- set grid_pts = [] -%}
+            {%- for i in range(5) -%}
+              {%- set r = pct / 100 * R -%}
+              {%- set px = cx + r * axes_cos[i] -%}
+              {%- set py = cy + r * axes_sin[i] -%}
+              {%- set _ = grid_pts.append(px|round(2)|string ~ ',' ~ py|round(2)|string) -%}
+            {%- endfor -%}
+            <polygon
+              points="{{ grid_pts|join(' ') }}"
+              fill="none"
+              stroke="#E5E7EB"
+              stroke-width="1"/>
+          {%- endfor -%}
+
+          {# ── Axis spokes ── #}
+          {%- for i in range(5) -%}
+            <line
+              x1="{{ cx }}" y1="{{ cy }}"
+              x2="{{ (cx + R * axes_cos[i])|round(2) }}" y2="{{ (cy + R * axes_sin[i])|round(2) }}"
+              stroke="#E5E7EB"
+              stroke-width="1"/>
+          {%- endfor -%}
+
+          {# ── Grid scale labels (on left spoke, axis 3 = negative cos side) ── #}
+          {%- for pct in [20, 40, 60, 80, 100] -%}
+            {%- set label_x = cx + 5 -%}
+            {%- set label_y = cy - (pct / 100 * R) -%}
+            <text
+              x="{{ label_x }}"
+              y="{{ label_y + 4 }}"
+              font-family="Inter, sans-serif"
+              font-size="9"
+              fill="#9CA3AF"
+              font-weight="500">{{ pct }}%</text>
+          {%- endfor -%}
+
+          {# ── Cible polygon (dashed outline, no fill) ── #}
+          <polygon
+            points="{{ cible_pts|join(' ') }}"
+            fill="none"
+            stroke="#9CA3AF"
+            stroke-width="1.5"
+            stroke-dasharray="4 3"
+            stroke-linejoin="round"/>
+
+          {# ── Actuel polygon (filled, violet aggregate) ── #}
+          <polygon
+            points="{{ actuel_pts|join(' ') }}"
+            fill="url(#actuelGrad)"
+            stroke="#6B3FA0"
+            stroke-width="2"
+            stroke-linejoin="round"/>
+
+          {# ── Dots on actuel vertices ── #}
+          {%- for i in range(5) -%}
+            {%- set slug = piliers_order[i] -%}
+            {%- set dot_r = actuel_vals[i] / 100 * R -%}
+            {%- set dot_x = cx + dot_r * axes_cos[i] -%}
+            {%- set dot_y = cy + dot_r * axes_sin[i] -%}
+            <circle
+              cx="{{ dot_x|round(2) }}"
+              cy="{{ dot_y|round(2) }}"
+              r="5"
+              fill="{{ piliers[slug].accent }}"
+              stroke="#FFFFFF"
+              stroke-width="2"/>
+          {%- endfor -%}
+
+          {# ── Center dot ── #}
+          <circle cx="{{ cx }}" cy="{{ cy }}" r="3" fill="#D1D5DB"/>
+
+          {# ── Axis labels ── #}
+          {%- for i in range(5) -%}
+            {%- set slug = piliers_order[i] -%}
+            {%- set lbl_x = cx + R * label_r_factor * axes_cos[i] -%}
+            {%- set lbl_y = cy + R * label_r_factor * axes_sin[i] -%}
+
+            {# Anchor: left-most axes → end, right-most → start, top/bottom → middle #}
+            {%- if axes_cos[i] > 0.3 -%}
+              {%- set anchor = "start" -%}
+            {%- elif axes_cos[i] < -0.3 -%}
+              {%- set anchor = "end" -%}
+            {%- else -%}
+              {%- set anchor = "middle" -%}
+            {%- endif -%}
+
+            {# Vertical baseline adjust #}
+            {%- if axes_sin[i] < -0.5 -%}
+              {%- set dy_adjust = -6 -%}
+            {%- elif axes_sin[i] > 0.5 -%}
+              {%- set dy_adjust = 14 -%}
+            {%- else -%}
+              {%- set dy_adjust = 4 -%}
+            {%- endif -%}
+
+            <text
+              x="{{ lbl_x|round(1) }}"
+              y="{{ (lbl_y + dy_adjust)|round(1) }}"
+              text-anchor="{{ anchor }}"
+              font-family="Inter, sans-serif"
+              font-size="11.5"
+              font-weight="700"
+              fill="{{ piliers[slug].accent }}"
+              letter-spacing="-0.01em">{{ piliers[slug].name }}</text>
+
+            {# Actuel value tag under label #}
+            <text
+              x="{{ lbl_x|round(1) }}"
+              y="{{ (lbl_y + dy_adjust + 14)|round(1) }}"
+              text-anchor="{{ anchor }}"
+              font-family="Inter, sans-serif"
+              font-size="10"
+              font-weight="500"
+              fill="#9CA3AF">{{ actuel_vals[i] }}%</text>
+          {%- endfor -%}
+
+        </svg>
+      </div>
+    </div>
+
+    {# ── Right: legend + table ── #}
+    <div class="radar-right">
+
+      <div class="radar-right-title">Carte d'équilibre</div>
+
+      {# Polygon legend #}
+      <div class="radar-poly-legend">
+        <div class="radar-poly-legend-item">
+          <div class="poly-line-sample actuel"></div>
+          <span>Actuel (agrégat Life OS)</span>
+        </div>
+        <div class="radar-poly-legend-item">
+          <div class="poly-line-sample cible"></div>
+          <span>Cible</span>
+        </div>
+      </div>
+
+      {# Balance table #}
+      <table class="balance-table">
+        <thead>
+          <tr>
+            <th>Pilier</th>
+            <th>Actuel</th>
+            <th>Cible</th>
+            <th>Gap</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for slug in piliers_order -%}
+            {%- set p = piliers[slug] -%}
+            {%- set gap = p.radar.gap -%}
+            <tr>
+              <td>
+                <div class="pilier-name-cell">
+                  <div class="pilier-dot" style="background: {{ p.accent }};"></div>
+                  <span style="color: {{ p.accent }}; font-weight: 600;">{{ p.name }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="val-actuel">{{ p.radar.actuel }}%</span>
+              </td>
+              <td>
+                <span class="val-cible">{{ p.radar.cible }}%</span>
+              </td>
+              <td>
+                {%- if gap <= 0 -%}
+                  <span class="gap-zero">+{{ gap }}</span>
+                {%- elif gap >= 20 -%}
+                  <span class="gap-alert-high">+{{ gap }}</span>
+                {%- else -%}
+                  <span class="gap-alert-mid">+{{ gap }}</span>
+                {%- endif -%}
+              </td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+
+      {# Biggest gap callout #}
+      {%- set focus = piliers[biggest_gap_slug] -%}
+      <div class="gap-callout" style="--callout-accent: {{ focus.accent }};">
+        <div class="gap-callout-label">Priorité d'équilibre</div>
+        <div class="gap-callout-pilier">{{ focus.name }} — écart +{{ biggest_gap_val }} pts</div>
+        <div class="gap-callout-desc">
+          Ce pilier présente l'écart cible le plus important.
+          Actuel&nbsp;: <strong>{{ focus.radar.actuel }}%</strong> · Objectif&nbsp;: <strong>{{ focus.radar.cible }}%</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
