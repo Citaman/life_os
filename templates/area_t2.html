@@ -178,7 +178,7 @@
 {{ m.section_header(
   eyebrow="PROGRESSION T2 2026",
   title="Évolution habit completion",
-  subtitle="W05 → W16 · 5 piliers · 12 semaines"
+  subtitle="W05 → W16 réel · W17 → W26 projection linéaire · 22 semaines"
 ) }}
 
 {# ── Chart card ───────────────────────────────────────────── #}
@@ -189,7 +189,7 @@
       <polyline points="2 18 9 11 14 16 22 7"/>
       <polyline points="17 7 22 7 22 12"/>
     </svg>
-    Evolution hebdomadaire W05-W16 · 5 piliers
+    Evolution hebdomadaire W05-W16 réel · W17-W26 projection · 5 piliers
   </div>
 
   <div class="chart-canvas-wrapper">
@@ -203,7 +203,8 @@
     <div class="legend-item">
       <div class="legend-dot" style="background: {{ p.accent }};"></div>
       <span class="legend-name">{{ p.name }}</span>
-      <span class="legend-value" style="color: {{ p.accent }};">{{ series[p.name] | last }}%</span>
+      <span class="legend-value" style="color: {{ p.accent }};">{{ series[p.name] | last }}% → {{ snap.piliers[p.slug].radar.cible }}%</span>
+      <span class="legend-name" style="font-size:10px;">(réel + proj.)</span>
     </div>
     {% endif %}
     {% endfor %}
@@ -251,8 +252,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var ctx = document.getElementById('areaT2Chart').getContext('2d');
 
-  var weeks     = {{ snap.historic_weekly_12w.weeks | tojson }};
+  {# Build extended labels: W05..W16 (real) + W17..W26 (projection) #}
+  {% set real_weeks = snap.historic_weekly_12w.weeks %}
+  {% set proj_weeks = ["W17","W18","W19","W20","W21","W22","W23","W24","W25","W26"] %}
+  {% set all_weeks  = real_weeks + proj_weeks %}
+
+  var allLabels = {{ all_weeks | tojson }};
   var rawSeries = {{ snap.historic_weekly_12w.series | tojson }};
+
+  {# Per-pilier cibles for projection endpoint #}
+  var cibles = {
+    "Int\u00e9rieur":       {{ snap.piliers.interieur.radar.cible }},
+    "Famille":              {{ snap.piliers.famille.radar.cible }},
+    "Pro \u0026 Financier": {{ snap.piliers.pro_fi.radar.cible }},
+    "Cr\u00e9ation":        {{ snap.piliers.creation.radar.cible }},
+    "Spirituel":            {{ snap.piliers.spirituel.radar.cible }}
+  };
 
   var pilierOrder = [
     { name: "Int\u00e9rieur",       accent: "{{ snap.piliers.interieur.accent }}" },
@@ -269,29 +284,82 @@ document.addEventListener('DOMContentLoaded', function () {
     return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
   }
 
-  var datasets = pilierOrder
+  // Build 10 linearly interpolated projection points from lastReal → cible
+  function buildProjection(lastReal, cible) {
+    var pts = [];
+    var steps = 10; // W17..W26
+    for (var i = 1; i <= steps; i++) {
+      pts.push(Math.round(lastReal + (cible - lastReal) * i / steps));
+    }
+    return pts;
+  }
+
+  var datasets = [];
+  var nulls12 = new Array(12).fill(null);
+  var nulls10 = new Array(10).fill(null);
+
+  pilierOrder
     .filter(function (p) { return rawSeries[p.name] !== undefined; })
-    .map(function (p) {
-      return {
-        label:              p.name,
-        data:               rawSeries[p.name],
-        borderColor:        p.accent,
-        backgroundColor:    hexToRgba(p.accent, 0.12),
-        fill:               'origin',
-        tension:            0.3,
-        pointRadius:        3,
-        pointHoverRadius:   5,
+    .forEach(function (p) {
+      var real = rawSeries[p.name]; // 12 points
+      var lastReal = real[real.length - 1];
+      var cible    = cibles[p.name];
+      var proj     = buildProjection(lastReal, cible); // 10 points
+
+      // Real dataset: 12 real points + 10 nulls (only draws W05-W16)
+      // Append anchor at W16 position for seamless join with projection
+      var realData = real.concat(nulls10);
+
+      // Projection dataset: 12 nulls + overlap anchor at W16 + 9 proj points
+      // We include W16 value as first point so the dashed line starts from W16
+      var projData = nulls12.concat([lastReal]).concat(proj.slice(1));
+      // Actually: 12 nulls + 10 proj values (W17..W26), but we want the line
+      // to visually start at W16. So use 11 nulls + lastReal at index 11 + proj 10
+      // That's 22 total: indices 0-10 = null, index 11 = lastReal, indices 12-21 = proj
+      projData = new Array(11).fill(null).concat([lastReal]).concat(proj);
+      // That's 11 + 1 + 10 = 22 points total — matches allLabels length
+
+      datasets.push({
+        label:               p.name,
+        data:                realData,
+        borderColor:         p.accent,
+        backgroundColor:     hexToRgba(p.accent, 0.12),
+        fill:                'origin',
+        tension:             0.3,
+        pointRadius:         3,
+        pointHoverRadius:    5,
         pointBackgroundColor: p.accent,
-        pointBorderColor:   '#ffffff',
-        pointBorderWidth:   1.5,
-        borderWidth:        2
-      };
+        pointBorderColor:    '#ffffff',
+        pointBorderWidth:    1.5,
+        borderWidth:         2,
+        spanGaps:            false
+      });
+
+      datasets.push({
+        label:               p.name + ' (proj.)',
+        data:                projData,
+        borderColor:         hexToRgba(p.accent, 0.6),
+        backgroundColor:     'transparent',
+        fill:                false,
+        tension:             0.3,
+        borderDash:          [5, 3],
+        borderWidth:         2,
+        pointRadius:         2,
+        pointHoverRadius:    4,
+        pointBackgroundColor: hexToRgba(p.accent, 0.6),
+        pointBorderColor:    '#ffffff',
+        pointBorderWidth:    1,
+        spanGaps:            false
+      });
     });
+
+  // W16 is at index 11 (0-based), used for vertical separator annotation
+  var w16Index = 11;
 
   new Chart(ctx, {
     type: 'line',
     data: {
-      labels:   weeks,
+      labels:   allLabels,
       datasets: datasets
     },
     options: {
@@ -313,9 +381,16 @@ document.addEventListener('DOMContentLoaded', function () {
           bodyFont:  { family: 'Inter', size: 12 },
           padding:   10,
           boxPadding: 4,
+          filter: function (item) {
+            // Hide projection duplicate entries in tooltip — show only real or proj, not both
+            return item.parsed.y !== null;
+          },
           callbacks: {
-            label: function (ctx) {
-              return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + '%';
+            label: function (item) {
+              var isProj = item.dataset.label.indexOf('(proj.)') !== -1;
+              var name   = item.dataset.label.replace(' (proj.)', '');
+              var suffix = isProj ? ' (proj.)' : '';
+              return ' ' + name + suffix + ': ' + item.parsed.y + '%';
             }
           }
         }
@@ -323,12 +398,24 @@ document.addEventListener('DOMContentLoaded', function () {
       scales: {
         x: {
           grid: {
-            color:       '#F3F4F6',
+            color:      function (ctx) {
+              // Highlight the W16 separator with a slightly stronger line
+              return ctx.index === w16Index ? '#9CA3AF' : '#F3F4F6';
+            },
+            lineWidth:   function (ctx) {
+              return ctx.index === w16Index ? 1.5 : 1;
+            },
             drawBorder:  false
           },
           ticks: {
             font:  { family: 'Inter', size: 11 },
-            color: '#6B7280'
+            color: function (ctx) {
+              return ctx.index === w16Index ? '#1A1A1A' : '#6B7280';
+            },
+            callback: function (val, index) {
+              var label = allLabels[index];
+              return label === 'W16' ? label + ' ▶' : label;
+            }
           },
           border: { display: false }
         },

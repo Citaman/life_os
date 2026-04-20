@@ -5,6 +5,15 @@
 
 {% block extra_css %}
 /* ── Heatmap-habits specific ──────────────────────────────── */
+
+/* ── Two-column layout: 55% heatmap / 45% tracker panel ──── */
+.heatmap-content {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  gap: 32px;
+  align-items: start;
+}
+
 .heatmap-wrap {
   display: flex;
   flex-direction: column;
@@ -50,10 +59,10 @@
   color: var(--pill-fg);
 }
 
-/* Grid: col-labels + 7 cells */
+/* Grid: col-labels + 7 cells — SPEC_V8 §8.3 → 32×32px */
 .hm-grid {
   display: grid;
-  grid-template-columns: 36px repeat(7, 28px);
+  grid-template-columns: 36px repeat(7, 32px);
   gap: 3px;
   align-items: center;
 }
@@ -77,19 +86,32 @@
   padding-right: 6px;
 }
 
+/* 32×32px cells + hover state */
 .hm-cell {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
+  transition: opacity 0.15s;
+}
+
+.hm-cell:hover {
+  opacity: 0.85;
+  cursor: default;
 }
 
 .hm-cell-avenir {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
   background: #F3F4F6;
   border: 1.5px dashed #D1D5DB;
   box-sizing: border-box;
+  transition: opacity 0.15s;
+}
+
+.hm-cell-avenir:hover {
+  opacity: 0.85;
+  cursor: default;
 }
 
 /* Separator between habits */
@@ -136,7 +158,7 @@
   flex-shrink: 0;
 }
 
-/* Score global */
+/* Score global (left panel) */
 .score-global {
   text-align: center;
   margin-top: 24px;
@@ -169,6 +191,120 @@
   margin-top: 4px;
 }
 
+/* ── Right panel: Semaine W16 — détail (V8 §4.6) ─────────── */
+.tracker-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: sticky;
+  top: 24px;
+}
+
+.tracker-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.tracker-habit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tracker-habit-row:last-of-type {
+  border-bottom: none;
+}
+
+.tracker-habit-name {
+  flex: 1 1 auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.tracker-days {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* Circles: 28px diameter */
+.tracker-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  transition: opacity 0.15s;
+}
+
+.tracker-circle:hover {
+  opacity: 0.85;
+  cursor: default;
+}
+
+.tracker-circle-done {
+  /* solid pilier accent */
+}
+
+.tracker-circle-miss {
+  background: transparent;
+  border: 1.5px dashed #D1D5DB;
+}
+
+.tracker-circle-future {
+  background: transparent;
+  border: 1.5px dashed #E5E7EB;
+}
+
+/* Bottom score block */
+.tracker-score-block {
+  margin-top: 20px;
+  padding: 18px 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.tracker-score-pct {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--tracker-accent);
+}
+
+.tracker-score-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ── Responsive: below 900px stack vertically ─────────────── */
+@media (max-width: 900px) {
+  .heatmap-content {
+    grid-template-columns: 1fr;
+  }
+  .tracker-panel {
+    position: static;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+}
+
 @media (max-width: 480px) {
   .hm-grid {
     grid-template-columns: 32px repeat(7, 24px);
@@ -176,6 +312,8 @@
   }
   .hm-cell, .hm-cell-avenir { width: 24px; height: 24px; }
   .hm-col-label { font-size: 9px; }
+  .tracker-circle { width: 22px; height: 22px; }
+  .tracker-days { gap: 3px; }
 }
 {% endblock %}
 
@@ -246,141 +384,176 @@
     {%- endif -%}
   {%- endmacro -%}
 
-  {%- macro get_pattern(band, habit_idx, week_idx) -%}
-    {# rotate by (habit_idx + week_idx) mod 3 to vary pattern per habit+week #}
-    {%- set rot = ((habit_idx + week_idx) % 3) -%}
-    {{- band_patterns[band][rot] | join(',') -}}
-  {%- endmacro -%}
-
   {# Day column labels (empty first cell for row-label column) #}
   {%- set day_labels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'] -%}
+  {%- set day_names  = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] -%}
   {%- set week_labels = ['W13', 'W14', 'W15', 'W16'] -%}
 
   {# ── Compute avg score across all habits ─────────────────────────────── #}
-  {%- set ns = namespace(score_sum=0) -%}
+  {%- set ns = namespace(score_sum=0, total_fait=0, total_cible=0) -%}
   {%- for h in pilier.habits_w16 -%}
-    {%- set ns.score_sum = ns.score_sum + h.score_pct -%}
+    {%- set ns.score_sum   = ns.score_sum   + h.score_pct -%}
+    {%- set ns.total_fait  = ns.total_fait  + h.fait -%}
+    {%- set ns.total_cible = ns.total_cible + h.cible -%}
   {%- endfor -%}
   {%- set avg_score = (ns.score_sum / pilier.habits_w16|length) | round(0) | int -%}
 
-  <div class="heatmap-wrap">
-    {% for habit in pilier.habits_w16 %}
-    {%- set h_idx = loop.index0 -%}
+  {# ── Two-column layout ──────────────────────────────────────────────── #}
+  <div class="heatmap-content">
 
-    {# Compute per-habit historic patterns for W13/W14/W15 #}
-    {%- set b13 = get_band(w13_pct) | trim -%}
-    {%- set b14 = get_band(w14_pct) | trim -%}
-    {%- set b15 = get_band(w15_pct) | trim -%}
+    {# ── LEFT: existing heatmap grid per habit ──────────────────────────── #}
+    <div class="heatmap-wrap">
+      {% for habit in pilier.habits_w16 %}
+      {%- set h_idx = loop.index0 -%}
 
-    {# Compute rotations: (h_idx + week_offset) % 3 #}
-    {%- set rot13 = (h_idx + 0) % 3 -%}
-    {%- set rot14 = (h_idx + 1) % 3 -%}
-    {%- set rot15 = (h_idx + 2) % 3 -%}
+      {# Compute per-habit historic patterns for W13/W14/W15 #}
+      {%- set b13 = get_band(w13_pct) | trim -%}
+      {%- set b14 = get_band(w14_pct) | trim -%}
+      {%- set b15 = get_band(w15_pct) | trim -%}
 
-    {%- set pat13 = band_patterns[b13][rot13] -%}
-    {%- set pat14 = band_patterns[b14][rot14] -%}
-    {%- set pat15 = band_patterns[b15][rot15] -%}
+      {# Compute rotations: (h_idx + week_offset) % 3 #}
+      {%- set rot13 = (h_idx + 0) % 3 -%}
+      {%- set rot14 = (h_idx + 1) % 3 -%}
+      {%- set rot15 = (h_idx + 2) % 3 -%}
 
-    {# Score pill color — green if >=80%, amber if >=60%, red otherwise #}
-    {%- if habit.score_pct >= 80 -%}
-      {%- set pill_bg = '#ECFDF5' -%}{%- set pill_fg = '#047857' -%}
-    {%- elif habit.score_pct >= 60 -%}
-      {%- set pill_bg = '#FEF3C7' -%}{%- set pill_fg = '#B45309' -%}
-    {%- else -%}
-      {%- set pill_bg = '#FEE2E2' -%}{%- set pill_fg = '#B91C1C' -%}
-    {%- endif -%}
+      {%- set pat13 = band_patterns[b13][rot13] -%}
+      {%- set pat14 = band_patterns[b14][rot14] -%}
+      {%- set pat15 = band_patterns[b15][rot15] -%}
 
-    <div class="habit-block">
-      {# ── Habit header #}
-      <div class="habit-header">
-        <span class="habit-name">{{ habit.name }}</span>
-        <span class="habit-cible">{{ habit.cible }}×/sem</span>
-        <span class="habit-score-pill" style="--pill-bg: {{ pill_bg }}; --pill-fg: {{ pill_fg }}; background: {{ pill_bg }}; color: {{ pill_fg }};">
-          {{ habit.fait }}/{{ habit.cible }} · {{ habit.score_pct }}%
-        </span>
+      {# Score pill color — green if >=80%, amber if >=60%, red otherwise #}
+      {%- if habit.score_pct >= 80 -%}
+        {%- set pill_bg = '#ECFDF5' -%}{%- set pill_fg = '#047857' -%}
+      {%- elif habit.score_pct >= 60 -%}
+        {%- set pill_bg = '#FEF3C7' -%}{%- set pill_fg = '#B45309' -%}
+      {%- else -%}
+        {%- set pill_bg = '#FEE2E2' -%}{%- set pill_fg = '#B91C1C' -%}
+      {%- endif -%}
+
+      <div class="habit-block">
+        {# ── Habit header #}
+        <div class="habit-header">
+          <span class="habit-name">{{ habit.name }}</span>
+          <span class="habit-cible">{{ habit.cible }}×/sem</span>
+          <span class="habit-score-pill" style="--pill-bg: {{ pill_bg }}; --pill-fg: {{ pill_fg }}; background: {{ pill_bg }}; color: {{ pill_fg }};">
+            {{ habit.fait }}/{{ habit.cible }} · {{ habit.score_pct }}%
+          </span>
+        </div>
+
+        {# ── Heatmap grid: header row then 4 data rows #}
+        <div class="hm-grid">
+          {# Column header row: empty corner + day labels #}
+          <div></div>
+          {% for lbl in day_labels %}
+          <div class="hm-col-label">{{ lbl }}</div>
+          {% endfor %}
+
+          {# ── W13 row #}
+          <div class="hm-row-label">W13</div>
+          {% for i in range(7) %}
+            {%- if pat13[i] == 1 -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W13 {{ day_names[i] }} — tenu"></div>
+            {%- else -%}
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W13 {{ day_names[i] }} — manqué"></div>
+            {%- endif -%}
+          {% endfor %}
+
+          {# ── W14 row #}
+          <div class="hm-row-label">W14</div>
+          {% for i in range(7) %}
+            {%- if pat14[i] == 1 -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W14 {{ day_names[i] }} — tenu"></div>
+            {%- else -%}
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W14 {{ day_names[i] }} — manqué"></div>
+            {%- endif -%}
+          {% endfor %}
+
+          {# ── W15 row #}
+          <div class="hm-row-label">W15</div>
+          {% for i in range(7) %}
+            {%- if pat15[i] == 1 -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W15 {{ day_names[i] }} — tenu"></div>
+            {%- else -%}
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W15 {{ day_names[i] }} — manqué"></div>
+            {%- endif -%}
+          {% endfor %}
+
+          {# ── W16 row (current — uses actual days[]) #}
+          <div class="hm-row-label">W16</div>
+          {% for i in range(7) %}
+            {%- if i > today_idx -%}
+          <div class="hm-cell-avenir" title="W16 {{ day_names[i] }} — à venir"></div>
+            {%- elif habit.days[i] -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W16 {{ day_names[i] }} — tenu"></div>
+            {%- else -%}
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W16 {{ day_names[i] }} — manqué"></div>
+            {%- endif -%}
+          {% endfor %}
+
+        </div>{# /.hm-grid #}
+      </div>{# /.habit-block #}
+      {% endfor %}
+
+      {# ── Legend ────────────────────────────────────────────────────────── #}
+      <div class="hm-legend">
+        <div class="hm-legend-item">
+          <div class="hm-legend-cell" style="background: {{ pilier.accent }};"></div>
+          Tenu
+        </div>
+        <div class="hm-legend-item">
+          <div class="hm-legend-cell" style="background: {{ pilier.tint_mid }};"></div>
+          Partiel
+        </div>
+        <div class="hm-legend-item">
+          <div class="hm-legend-cell" style="background: {{ pilier.tint_light }};"></div>
+          Manqué
+        </div>
+        <div class="hm-legend-item">
+          <div class="hm-legend-cell-avenir"></div>
+          A venir
+        </div>
       </div>
 
-      {# ── Heatmap grid: header row then 4 data rows #}
-      <div class="hm-grid">
-        {# Column header row: empty corner + day labels #}
-        <div></div>
-        {% for lbl in day_labels %}
-        <div class="hm-col-label">{{ lbl }}</div>
-        {% endfor %}
-
-        {# ── W13 row #}
-        <div class="hm-row-label">W13</div>
-        {% for i in range(7) %}
-          {%- if pat13[i] == 1 -%}
-        <div class="hm-cell" style="background: {{ pilier.accent }};"></div>
-          {%- else -%}
-        <div class="hm-cell" style="background: {{ pilier.tint_light }};"></div>
-          {%- endif -%}
-        {% endfor %}
-
-        {# ── W14 row #}
-        <div class="hm-row-label">W14</div>
-        {% for i in range(7) %}
-          {%- if pat14[i] == 1 -%}
-        <div class="hm-cell" style="background: {{ pilier.accent }};"></div>
-          {%- else -%}
-        <div class="hm-cell" style="background: {{ pilier.tint_light }};"></div>
-          {%- endif -%}
-        {% endfor %}
-
-        {# ── W15 row #}
-        <div class="hm-row-label">W15</div>
-        {% for i in range(7) %}
-          {%- if pat15[i] == 1 -%}
-        <div class="hm-cell" style="background: {{ pilier.accent }};"></div>
-          {%- else -%}
-        <div class="hm-cell" style="background: {{ pilier.tint_light }};"></div>
-          {%- endif -%}
-        {% endfor %}
-
-        {# ── W16 row (current — uses actual days[]) #}
-        <div class="hm-row-label">W16</div>
-        {% for i in range(7) %}
-          {%- if i > today_idx -%}
-        <div class="hm-cell-avenir"></div>
-          {%- elif habit.days[i] -%}
-        <div class="hm-cell" style="background: {{ pilier.accent }};"></div>
-          {%- else -%}
-        <div class="hm-cell" style="background: {{ pilier.tint_light }};"></div>
-          {%- endif -%}
-        {% endfor %}
-
-      </div>{# /.hm-grid #}
-    </div>{# /.habit-block #}
-    {% endfor %}
-
-    {# ── Legend ────────────────────────────────────────────────────────── #}
-    <div class="hm-legend">
-      <div class="hm-legend-item">
-        <div class="hm-legend-cell" style="background: {{ pilier.accent }};"></div>
-        Tenu
+      {# ── Score global (left panel summary) ────────────────────────────── #}
+      <div class="score-global" style="--pg-accent: {{ pilier.accent }};">
+        <div class="score-global-label">Score global pilier</div>
+        <div class="score-global-value">{{ avg_score }}%</div>
+        <div class="score-global-sub">Moyenne sur {{ pilier.habits_w16|length }} habitude{{ "s" if pilier.habits_w16|length > 1 else "" }} · semaine W16</div>
       </div>
-      <div class="hm-legend-item">
-        <div class="hm-legend-cell" style="background: {{ pilier.tint_mid }};"></div>
-        Partiel
-      </div>
-      <div class="hm-legend-item">
-        <div class="hm-legend-cell" style="background: {{ pilier.tint_light }};"></div>
-        Manqué
-      </div>
-      <div class="hm-legend-item">
-        <div class="hm-legend-cell-avenir"></div>
-        A venir
-      </div>
-    </div>
 
-    {# ── Score global ──────────────────────────────────────────────────── #}
-    <div class="score-global" style="--pg-accent: {{ pilier.accent }};">
-      <div class="score-global-label">Score global pilier</div>
-      <div class="score-global-value">{{ avg_score }}%</div>
-      <div class="score-global-sub">Moyenne sur {{ pilier.habits_w16|length }} habitude{{ "s" if pilier.habits_w16|length > 1 else "" }} · semaine W16</div>
-    </div>
+    </div>{# /.heatmap-wrap #}
 
-  </div>{# /.heatmap-wrap #}
+    {# ── RIGHT: Semaine W16 — détail (V8 §4.6) ─────────────────────────── #}
+    <div class="tracker-panel">
+      <div class="tracker-panel-title">Semaine W16 — détail</div>
+
+      {% for habit in pilier.habits_w16 %}
+      <div class="tracker-habit-row">
+        <span class="tracker-habit-name">{{ habit.name }}</span>
+        <div class="tracker-days">
+          {% for i in range(7) %}
+            {%- if i > today_idx -%}
+          <div class="tracker-circle tracker-circle-future"
+               title="{{ day_names[i] }} — à venir"></div>
+            {%- elif habit.days[i] -%}
+          <div class="tracker-circle tracker-circle-done"
+               style="background: {{ pilier.accent }};"
+               title="{{ day_names[i] }} — tenu"></div>
+            {%- else -%}
+          <div class="tracker-circle tracker-circle-miss"
+               title="{{ day_names[i] }} — manqué"></div>
+            {%- endif -%}
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+
+      {# ── Bottom score ─────────────────────────────────────────────────── #}
+      <div class="tracker-score-block" style="--tracker-accent: {{ pilier.accent }};">
+        <div class="tracker-score-pct">{{ avg_score }} %</div>
+        <div class="tracker-score-sub">{{ ns.total_fait }} / {{ ns.total_cible }} habitudes tenues</div>
+      </div>
+    </div>{# /.tracker-panel #}
+
+  </div>{# /.heatmap-content #}
 </div>{# /.card #}
 {% endblock %}

@@ -66,6 +66,13 @@
   margin-top: 6px;
   padding-left: 4px;
 }
+svg .node-circle {
+  cursor: default;
+  transition: filter 0.15s;
+}
+svg .node-circle:hover {
+  filter: brightness(1.1);
+}
 {% endblock %}
 
 {% block content %}
@@ -78,8 +85,9 @@
   {%- set _ = ach_map.update({a.id: a}) -%}
 {%- endfor -%}
 
-{# For each achievement, gather its sous (limited to 15 if >20) #}
+{# For each achievement, gather its sous (limited to 10 to cap SVG height) #}
 {# Structure: list of {ach, sous_group, capped, total_count} #}
+{%- set SOUS_CAP = 10 -%}
 {%- set groups = [] -%}
 {%- for a in pilier.achievements_active | sort(attribute='name') -%}
   {%- set matched = [] -%}
@@ -89,8 +97,8 @@
     {%- endif -%}
   {%- endfor -%}
   {%- set total_count = matched | length -%}
-  {%- set capped = total_count > 20 -%}
-  {%- set display_sous = matched[:15] if capped else matched -%}
+  {%- set capped = total_count > SOUS_CAP -%}
+  {%- set display_sous = matched[:SOUS_CAP] if capped else matched -%}
   {%- set _ = groups.append({'ach': a, 'sous': display_sous, 'capped': capped, 'total': total_count}) -%}
 {%- endfor -%}
 
@@ -118,8 +126,11 @@
 {%- set display_sous_count = display_sous_count_ns.v -%}
 
 {%- set svg_w = 900 -%}
-{%- set svg_h_raw = display_sous_count * 38 + 100 -%}
-{%- set svg_h = 400 if svg_h_raw < 400 else svg_h_raw -%}
+{%- set svg_h_raw = display_sous_count * 27 + 100 -%}
+{%- set svg_h_min = 400 -%}
+{%- set svg_h_max = 600 -%}
+{%- set svg_h_uncapped = svg_h_min if svg_h_raw < svg_h_min else svg_h_raw -%}
+{%- set svg_h = svg_h_max if svg_h_uncapped > svg_h_max else svg_h_uncapped -%}
 
 {# Node positions ────────────────────────────────────────────────────── #}
 {# x_ach=100 center, x_sous=520 center, node sizes: ach r=16, sous r=9 #}
@@ -128,7 +139,7 @@
 {%- set r_ach = 16 -%}
 {%- set r_sous = 9 -%}
 {%- set y_start = 60 -%}
-{%- set row_gap = 38 -%}
+{%- set row_gap = 27 -%}
 
 {# We build SVG elements as a list of strings — Jinja can't mutate ints easily
    so we use a namespace to track y_cursor #}
@@ -232,8 +243,10 @@
         <circle cx="{{ x_ach }}" cy="{{ y_ach }}" r="{{ r_ach + 4 }}"
                 fill="{{ pilier.accent }}" opacity="0.10"/>
         {# Main node #}
-        <circle cx="{{ x_ach }}" cy="{{ y_ach }}" r="{{ r_ach }}"
-                fill="{{ pilier.accent }}" stroke="{{ pilier.accent }}" stroke-width="0.5"/>
+        <circle class="node-circle" cx="{{ x_ach }}" cy="{{ y_ach }}" r="{{ r_ach }}"
+                fill="{{ pilier.accent }}" stroke="{{ pilier.accent }}" stroke-width="0.5">
+          <title>{{ a.name }}{% if a.progress is not none %} · {{ a.progress }}%{% endif %}{% if a.deadline %} · {{ a.deadline }}{% endif %}</title>
+        </circle>
         {# Progress text inside node #}
         {% if a.progress is not none %}
         <text x="{{ x_ach }}" y="{{ y_ach + 1 }}"
@@ -266,8 +279,10 @@
             {% set node_fill = pilier.tint_mid %}
             {% set text_fill = '#1A1A1A' %}
           {% endif %}
-          <circle cx="{{ x_sous }}" cy="{{ y_sous }}" r="{{ r_sous }}"
-                  fill="{{ node_fill }}" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
+          <circle class="node-circle" cx="{{ x_sous }}" cy="{{ y_sous }}" r="{{ r_sous }}"
+                  fill="{{ node_fill }}" stroke="rgba(0,0,0,0.08)" stroke-width="0.5">
+            <title>{{ s.name }}{% if s.statut %} · {{ s.statut }}{% endif %}{% if s.deadline %} · {{ s.deadline }}{% endif %}</title>
+          </circle>
           {# Label right of node #}
           <text x="{{ x_sous + r_sous + 8 }}" y="{{ y_sous + 1 }}"
                 dominant-baseline="central"
@@ -297,7 +312,7 @@
           {%- set last_y = g.sous_ys[-1] if g.sous_ys else g.y_ach -%}
           <text x="{{ x_sous - r_sous - 1 }}" y="{{ last_y + 24 }}"
                 font-size="10" font-style="italic" fill="#9CA3AF">
-            +{{ g.total - 15 }} sous-achievements restants — voir DB Plan d'exécution
+            +{{ g.total - SOUS_CAP }} sous-achievements restants — voir DB Plan d'exécution
           </text>
         {% endif %}
       {% endfor %}
@@ -309,7 +324,7 @@
   {% for g in g_computed %}
     {% if g.capped %}
     <p class="overflow-note">
-      "{{ (g.ach.name[:55] + '…') if g.ach.name | length > 55 else g.ach.name }}" — affichage limité à 15 / {{ g.total }} sous-achievements. +{{ g.total - 15 }} restants visibles dans la DB Plan d'exécution.
+      "{{ (g.ach.name[:55] + '…') if g.ach.name | length > 55 else g.ach.name }}" — affichage limité à {{ SOUS_CAP }} / {{ g.total }} sous-achievements. +{{ g.total - SOUS_CAP }} restants visibles dans la DB Plan d'exécution.
     </p>
     {% endif %}
   {% endfor %}

@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-{{ m.section_header(eyebrow="LIFE OS", title="Embeds · V2 Phase B", subtitle="18 HTMLs iframés dans les pages Notion · data live générée via Python cron quotidien depuis les 3 DBs.") }}
+{{ m.section_header(eyebrow="LIFE OS", title="Embeds · V2 Phase B", subtitle="27 HTMLs iframés dans les pages Notion · data live générée via Python cron quotidien depuis les 3 DBs.") }}
 
 <div class="group">
   <h4>Dashboard</h4>
@@ -36,13 +36,14 @@
   <div class="grid-3">
     {% for slug in ['interieur', 'famille', 'pro_fi', 'creation', 'spirituel'] %}
       {% set p = snap.piliers[slug] %}
-      <a class="tile" href="sankey-pilier-{{ slug }}.html" style="border-left: 3px solid {{ p.accent }};">
+      {% set fslug = slug | replace('_', '-') %}
+      <a class="tile" href="sankey-pilier-{{ fslug }}.html" style="border-left: 3px solid {{ p.accent }};">
         <h3>Sankey · {{ p.name }}</h3><p>Temps hebdo</p>
       </a>
-      <a class="tile" href="heatmap-habits-{{ slug }}.html" style="border-left: 3px solid {{ p.accent }};">
+      <a class="tile" href="heatmap-habits-{{ fslug }}.html" style="border-left: 3px solid {{ p.accent }};">
         <h3>Heatmap habits · {{ p.name }}</h3><p>4 sem × 7 j</p>
       </a>
-      <a class="tile" href="tree-deps-{{ slug }}.html" style="border-left: 3px solid {{ p.accent }};">
+      <a class="tile" href="tree-deps-{{ fslug }}.html" style="border-left: 3px solid {{ p.accent }};">
         <h3>Deps tree · {{ p.name }}</h3><p>Achievement→Sous→Tâche</p>
       </a>
     {% endfor %}

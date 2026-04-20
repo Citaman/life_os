@@ -271,15 +271,16 @@
 {# Label positions — slightly beyond R (at 118% of R) #}
 {%- set label_r_factor = 1.22 -%}
 
-{# Find pilier with biggest gap #}
-{%- set biggest_gap_slug = piliers_order[0] -%}
-{%- set biggest_gap_val = piliers[piliers_order[0]].radar.gap -%}
+{# Find pilier with biggest gap — use namespace to allow mutation inside loop #}
+{%- set ns = namespace(biggest_gap_slug=piliers_order[0], biggest_gap_val=piliers[piliers_order[0]].radar.gap) -%}
 {%- for slug in piliers_order -%}
-  {%- if piliers[slug].radar.gap > biggest_gap_val -%}
-    {%- set biggest_gap_slug = slug -%}
-    {%- set biggest_gap_val = piliers[slug].radar.gap -%}
+  {%- if piliers[slug].radar.gap > ns.biggest_gap_val -%}
+    {%- set ns.biggest_gap_slug = slug -%}
+    {%- set ns.biggest_gap_val = piliers[slug].radar.gap -%}
   {%- endif -%}
 {%- endfor -%}
+{%- set biggest_gap_slug = ns.biggest_gap_slug -%}
+{%- set biggest_gap_val = ns.biggest_gap_val -%}
 
 <div class="radar-page">
 
