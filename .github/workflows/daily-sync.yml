@@ -1,0 +1,67 @@
+name: Daily Notion sync
+
+on:
+  schedule:
+    # 5h UTC = 6h Paris (winter) / 7h Paris (summer). Runs every day.
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+    # Manual trigger from GitHub UI for on-demand refresh.
+  push:
+    branches: [main]
+    paths:
+      - 'templates/**'
+      - 'scripts/**'
+      - 'requirements.txt'
+      - '.github/workflows/daily-sync.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch Notion DBs
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          PLAN_DS: 2c67d9c9-725d-4542-b239-f6df039e6c01
+          HABITUDES_DS: a7718a5e-304f-486b-8617-421e5f986aed
+          BACKLOG_DS: 7a88c1c8-140c-4536-a1a8-296b518f5094
+        run: python scripts/fetch_notion.py
+
+      - name: Transform to snapshots.json
+        env:
+          CURRENT_WEEK: W16
+          CURRENT_TRIMESTER: 'T2 2026'
+          CURRENT_DATE: '2026-04-19'
+        run: python scripts/transform.py
+
+      - name: Build HTML embeds
+        run: python scripts/build_html.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
