@@ -1,0 +1,353 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Tendance prédication · Spirituel{% endblock %}
+
+{% block extra_css %}
+/* ── Chart wrapper ──────────────────────────────────────────────── */
+.chart-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 360px;
+}
+
+/* ── Card label ─────────────────────────────────────────────────── */
+.card-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #B8860B;
+  flex-shrink: 0;
+}
+
+/* ── KPI row ────────────────────────────────────────────────────── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+@media (max-width: 640px) {
+  .kpi-row { grid-template-columns: 1fr; }
+}
+.kpi-callout {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  border-top: 3px solid var(--kpi-color, #B8860B);
+}
+.kpi-callout-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.kpi-callout-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--kpi-color, #B8860B);
+  font-variant-numeric: tabular-nums;
+}
+.kpi-callout-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* ── Annotation banner ──────────────────────────────────────────── */
+.annotation-banner {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(184, 134, 11, 0.07);
+  border-left: 3px solid #B8860B;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.annotation-banner-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #B8860B;
+  flex-shrink: 0;
+}
+.annotation-banner-text {
+  font-size: 12px;
+  color: #1A1A1A;
+  line-height: 1.5;
+}
+.annotation-banner-text strong {
+  font-weight: 700;
+  color: #B8860B;
+}
+
+/* ── In-progress badge ──────────────────────────────────────────── */
+.badge-en-cours {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #FEF3C7;
+  color: #B45309;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+{% endblock %}
+
+{% block content %}
+{# ── Section header ───────────────────────────────────────────────── #}
+{{ m.section_header(
+  eyebrow="TENDANCE",
+  title="Prédication · 6 derniers mois",
+  subtitle="Heures mensuelles enregistrées vs objectif 30 h/mois (pionnier auxiliaire)",
+  accent="#B8860B"
+) }}
+
+{# ── Chart card ───────────────────────────────────────────────────── #}
+<div class="card">
+  <div class="card-label">
+    <span class="card-label-dot"></span>
+    Heures de prédication · Nov 2025 &rarr; Avr 2026
+  </div>
+  <div class="chart-canvas-wrapper">
+    <canvas id="predicationChart"></canvas>
+  </div>
+
+  {# ── Annotation: mars milestone ─────────────────────────────────── #}
+  <div class="annotation-banner">
+    <div class="annotation-banner-icon"></div>
+    <div class="annotation-banner-text">
+      <strong>Pic mars · 30 h &mdash; 1er mois cible atteinte.</strong>
+      Avril en cours : 24 h enregistrées au 19 avril, 11 jours restants.
+    </div>
+  </div>
+</div>
+
+{# ── KPI callout row ──────────────────────────────────────────────── #}
+<div class="kpi-row">
+
+  <div class="kpi-callout" style="--kpi-color: #B8860B;">
+    <div class="kpi-callout-label">Moyenne 6 mois</div>
+    <div class="kpi-callout-value">22,5 h</div>
+    <div class="kpi-callout-sub">Nov 2025 &rarr; Avr 2026 · tendance haussiere</div>
+  </div>
+
+  <div class="kpi-callout" style="--kpi-color: #047857;">
+    <div class="kpi-callout-label">Best · cible atteinte</div>
+    <div class="kpi-callout-value">30 h</div>
+    <div class="kpi-callout-sub">Mars 2026 &mdash; 1er mois pionnier auxiliaire confirme</div>
+  </div>
+
+  <div class="kpi-callout" style="--kpi-color: #B45309;">
+    <div class="kpi-callout-label">Trajectoire avril</div>
+    <div class="kpi-callout-value">24 h</div>
+    <div class="kpi-callout-sub">11 jours restants · besoin 6 h · doable en 2 sorties de 3 h</div>
+  </div>
+
+</div>
+
+{# ── Chart.js CDN ─────────────────────────────────────────────────── #}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  'use strict';
+
+  var ACCENT       = '#B8860B';
+  var ACCENT_FILL  = 'rgba(184, 134, 11, 0.15)';
+  var TARGET_COLOR = 'rgba(107, 114, 128, 0.70)';
+
+  var labels = ['Nov 25', 'Déc 25', 'Jan 26', 'Fév 26', 'Mars 26', 'Avr 26'];
+  var reel   = [10, 18, 25, 28, 30, 24];
+  var cible  = [30, 30, 30, 30, 30, 30];
+
+  /* Point-label plugin — draw hour values above each data point */
+  var pointLabelPlugin = {
+    id: 'pointLabels',
+    afterDatasetsDraw: function (chart) {
+      var ctx = chart.ctx;
+      chart.data.datasets.forEach(function (dataset, i) {
+        if (i !== 0) return; /* label réel series only */
+        var meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach(function (point, j) {
+          var val = dataset.data[j];
+          if (val == null) return;
+          var props  = point.getProps(['x', 'y'], true);
+          var isLast = j === dataset.data.length - 1;
+          var isMars = j === 4; /* mars milestone */
+
+          ctx.save();
+          ctx.textAlign    = 'center';
+          ctx.textBaseline = 'bottom';
+
+          /* mars = bold accent, last = amber-warning, others = default accent */
+          ctx.font      = (isMars ? '700' : isLast ? '700' : '600') + ' 11px Inter, system-ui, sans-serif';
+          ctx.fillStyle = isLast ? '#B45309' : ACCENT;
+
+          var label = val + ' h' + (isLast ? '*' : '');
+          ctx.fillText(label, props.x, props.y - 7);
+          ctx.restore();
+        });
+      });
+    }
+  };
+
+  /* Target-line label plugin — draw "Objectif 30 h" on the dashed line */
+  var targetLabelPlugin = {
+    id: 'targetLabel',
+    afterDatasetsDraw: function (chart) {
+      var ctx  = chart.ctx;
+      var meta = chart.getDatasetMeta(1);
+      if (!meta || !meta.data || meta.data.length === 0) return;
+      var firstPt = meta.data[0];
+      var props   = firstPt.getProps(['x', 'y'], true);
+      ctx.save();
+      ctx.textAlign    = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.font         = '500 10px Inter, system-ui, sans-serif';
+      ctx.fillStyle    = TARGET_COLOR;
+      ctx.fillText('Objectif 30 h', props.x + 4, props.y - 4);
+      ctx.restore();
+    }
+  };
+
+  var ctx = document.getElementById('predicationChart').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label:                'Heures réelles',
+          data:                 reel,
+          borderColor:          ACCENT,
+          backgroundColor:      ACCENT_FILL,
+          fill:                 'origin',
+          tension:              0.35,
+          pointRadius:          5,
+          pointHoverRadius:     7,
+          pointBackgroundColor: reel.map(function (v, i) {
+            /* last point (Avr) in amber-warning; mars peak in bright accent */
+            if (i === 5) return '#B45309';
+            if (i === 4) return ACCENT;
+            return ACCENT;
+          }),
+          pointBorderColor:     '#ffffff',
+          pointBorderWidth:     2,
+          /* last point slightly larger to draw attention */
+          pointRadius: reel.map(function (v, i) { return i === 5 ? 7 : 5; }),
+          borderWidth:          2.5,
+          order:                1
+        },
+        {
+          label:            'Cible 30 h / mois',
+          data:             cible,
+          borderColor:      TARGET_COLOR,
+          backgroundColor:  'transparent',
+          borderWidth:      1.5,
+          borderDash:       [6, 4],
+          pointRadius:      0,
+          pointHoverRadius: 0,
+          tension:          0,
+          fill:             false,
+          order:            2
+        }
+      ]
+    },
+    options: {
+      responsive:          true,
+      maintainAspectRatio: false,
+      animation: { duration: 700, easing: 'easeOutQuart' },
+      interaction: {
+        mode:      'index',
+        intersect: false
+      },
+      plugins: {
+        legend: {
+          display:  true,
+          position: 'bottom',
+          labels: {
+            font:          { family: 'Inter', size: 12, weight: '500' },
+            color:         '#6B7280',
+            boxWidth:      12,
+            boxHeight:     2,
+            borderRadius:  3,
+            padding:       16,
+            usePointStyle: false
+          }
+        },
+        tooltip: {
+          backgroundColor: '#ffffff',
+          borderColor:     '#E5E7EB',
+          borderWidth:     1,
+          titleColor:      '#1A1A1A',
+          bodyColor:       '#6B7280',
+          titleFont:       { family: 'Inter', size: 12, weight: '700' },
+          bodyFont:        { family: 'Inter', size: 12 },
+          padding:         10,
+          boxPadding:      4,
+          callbacks: {
+            label: function (item) {
+              if (item.datasetIndex === 0) {
+                var suffix = item.dataIndex === 5 ? ' (en cours, 11 j restants)' : '';
+                return '  Réel : ' + item.parsed.y + ' h' + suffix;
+              }
+              return '  Cible : ' + item.parsed.y + ' h';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid:   { color: '#F3F4F6', drawBorder: false },
+          border: { display: false },
+          ticks:  {
+            font:  { family: 'Inter', size: 11 },
+            color: '#6B7280'
+          }
+        },
+        y: {
+          min:    0,
+          max:    35,
+          border: { display: false },
+          grid: {
+            color:      '#F3F4F6',
+            drawBorder: false
+          },
+          ticks: {
+            stepSize: 5,
+            font:     { family: 'Inter', size: 11 },
+            color:    '#9CA3AF',
+            callback: function (val) { return val + ' h'; }
+          }
+        }
+      }
+    },
+    plugins: [pointLabelPlugin, targetLabelPlugin]
+  });
+})();
+</script>
+{% endblock %}

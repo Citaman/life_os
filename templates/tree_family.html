@@ -1,0 +1,404 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+
+{% block title %}Famille · Membres de la famille{% endblock %}
+
+{% block extra_css %}
+/* ── tree_family specific ─────────────────────────────────────── */
+.family-layout {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .family-layout { grid-template-columns: 1fr; }
+}
+
+.family-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 24px 24px;
+  overflow-x: auto;
+}
+
+.family-card h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--famille);
+  margin-bottom: 20px;
+}
+
+/* Member list (right card) */
+.member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.member-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.member-item:last-child { border-bottom: none; }
+
+.member-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.member-info { flex: 1; min-width: 0; }
+
+.member-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.member-role {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--famille);
+  margin-bottom: 4px;
+}
+
+.member-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.member-last {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-top: 3px;
+}
+
+/* Legend */
+.tree-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+{% endblock %}
+
+{% block content %}
+{{ m.section_header(
+  eyebrow="LE CERCLE PROCHE",
+  title="Membres de la famille",
+  subtitle="Arborescence + présence/interaction par personne",
+  accent="#C84B4B"
+) }}
+
+<div class="family-layout">
+
+  <!-- LEFT CARD: SVG family tree (60%) -->
+  <div class="family-card">
+    <h3>Arbre familial</h3>
+    <div class="chart-container" style="min-width: 520px;">
+      <svg
+        width="600"
+        height="400"
+        viewBox="0 0 600 400"
+        xmlns="http://www.w3.org/2000/svg"
+        style="display:block; font-family:'Inter',sans-serif; overflow: visible;"
+      >
+        <!-- ── Background section labels ───────────────────────────── -->
+        <text x="16" y="16" font-size="9" font-weight="600" letter-spacing="0.14em"
+              fill="#C84B4B" text-anchor="start">NOYAU</text>
+        <text x="430" y="16" font-size="9" font-weight="600" letter-spacing="0.14em"
+              fill="#9CA3AF" text-anchor="start">FAMILLE ÉLARGIE</text>
+
+        <!-- Vertical divider hint -->
+        <line x1="370" y1="24" x2="370" y2="376"
+              stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4 5" opacity="0.7"/>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- GEN 1: Anthonny (ego) — Mirane (couple principal)         -->
+        <!-- Anthonny @ (155, 100) · Mirane @ (255, 100)               -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Horizontal line linking couple -->
+        <line x1="179" y1="100" x2="231" y2="100"
+              stroke="#C84B4B" stroke-width="2" opacity="0.6"/>
+
+        <!-- Anthonny node (filled accent) -->
+        <circle cx="155" cy="100" r="24" fill="#C84B4B"/>
+        <text x="155" y="101" text-anchor="middle" dominant-baseline="central"
+              font-size="14" font-weight="800" fill="#FFFFFF">A</text>
+        <!-- Name + role below -->
+        <text x="155" y="134" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">Anthonny</text>
+        <text x="155" y="148" text-anchor="middle"
+              font-size="10" fill="#6B7280">Ego</text>
+
+        <!-- Mirane node (light accent) -->
+        <circle cx="255" cy="100" r="24" fill="#F2D0D0"/>
+        <text x="255" y="101" text-anchor="middle" dominant-baseline="central"
+              font-size="14" font-weight="800" fill="#C84B4B">M</text>
+        <!-- Name + role below -->
+        <text x="255" y="134" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">Mirane</text>
+        <text x="255" y="148" text-anchor="middle"
+              font-size="10" fill="#6B7280">Conjointe</text>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- GEN 2: James + Harper (enfants)                           -->
+        <!-- James @ (155, 270) · Harper @ (255, 270)                  -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Vertical connector from couple midpoint down to children bar -->
+        <line x1="205" y1="124" x2="205" y2="230"
+              stroke="#E08B8B" stroke-width="1.5" opacity="0.7"/>
+
+        <!-- Horizontal bar above children -->
+        <line x1="155" y1="230" x2="255" y2="230"
+              stroke="#E08B8B" stroke-width="1.5" opacity="0.7"/>
+
+        <!-- Vertical drops to each child -->
+        <line x1="155" y1="230" x2="155" y2="246"
+              stroke="#E08B8B" stroke-width="1.5" opacity="0.7"/>
+        <line x1="255" y1="230" x2="255" y2="246"
+              stroke="#E08B8B" stroke-width="1.5" opacity="0.7"/>
+
+        <!-- James node -->
+        <circle cx="155" cy="270" r="24" fill="#F2D0D0"/>
+        <text x="155" y="271" text-anchor="middle" dominant-baseline="central"
+              font-size="14" font-weight="800" fill="#C84B4B">J</text>
+        <text x="155" y="304" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">James</text>
+        <text x="155" y="318" text-anchor="middle"
+              font-size="10" fill="#6B7280">Fils · 3 ans</text>
+
+        <!-- Harper node -->
+        <circle cx="255" cy="270" r="24" fill="#F2D0D0"/>
+        <text x="255" y="271" text-anchor="middle" dominant-baseline="central"
+              font-size="14" font-weight="800" fill="#C84B4B">H</text>
+        <text x="255" y="304" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">Harper</text>
+        <text x="255" y="318" text-anchor="middle"
+              font-size="10" fill="#6B7280">Fille · 8 mois</text>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- CLUSTER ÉLARGI : Kimberley + Ashley (sœurs Anthonny)      -->
+        <!-- Kimberley @ (440, 100) · Ashley @ (540, 100)              -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Dashed horizontal line from Anthonny to cluster (= sœurs de) -->
+        <line x1="179" y1="100" x2="395" y2="100"
+              stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.8"/>
+        <!-- Small arrow / bracket hint -->
+        <line x1="395" y1="84" x2="395" y2="116"
+              stroke="#D1D5DB" stroke-width="1" opacity="0.6"/>
+        <line x1="395" y1="100" x2="416" y2="100"
+              stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.8"/>
+        <line x1="416" y1="84" x2="416" y2="116"
+              stroke="#D1D5DB" stroke-width="1" opacity="0.6"/>
+
+        <!-- Horizontal bar linking 2 sisters -->
+        <line x1="416" y1="100" x2="490" y2="100"
+              stroke="#D1D5DB" stroke-width="1.5" opacity="0.7"/>
+        <line x1="440" y1="100" x2="440" y2="76"
+              stroke="#D1D5DB" stroke-width="1" opacity="0.5"/>
+        <line x1="540" y1="100" x2="540" y2="76"
+              stroke="#D1D5DB" stroke-width="1" opacity="0.5"/>
+
+        <!-- Kimberley node (gray = extended) -->
+        <circle cx="440" cy="100" r="24" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5"/>
+        <text x="440" y="101" text-anchor="middle" dominant-baseline="central"
+              font-size="13" font-weight="700" fill="#6B7280">K</text>
+        <text x="440" y="134" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">Kimberley</text>
+        <text x="440" y="148" text-anchor="middle"
+              font-size="10" fill="#9CA3AF">Sœur aînée</text>
+
+        <!-- Ashley node (gray = extended) -->
+        <circle cx="540" cy="100" r="24" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5"/>
+        <text x="540" y="101" text-anchor="middle" dominant-baseline="central"
+              font-size="13" font-weight="700" fill="#6B7280">As</text>
+        <text x="540" y="134" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">Ashley</text>
+        <text x="540" y="148" text-anchor="middle"
+              font-size="10" fill="#9CA3AF">2e sœur</text>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- Jillian (neveu, fils de Kimberley) @ (440, 270)           -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Solid vertical from Kimberley down to Jillian -->
+        <line x1="440" y1="124" x2="440" y2="246"
+              stroke="#D1D5DB" stroke-width="1.5" opacity="0.8"/>
+
+        <!-- Jillian node (gray = extended) -->
+        <circle cx="440" cy="270" r="24" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5"/>
+        <text x="440" y="271" text-anchor="middle" dominant-baseline="central"
+              font-size="13" font-weight="700" fill="#6B7280">Ji</text>
+        <text x="440" y="304" text-anchor="middle"
+              font-size="11" font-weight="700" fill="#1A1A1A">Jillian</text>
+        <text x="440" y="318" text-anchor="middle"
+              font-size="10" fill="#9CA3AF">Neveu · 14 ans</text>
+
+        <!-- Small study badge on Jillian -->
+        <rect x="408" y="340" width="64" height="16" rx="8" fill="#FEF3C7"/>
+        <text x="440" y="348" text-anchor="middle" dominant-baseline="central"
+              font-size="8.5" font-weight="600" fill="#B45309">Vivre toujours</text>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- Generation labels (left margin)                            -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <text x="12" y="100" dominant-baseline="central"
+              font-size="8.5" font-weight="600" letter-spacing="0.10em"
+              fill="#C84B4B" opacity="0.7" text-anchor="start">GÉN 1</text>
+        <text x="12" y="270" dominant-baseline="central"
+              font-size="8.5" font-weight="600" letter-spacing="0.10em"
+              fill="#C84B4B" opacity="0.7" text-anchor="start">GÉN 2</text>
+
+      </svg>
+    </div>
+
+    <!-- Legend -->
+    <div class="tree-legend">
+      <div class="legend-item">
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" r="9" fill="#C84B4B"/>
+          <text x="10" y="11" text-anchor="middle" dominant-baseline="central"
+                font-size="8" font-weight="800" fill="#FFF" font-family="Inter">A</text>
+        </svg>
+        <span>Ego (Anthonny)</span>
+      </div>
+      <div class="legend-item">
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" r="9" fill="#F2D0D0"/>
+          <text x="10" y="11" text-anchor="middle" dominant-baseline="central"
+                font-size="8" font-weight="800" fill="#C84B4B" font-family="Inter">M</text>
+        </svg>
+        <span>Noyau (conjoint/enfants)</span>
+      </div>
+      <div class="legend-item">
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" r="9" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5"/>
+          <text x="10" y="11" text-anchor="middle" dominant-baseline="central"
+                font-size="8" font-weight="700" fill="#6B7280" font-family="Inter">K</text>
+        </svg>
+        <span>Famille élargie</span>
+      </div>
+      <div class="legend-item">
+        <svg width="32" height="12" viewBox="0 0 32 12">
+          <line x1="0" y1="6" x2="32" y2="6" stroke="#D1D5DB"
+                stroke-width="1.5" stroke-dasharray="5 4"/>
+        </svg>
+        <span>Lien fratrie (sœurs de)</span>
+      </div>
+      <div class="legend-item">
+        <svg width="32" height="12" viewBox="0 0 32 12">
+          <line x1="0" y1="6" x2="32" y2="6" stroke="#E08B8B" stroke-width="1.5"/>
+        </svg>
+        <span>Lien parent → enfant</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT CARD: member list (40%) -->
+  <div class="family-card">
+    <h3>Interactions &amp; présence</h3>
+    <div class="member-list">
+
+      <!-- Mirane -->
+      <div class="member-item">
+        <div class="member-avatar" style="background:#F2D0D0; color:#C84B4B;">M</div>
+        <div class="member-info">
+          <div class="member-name">Mirane</div>
+          <div class="member-role">Conjointe</div>
+          <div class="member-desc">Rituels hebdomadaires · revue dimanche soir</div>
+          <div class="member-last">Dernier check-in dim 7 avril</div>
+        </div>
+      </div>
+
+      <!-- James -->
+      <div class="member-item">
+        <div class="member-avatar" style="background:#F2D0D0; color:#C84B4B;">J</div>
+        <div class="member-info">
+          <div class="member-name">James</div>
+          <div class="member-role">Fils · 3 ans 3 mois</div>
+          <div class="member-desc">Lecture quotidienne 15 min · activités motricité</div>
+          <div class="member-last">5/6 jours W16 · dernier 18 avril</div>
+        </div>
+      </div>
+
+      <!-- Harper -->
+      <div class="member-item">
+        <div class="member-avatar" style="background:#F2D0D0; color:#C84B4B;">H</div>
+        <div class="member-info">
+          <div class="member-name">Harper</div>
+          <div class="member-role">Fille · 8 mois</div>
+          <div class="member-desc">Tummy time quotidien · éveil sensoriel</div>
+          <div class="member-last">Premier mot 4 avril</div>
+        </div>
+      </div>
+
+      <!-- Kimberley -->
+      <div class="member-item">
+        <div class="member-avatar" style="background:#F3F4F6; color:#6B7280;">K</div>
+        <div class="member-info">
+          <div class="member-name">Kimberley</div>
+          <div class="member-role">Sœur aînée</div>
+          <div class="member-desc">Appel mensuel · nouvelles famille</div>
+          <div class="member-last">Dernier appel 8 avril</div>
+        </div>
+      </div>
+
+      <!-- Ashley -->
+      <div class="member-item">
+        <div class="member-avatar" style="background:#F3F4F6; color:#6B7280;">As</div>
+        <div class="member-info">
+          <div class="member-name">Ashley</div>
+          <div class="member-role">2e sœur · pratiquante</div>
+          <div class="member-desc">Accompagne Jillian aux réunions · croise 2×/sem</div>
+          <div class="member-last">Réunion congrégation 17 avril</div>
+        </div>
+      </div>
+
+      <!-- Jillian -->
+      <div class="member-item">
+        <div class="member-avatar" style="background:#FEF3C7; color:#B45309;">Ji</div>
+        <div class="member-info">
+          <div class="member-name">Jillian</div>
+          <div class="member-role">Neveu · 14 ans</div>
+          <div class="member-desc">Étude <em>Vivre pour toujours</em> avec Anthonny</div>
+          <div class="member-last">Chapitre 14 cette semaine · 19 avril</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

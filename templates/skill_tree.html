@@ -1,0 +1,443 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+
+{% block title %}Skill Tree · Création{% endblock %}
+
+{% block extra_css %}
+/* ── Skill Tree — Création ──────────────────────────────── */
+.skill-tree-page {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.skill-tree-card {
+  background: #0F0F14;
+  color: #FAFAFA;
+  padding: 40px;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.32);
+  margin-bottom: 20px;
+}
+
+/* SVG container */
+.skill-tree-svg-wrap {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.skill-tree-svg-wrap svg {
+  display: block;
+  min-width: 900px;
+}
+
+/* Legend row */
+.skill-tree-legend {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(107, 63, 160, 0.25);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9CA3AF;
+}
+
+.legend-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot--completed {
+  background: #6B3FA0;
+  box-shadow: 0 0 10px rgba(107, 63, 160, 0.7);
+}
+
+.legend-dot--in-progress {
+  background: rgba(107, 63, 160, 0.5);
+}
+
+.legend-dot--not-started {
+  background: transparent;
+  border: 2px dashed rgba(107, 63, 160, 0.5);
+}
+
+/* Road-ahead note */
+.skill-tree-note {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: rgba(107, 63, 160, 0.08);
+  border-left: 3px solid #6B3FA0;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #A584CA;
+  line-height: 1.6;
+}
+
+.skill-tree-note strong {
+  color: #FAFAFA;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .skill-tree-card { padding: 24px 16px; }
+  .skill-tree-legend { gap: 16px; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="skill-tree-page">
+
+  {{ m.section_header(
+    eyebrow="ARBRE DE COMPÉTENCES",
+    title="Skill Tree · Création",
+    subtitle="Prérequis entre compétences · 3 tracks parallèles",
+    accent="#6B3FA0"
+  ) }}
+
+  <div class="skill-tree-card">
+
+    {#
+      ────────────────────────────────────────────────────
+      NODES (fixed positions):
+        Track 1 (y=90):
+          n0  Algèbre linéaire   (100,90)  30%
+          n1  Backpropagation    (280,90)  25%
+          n2  Deep Learning      (460,90)   0%
+          n3  LLMs               (640,90)   0%
+          n4  Transformer        (820,90)   0%
+
+        Track 2 (y=240):
+          n5  Micrograd P0       (280,240) 25%
+          n6  PyTorch            (460,240) 60%
+
+        Track 3 (y=390):
+          n7  100 Days C++       (460,390)  0%
+          n8  100 Days CUDA      (640,390)  0%
+
+      EDGES:
+        n0 → n1   (Track 1 prereq)
+        n1 → n2
+        n2 → n3
+        n3 → n4
+        n5 → n6   (Track 2 prereq)
+        n7 → n8   (Track 3 prereq)
+        n5 → n2   (cross-track: Micrograd → Deep Learning post-Micrograd)
+
+      Node style rules:
+        ≥ 80% : filled #6B3FA0, white text, glow
+        1–79% : filled rgba(107,63,160,0.5), white text
+           0% : no fill, dashed stroke #6B3FA0 opacity 0.4, label opacity 0.4
+
+      Edge opacity:
+        Target 0% → 0.25
+        Target 1–79% → 0.55
+        Target 100% → 1.0
+    ────────────────────────────────────────────────────
+    #}
+
+    <div class="skill-tree-svg-wrap">
+      <svg width="900" height="480" viewBox="0 0 900 480"
+           xmlns="http://www.w3.org/2000/svg"
+           aria-label="Skill Tree Création — 3 tracks de compétences">
+
+        <defs>
+          <!-- Glow filter for completed nodes -->
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <!-- Subtle glow for in-progress nodes -->
+          <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- ── Track background lanes ─────────────────────────────── -->
+        <rect x="58" y="54" width="830" height="72" rx="8"
+              fill="rgba(107,63,160,0.04)" stroke="rgba(107,63,160,0.08)"
+              stroke-width="1"/>
+        <rect x="58" y="204" width="450" height="72" rx="8"
+              fill="rgba(107,63,160,0.04)" stroke="rgba(107,63,160,0.08)"
+              stroke-width="1"/>
+        <rect x="420" y="354" width="260" height="72" rx="8"
+              fill="rgba(107,63,160,0.04)" stroke="rgba(107,63,160,0.08)"
+              stroke-width="1"/>
+
+        <!-- ── Track labels (left side) ─────────────────────────────── -->
+        <!-- Track 1 label -->
+        <text x="16" y="90" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="9" font-weight="700"
+              fill="#6B3FA0" opacity="0.7" letter-spacing="0.14em"
+              transform="rotate(-90,16,90)">TRACK 1</text>
+
+        <!-- Track 2 label -->
+        <text x="16" y="240" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="9" font-weight="700"
+              fill="#6B3FA0" opacity="0.7" letter-spacing="0.14em"
+              transform="rotate(-90,16,240)">TRACK 2</text>
+
+        <!-- Track 3 label -->
+        <text x="16" y="390" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="9" font-weight="700"
+              fill="#6B3FA0" opacity="0.7" letter-spacing="0.14em"
+              transform="rotate(-90,16,390)">TRACK 3</text>
+
+        <!-- Track 1 description -->
+        <text x="74" y="44" font-family="Inter, sans-serif" font-size="9"
+              font-weight="500" fill="#6B3FA0" opacity="0.5"
+              letter-spacing="0.05em">
+          Maths → ML → DL → LLMs → Transformer
+        </text>
+
+        <!-- Track 2 description -->
+        <text x="74" y="194" font-family="Inter, sans-serif" font-size="9"
+              font-weight="500" fill="#6B3FA0" opacity="0.5"
+              letter-spacing="0.05em">
+          Outillage pratique : Micrograd → PyTorch
+        </text>
+
+        <!-- Track 3 description -->
+        <text x="430" y="344" font-family="Inter, sans-serif" font-size="9"
+              font-weight="500" fill="#6B3FA0" opacity="0.5"
+              letter-spacing="0.05em">
+          Systèmes bas niveau
+        </text>
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- EDGES (drawn first, under nodes)                          -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+
+        <!-- n0(100,90) → n1(280,90) — target 25% → opacity 0.38 -->
+        <path d="M 136,90 C 180,90 236,90 244,90"
+              fill="none" stroke="#6B3FA0" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.38"/>
+        <!-- arrowhead -->
+        <polygon points="244,86 252,90 244,94"
+                 fill="#6B3FA0" opacity="0.38"/>
+
+        <!-- n1(280,90) → n2(460,90) — target 0% → opacity 0.22 -->
+        <path d="M 316,90 C 360,90 416,90 424,90"
+              fill="none" stroke="#6B3FA0" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.22"/>
+        <polygon points="424,86 432,90 424,94"
+                 fill="#6B3FA0" opacity="0.22"/>
+
+        <!-- n2(460,90) → n3(640,90) — target 0% → opacity 0.22 -->
+        <path d="M 496,90 C 540,90 596,90 604,90"
+              fill="none" stroke="#6B3FA0" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.22"/>
+        <polygon points="604,86 612,90 604,94"
+                 fill="#6B3FA0" opacity="0.22"/>
+
+        <!-- n3(640,90) → n4(820,90) — target 0% → opacity 0.22 -->
+        <path d="M 676,90 C 720,90 776,90 784,90"
+              fill="none" stroke="#6B3FA0" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.22"/>
+        <polygon points="784,86 792,90 784,94"
+                 fill="#6B3FA0" opacity="0.22"/>
+
+        <!-- n5(280,240) → n6(460,240) — target 60% → opacity 0.55 -->
+        <path d="M 316,240 C 360,240 416,240 424,240"
+              fill="none" stroke="#6B3FA0" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.55"/>
+        <polygon points="424,236 432,240 424,244"
+                 fill="#6B3FA0" opacity="0.55"/>
+
+        <!-- n7(460,390) → n8(640,390) — target 0% → opacity 0.22 -->
+        <path d="M 496,390 C 540,390 596,390 604,390"
+              fill="none" stroke="#6B3FA0" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.22"/>
+        <polygon points="604,386 612,390 604,394"
+                 fill="#6B3FA0" opacity="0.22"/>
+
+        <!-- n5(280,240) → n2(460,90) cross-track — target 0% → opacity 0.18 -->
+        <!-- Curved Bézier going up-right from Micrograd to Deep Learning -->
+        <path d="M 300,207 C 340,160 400,110 428,100"
+              fill="none" stroke="#6B3FA0" stroke-width="1.2"
+              stroke-dasharray="3 4" opacity="0.18"/>
+        <polygon points="424,97 432,100 427,107"
+                 fill="#6B3FA0" opacity="0.18"/>
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- NODES                                                      -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+
+        <!-- ── n0: Algèbre linéaire (100, 90) — 30% — in-progress ── -->
+        <circle cx="100" cy="90" r="36"
+                fill="rgba(107,63,160,0.50)"
+                filter="url(#glow-soft)"/>
+        <text x="100" y="86" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA">30%</text>
+        <!-- label -->
+        <text x="100" y="138" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">Algèbre</text>
+        <text x="100" y="152" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">linéaire</text>
+
+        <!-- ── n1: Backpropagation (280, 90) — 25% — in-progress ── -->
+        <circle cx="280" cy="90" r="36"
+                fill="rgba(107,63,160,0.50)"
+                filter="url(#glow-soft)"/>
+        <text x="280" y="86" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA">25%</text>
+        <text x="280" y="138" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">Backpropa-</text>
+        <text x="280" y="152" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">gation</text>
+
+        <!-- ── n2: Deep Learning (460, 90) — 0% — not started ── -->
+        <circle cx="460" cy="90" r="36"
+                fill="none"
+                stroke="#6B3FA0" stroke-width="1.5"
+                stroke-dasharray="5 3"
+                opacity="0.4"/>
+        <text x="460" y="86" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA" opacity="0.4">0%</text>
+        <text x="460" y="138" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">Deep</text>
+        <text x="460" y="152" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">Learning</text>
+
+        <!-- ── n3: LLMs (640, 90) — 0% — not started ── -->
+        <circle cx="640" cy="90" r="36"
+                fill="none"
+                stroke="#6B3FA0" stroke-width="1.5"
+                stroke-dasharray="5 3"
+                opacity="0.4"/>
+        <text x="640" y="86" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA" opacity="0.4">0%</text>
+        <text x="640" y="138" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">LLMs</text>
+
+        <!-- ── n4: Transformer from scratch (820, 90) — 0% — not started ── -->
+        <circle cx="820" cy="90" r="36"
+                fill="none"
+                stroke="#6B3FA0" stroke-width="1.5"
+                stroke-dasharray="5 3"
+                opacity="0.4"/>
+        <text x="820" y="86" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA" opacity="0.4">0%</text>
+        <text x="820" y="138" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">Transformer</text>
+        <text x="820" y="152" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">from scratch</text>
+
+        <!-- ── n5: Micrograd P0 (280, 240) — 25% — in-progress ── -->
+        <circle cx="280" cy="240" r="36"
+                fill="rgba(107,63,160,0.50)"
+                filter="url(#glow-soft)"/>
+        <text x="280" y="236" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA">25%</text>
+        <text x="280" y="288" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">Micrograd</text>
+        <text x="280" y="302" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">P0</text>
+
+        <!-- ── n6: PyTorch (460, 240) — 60% — in-progress ── -->
+        <circle cx="460" cy="240" r="36"
+                fill="rgba(107,63,160,0.50)"
+                filter="url(#glow-soft)"/>
+        <text x="460" y="236" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA">60%</text>
+        <text x="460" y="288" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7">PyTorch</text>
+
+        <!-- ── n7: 100 Days C++ (460, 390) — 0% — not started ── -->
+        <circle cx="460" cy="390" r="36"
+                fill="none"
+                stroke="#6B3FA0" stroke-width="1.5"
+                stroke-dasharray="5 3"
+                opacity="0.4"/>
+        <text x="460" y="386" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA" opacity="0.4">0%</text>
+        <text x="460" y="438" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">100 Days</text>
+        <text x="460" y="452" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">C++</text>
+
+        <!-- ── n8: 100 Days CUDA (640, 390) — 0% — not started ── -->
+        <circle cx="640" cy="390" r="36"
+                fill="none"
+                stroke="#6B3FA0" stroke-width="1.5"
+                stroke-dasharray="5 3"
+                opacity="0.4"/>
+        <text x="640" y="386" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="700"
+              fill="#FAFAFA" opacity="0.4">0%</text>
+        <text x="640" y="438" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">100 Days</text>
+        <text x="640" y="452" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="11" font-weight="600"
+              fill="#DDCEE7" opacity="0.4">CUDA</text>
+
+      </svg>
+    </div>{# /.skill-tree-svg-wrap #}
+
+    <!-- ── Legend ────────────────────────────────────────────────── -->
+    <div class="skill-tree-legend">
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--completed"></div>
+        <span>Completé (≥ 80%)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--in-progress"></div>
+        <span>En cours (1 – 79%)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--not-started"></div>
+        <span>Pas encore démarré (0%)</span>
+      </div>
+    </div>
+
+    <!-- ── Road-ahead note ───────────────────────────────────────── -->
+    <div class="skill-tree-note">
+      <strong>Prochains à démarrer :</strong>
+      Deep Learning post-Micrograd (juin 2026) puis LLMs (août 2026).
+      Track 3 (C++ → CUDA) en parallèle dès que Track 2 atteint 80%.
+    </div>
+
+  </div>{# /.skill-tree-card #}
+
+</div>{# /.skill-tree-page #}
+{% endblock %}

@@ -1,0 +1,329 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Treemap · Depenses mensuelles{% endblock %}
+
+{% block extra_css %}
+.treemap-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+#treemap-svg {
+  display: block;
+  width: 100%;
+  height: 420px;
+}
+.insights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .insights-grid { grid-template-columns: 1fr; }
+}
+.insight-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--bg);
+  border-left: 3px solid var(--insight-accent, #1E4D8C);
+}
+.insight-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--insight-icon-bg, #C9D8E8);
+}
+.insight-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--insight-accent, #1E4D8C);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.insight-body {
+  flex: 1;
+  min-width: 0;
+}
+.insight-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.insight-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.insight-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+{% endblock %}
+
+{% block content %}
+{{ m.section_header(
+    eyebrow="REPARTITION DEPENSES",
+    title="Treemap · 3 200 € nets / mois",
+    subtitle="Visualisation proportionnelle des categories de depenses",
+    accent="#1E4D8C"
+) }}
+
+<div class="card">
+  <div class="treemap-wrap">
+    <svg id="treemap-svg"
+         viewBox="0 0 900 420"
+         preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="insights-grid">
+    <div class="insight-row" style="--insight-accent: #1E4D8C; --insight-icon-bg: #C9D8E8;">
+      <div class="insight-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 3h18v4H3zM3 10h11v11H3zM17 10h4v11h-4z"/></svg>
+      </div>
+      <div class="insight-body">
+        <div class="insight-label">Top 3 postes cumules</div>
+        <div class="insight-value">68% du net</div>
+        <div class="insight-sub">Logement + Reserve + Courses — 2 120 € sur 3 200 €</div>
+      </div>
+    </div>
+
+    <div class="insight-row" style="--insight-accent: #10B981; --insight-icon-bg: #D1FAE5;">
+      <div class="insight-icon">
+        <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <div class="insight-body">
+        <div class="insight-label">Epargne totale (PEA + AV + Reserve)</div>
+        <div class="insight-value">1 080 € · 33% du net</div>
+        <div class="insight-sub">Bien au-dessus de la cible 15% — trajectoire solide</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function () {
+  /* ── Data ── */
+  var CATEGORIES = [
+    { name: "Logement",                montant: 900,  pct: 28, type: "spending" },
+    { name: "Reserve epargne court",   montant: 800,  pct: 25, type: "savings"  },
+    { name: "Courses alimentation",    montant: 420,  pct: 13, type: "spending" },
+    { name: "Enfants famille",         montant: 320,  pct: 10, type: "spending" },
+    { name: "Epargne PEA",             montant: 200,  pct: 6,  type: "savings"  },
+    { name: "Transport",               montant: 180,  pct: 6,  type: "spending" },
+    { name: "Loisirs",                 montant: 150,  pct: 5,  type: "spending" },
+    { name: "Admin divers",            montant: 150,  pct: 5,  type: "spending" },
+    { name: "Assurance vie",           montant: 80,   pct: 3,  type: "savings"  }
+  ];
+
+  /* ── Color scales ── */
+  /* Spending: interpolate from darkest #1E4D8C to lightest #C9D8E8 by rank */
+  /* Savings:  interpolate from #065F46 to #34D399 */
+  var spendingItems  = CATEGORIES.filter(function(d){ return d.type === "spending"; });
+  var savingsItems   = CATEGORIES.filter(function(d){ return d.type === "savings";  });
+
+  var spendingScale = d3.scaleOrdinal(
+    spendingItems.map(function(d){ return d.name; }),
+    spendingItems.map(function(d, i){
+      return d3.interpolateRgb("#1E4D8C", "#C9D8E8")(i / Math.max(spendingItems.length - 1, 1));
+    })
+  );
+
+  var savingsScale = d3.scaleOrdinal(
+    savingsItems.map(function(d){ return d.name; }),
+    savingsItems.map(function(d, i){
+      return d3.interpolateRgb("#059669", "#6EE7B7")(i / Math.max(savingsItems.length - 1, 1));
+    })
+  );
+
+  function tileColor(d) {
+    return d.data.type === "savings"
+      ? savingsScale(d.data.name)
+      : spendingScale(d.data.name);
+  }
+
+  /* Determine if text should be white or dark based on background luminance */
+  function textColor(hexColor) {
+    var c = hexColor.replace("#", "");
+    var r = parseInt(c.substring(0, 2), 16) / 255;
+    var g = parseInt(c.substring(2, 4), 16) / 255;
+    var b = parseInt(c.substring(4, 6), 16) / 255;
+    /* WCAG relative luminance */
+    r = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+    g = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+    b = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+    var L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    return L > 0.35 ? "#1A1A1A" : "#FFFFFF";
+  }
+
+  function renderTreemap() {
+    var svgEl = document.getElementById("treemap-svg");
+    if (!svgEl) return;
+
+    var rect = svgEl.getBoundingClientRect();
+    var W = Math.max(rect.width || 0, 400);
+    var H = 420;
+
+    if (W < 100) { setTimeout(renderTreemap, 100); return; }
+
+    var svg = d3.select("#treemap-svg")
+      .attr("width", W)
+      .attr("height", H)
+      .attr("viewBox", "0 0 " + W + " " + H)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    svg.selectAll("*").remove();
+
+    /* Build hierarchy */
+    var root = d3.hierarchy({
+      name: "root",
+      children: CATEGORIES
+    }).sum(function(d){ return d.montant || 0; })
+      .sort(function(a, b){ return b.value - a.value; });
+
+    d3.treemap()
+      .size([W, H])
+      .padding(2)
+      .round(true)
+      (root);
+
+    var defs = svg.append("defs");
+
+    /* One linear gradient per leaf for depth effect */
+    root.leaves().forEach(function(d, i) {
+      var base = tileColor(d);
+      var grad = defs.append("linearGradient")
+        .attr("id", "tg-" + i)
+        .attr("x1", "0%").attr("y1", "0%")
+        .attr("x2", "100%").attr("y2", "100%");
+      grad.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", base)
+        .attr("stop-opacity", 1);
+      grad.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", d3.color(base).darker(0.35).formatHex())
+        .attr("stop-opacity", 1);
+      d._gradId = "tg-" + i;
+      d._baseColor = base;
+    });
+
+    var cell = svg.selectAll("g.tile")
+      .data(root.leaves())
+      .join("g")
+      .attr("class", "tile")
+      .attr("transform", function(d){ return "translate(" + d.x0 + "," + d.y0 + ")"; })
+      .style("cursor", "default");
+
+    /* Background rect */
+    cell.append("rect")
+      .attr("width", function(d){ return d.x1 - d.x0; })
+      .attr("height", function(d){ return d.y1 - d.y0; })
+      .attr("fill", function(d){ return "url(#" + d._gradId + ")"; })
+      .attr("rx", 4)
+      .attr("ry", 4)
+      .on("mouseover", function(event, d) {
+        d3.select(this)
+          .attr("fill", d3.color(d._baseColor).brighter(0.25).formatHex());
+      })
+      .on("mouseout", function(event, d) {
+        d3.select(this)
+          .attr("fill", "url(#" + d._gradId + ")");
+      });
+
+    /* Tooltip */
+    cell.append("title")
+      .text(function(d){
+        return d.data.name + "\n" + d.data.montant + " € · " + d.data.pct + "%";
+      });
+
+    /* Text labels — only render if tile is large enough */
+    cell.each(function(d) {
+      var tileW = d.x1 - d.x0;
+      var tileH = d.y1 - d.y0;
+      if (tileW < 48 || tileH < 30) return; /* too small — skip */
+
+      var g = d3.select(this);
+      var fc = textColor(d._baseColor);
+      var pad = 8;
+      var avail = tileW - pad * 2;
+
+      /* Name — truncate if needed */
+      var nameEl = g.append("text")
+        .attr("x", pad)
+        .attr("y", pad + 11)
+        .attr("font-family", "Inter, system-ui, sans-serif")
+        .attr("font-size", Math.min(12, Math.max(9, tileW / 12)))
+        .attr("font-weight", 700)
+        .attr("fill", fc)
+        .text(d.data.name);
+
+      /* Truncate if overflows */
+      try {
+        if (nameEl.node().getComputedTextLength && nameEl.node().getComputedTextLength() > avail) {
+          var txt = d.data.name;
+          while (txt.length > 3 && nameEl.node().getComputedTextLength() > avail) {
+            txt = txt.slice(0, -1);
+            nameEl.text(txt + "\u2026");
+          }
+        }
+      } catch(e) { /* ignore in non-browser env */ }
+
+      if (tileH < 52) return; /* only name fits */
+
+      /* Amount */
+      g.append("text")
+        .attr("x", pad)
+        .attr("y", pad + 11 + 16)
+        .attr("font-family", "Inter, system-ui, sans-serif")
+        .attr("font-size", Math.min(11, Math.max(9, tileW / 13)))
+        .attr("font-weight", 600)
+        .attr("fill", fc)
+        .attr("opacity", 0.9)
+        .text(d.data.montant + " \u20ac");
+
+      if (tileH < 72) return;
+
+      /* Percentage */
+      g.append("text")
+        .attr("x", pad)
+        .attr("y", pad + 11 + 16 + 14)
+        .attr("font-family", "Inter, system-ui, sans-serif")
+        .attr("font-size", Math.min(10, Math.max(8, tileW / 14)))
+        .attr("font-weight", 500)
+        .attr("fill", fc)
+        .attr("opacity", 0.75)
+        .text(d.data.pct + "%");
+    });
+  }
+
+  window.addEventListener("load", function () {
+    var svgEl = document.getElementById("treemap-svg");
+    if (!svgEl) return;
+    if (svgEl.getBoundingClientRect().width > 100) {
+      renderTreemap();
+    } else {
+      setTimeout(renderTreemap, 100);
+    }
+  });
+})();
+</script>
+{% endblock %}
