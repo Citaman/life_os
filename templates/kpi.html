@@ -1,0 +1,65 @@
+{% extends "_base.html" %}
+{% block title %}{{ kpi.eyebrow }} · Life OS{% endblock %}
+{% block body_class %}kpi-embed{% endblock %}
+{% block extra_css %}
+body.kpi-embed {
+  padding: 16px;
+  background: transparent;
+  min-height: auto;
+}
+body.kpi-embed .footer { display: none; }
+.kpi-embed-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border-top: 3px solid {{ kpi.accent }};
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 120px;
+}
+.kpi-embed-card .eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.kpi-embed-card .value {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 6vw, 44px);
+  line-height: 1;
+  color: {{ kpi.accent }};
+  letter-spacing: -0.02em;
+}
+.kpi-embed-card .sub {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 2px;
+}
+.kpi-embed-card .sub2 {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+.kpi-embed-card .footer-sync {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 10px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+{% endblock %}
+{% block content %}
+<div class="kpi-embed-card">
+  <div class="eyebrow">{{ kpi.eyebrow }}</div>
+  <div class="value">{{ kpi.value }}</div>
+  {% if kpi.sub %}<div class="sub">{{ kpi.sub }}</div>{% endif %}
+  {% if kpi.sub2 %}<div class="sub2">{{ kpi.sub2 }}</div>{% endif %}
+  <div class="footer-sync">Sync · {{ snap.generated_at[:10] }} · DB Notion</div>
+</div>
+{% endblock %}

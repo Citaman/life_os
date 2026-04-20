@@ -91,6 +91,18 @@ def main() -> None:
             rendered += 1
             print(f"  rendered {out_name}")
 
+    # KPI embeds (one HTML per kpi_catalog entry)
+    try:
+        kpi_tmpl = env.get_template("kpi.html")
+        for slug, kpi_data in snapshots.get("kpi_catalog", {}).items():
+            out_name = f"kpi-{slug}.html"
+            html = kpi_tmpl.render(snap=snapshots, kpi=kpi_data)
+            (DIST_DIR / out_name).write_text(html)
+            rendered += 1
+            print(f"  rendered {out_name}")
+    except Exception as e:
+        print(f"  skip kpi rendering: {e}")
+
     # Index page listing all embeds for easy preview
     try:
         idx = env.get_template("_index.html")

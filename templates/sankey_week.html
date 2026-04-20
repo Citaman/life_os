@@ -100,12 +100,19 @@
 
 {% if not snap.time_week %}
 <div class="card">
-  {{ m.todo_placeholder(
+  {% call m.todo_placeholder(
     title="Flux Sankey — Semaine 168 h",
     reason="Aucune DB Time Tracker n'est encore branchée. Quand tu commences à tracker les heures (manuellement ou via intégration Toggl/Rize), ce Sankey se remplit avec les vraies valeurs.",
     needed_db="DB Time Tracker",
     accent="#3B82F6"
-  ) }}
+  ) %}
+    <h5>Comment activer ce Sankey</h5>
+    <ul>
+      <li>Pas de DB Time Tracker encore.</li>
+      <li>Crée une DB Notion avec : <strong>Date</strong> + <strong>Pilier</strong> + <strong>Activité</strong> + <strong>Durée (h)</strong></li>
+      <li>Ce Sankey se remplira automatiquement dès que des entrées existent.</li>
+    </ul>
+  {% endcall %}
 </div>
 {% else %}
 <div class="card">

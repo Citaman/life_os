@@ -81,6 +81,9 @@
   <div class="todo-title">{{ title }}</div>
   {% if reason %}<p class="todo-reason">{{ reason }}</p>{% endif %}
   {% if needed_db %}<div class="todo-needed">Source manquante · {{ needed_db }}</div>{% endif %}
+  {% if caller %}
+    <div class="todo-preview">{{ caller() }}</div>
+  {% endif %}
   <div class="todo-hint">Rendu transparent tant que la source de données n'est pas disponible. Aucune valeur hardcodée.</div>
 </div>
 {%- endmacro -%}

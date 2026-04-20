@@ -63,12 +63,25 @@
 
 {% if not pilier.time_pilier %}
 
-{{ m.todo_placeholder(
+{% call m.todo_placeholder(
     title="Flux Sankey — " + pilier.name,
     reason="Aucune DB Time Tracker n'est branchée. Tu peux commencer par tracker tes heures hebdo (manuellement dans une DB 'Time log' avec Pilier + Activité + Durée), et ce Sankey se remplira automatiquement.",
     needed_db="DB Time Tracker · Pilier=" + pilier.name,
     accent=pilier.accent
-) }}
+) %}
+  {% if pilier.achievements_active %}
+  <h5>Achievements actifs ({{ pilier.achievements_active | length }})</h5>
+  <ul>
+    {% for a in pilier.achievements_active %}
+      <li>
+        <strong>{{ a.name }}</strong> ·
+        start={{ a.start }}{% if a.deadline %} · deadline={{ a.deadline }}{% endif %} ·
+        progress={{ a.progress }}%
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endcall %}
 {% else %}
 <div class="card">
   <div class="pilier-accent-bar" style="background: linear-gradient(90deg, {{ pilier.accent }}, {{ pilier.tint_mid }});"></div>

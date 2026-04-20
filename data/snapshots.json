@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-20T08:01:00.414389Z",
+  "generated_at": "2026-04-20T09:11:21.240805Z",
   "current_week": "W16",
   "current_trimester": "T2 2026",
   "current_date": "2026-04-19",
@@ -3258,6 +3258,174 @@
         }
       ],
       "signature_metric": null
+    }
+  },
+  "kpi_catalog": {
+    "dash-tasks-today": {
+      "eyebrow": "TÂCHES DU JOUR",
+      "value": "0 / 4",
+      "sub": "complétées · 4 en attente",
+      "accent": "#3B82F6",
+      "accent_light": "#DBEAFE"
+    },
+    "dash-badge-week": {
+      "eyebrow": "BADGE SEMAINE W16",
+      "value": "81 %",
+      "sub": "VERT · 43 / 53 habitudes tenues",
+      "accent": "#10B981",
+      "accent_light": "#D1FAE5"
+    },
+    "dash-trimester-t2": {
+      "eyebrow": "TRIMESTRE T2 2026",
+      "value": "0 %",
+      "sub": "0 sous done · 14 en cours · 1391 pages",
+      "accent": "#F59E0B",
+      "accent_light": "#FEF3C7"
+    },
+    "dash-pilier-interieur": {
+      "eyebrow": "INTÉRIEUR",
+      "value": "15 %",
+      "sub": "2 achievement(s) actif(s)",
+      "sub2": "Atteindre 90 kg via body recomposition · Sommeil et récupération solides",
+      "accent": "#2F7D5B",
+      "accent_light": "#D4E5DB"
+    },
+    "dash-pilier-famille": {
+      "eyebrow": "FAMILLE",
+      "value": "0 %",
+      "sub": "2 achievement(s) actif(s)",
+      "sub2": "Éducation James équilibrée (3 ans, bilin · Couple solide Mirane (rituels Gottman)",
+      "accent": "#C84B4B",
+      "accent_light": "#F2D0D0"
+    },
+    "dash-pilier-pro-fi": {
+      "eyebrow": "PRO & FINANCIER",
+      "value": "0 %",
+      "sub": "2 achievement(s) actif(s)",
+      "sub2": "Budget familial maîtrisé · Admin & patrimoine à jour",
+      "accent": "#1E4D8C",
+      "accent_light": "#C9D8E8"
+    },
+    "dash-pilier-creation": {
+      "eyebrow": "CRÉATION",
+      "value": "0 %",
+      "sub": "1 achievement(s) actif(s)",
+      "sub2": "Re-implémenter chaque modèle ML from scr",
+      "accent": "#6B3FA0",
+      "accent_light": "#DDCEE7"
+    },
+    "dash-pilier-spirituel": {
+      "eyebrow": "SPIRITUEL",
+      "value": "0 %",
+      "sub": "2 achievement(s) actif(s)",
+      "sub2": "Accompagnement Jillian dans Vivre pour t · Prédication régulière et progressive (pa",
+      "accent": "#B8860B",
+      "accent_light": "#ECD9A8"
+    },
+    "interieur-achievements": {
+      "eyebrow": "ACHIEVEMENTS ACTIFS",
+      "value": "2 / 2",
+      "sub": "plafond Time Budget",
+      "accent": "#2F7D5B",
+      "accent_light": "#D4E5DB"
+    },
+    "interieur-habits": {
+      "eyebrow": "HABITUDES W16",
+      "value": "84 %",
+      "sub": "16 / 19 cibles semaine",
+      "accent": "#2F7D5B",
+      "accent_light": "#D4E5DB"
+    },
+    "interieur-signature": {
+      "eyebrow": "POIDS ACTUEL",
+      "value": "—",
+      "sub": "DB Mesures corps à brancher",
+      "accent": "#2F7D5B",
+      "accent_light": "#D4E5DB"
+    },
+    "famille-achievements": {
+      "eyebrow": "ACHIEVEMENTS ACTIFS",
+      "value": "2 / 2",
+      "sub": "plafond Time Budget",
+      "accent": "#C84B4B",
+      "accent_light": "#F2D0D0"
+    },
+    "famille-habits": {
+      "eyebrow": "HABITUDES W16",
+      "value": "83 %",
+      "sub": "5 / 6 cibles semaine",
+      "accent": "#C84B4B",
+      "accent_light": "#F2D0D0"
+    },
+    "famille-signature": {
+      "eyebrow": "DATE-NIGHT CETTE SEMAINE",
+      "value": "—",
+      "sub": "DB Couple à brancher",
+      "accent": "#C84B4B",
+      "accent_light": "#F2D0D0"
+    },
+    "pro-fi-achievements": {
+      "eyebrow": "ACHIEVEMENTS ACTIFS",
+      "value": "2 / 2",
+      "sub": "plafond Time Budget",
+      "accent": "#1E4D8C",
+      "accent_light": "#C9D8E8"
+    },
+    "pro-fi-habits": {
+      "eyebrow": "HABITUDES W16",
+      "value": "71 %",
+      "sub": "5 / 7 cibles semaine",
+      "accent": "#1E4D8C",
+      "accent_light": "#C9D8E8"
+    },
+    "pro-fi-signature": {
+      "eyebrow": "NET WORTH",
+      "value": "—",
+      "sub": "DB Comptes à brancher",
+      "accent": "#1E4D8C",
+      "accent_light": "#C9D8E8"
+    },
+    "creation-achievements": {
+      "eyebrow": "ACHIEVEMENTS ACTIFS",
+      "value": "1 / 2",
+      "sub": "plafond Tech+Arts combinés",
+      "accent": "#6B3FA0",
+      "accent_light": "#DDCEE7"
+    },
+    "creation-habits": {
+      "eyebrow": "HABITUDES W16",
+      "value": "83 %",
+      "sub": "10 / 12 cibles semaine",
+      "accent": "#6B3FA0",
+      "accent_light": "#DDCEE7"
+    },
+    "creation-signature": {
+      "eyebrow": "PROGRESSION TECH",
+      "value": "—",
+      "sub": "0 % · pas de sous complété T2",
+      "accent": "#6B3FA0",
+      "accent_light": "#DDCEE7"
+    },
+    "spirituel-achievements": {
+      "eyebrow": "ACHIEVEMENTS ACTIFS",
+      "value": "2 / 2",
+      "sub": "plafond Time Budget",
+      "accent": "#B8860B",
+      "accent_light": "#ECD9A8"
+    },
+    "spirituel-habits": {
+      "eyebrow": "HABITUDES W16",
+      "value": "78 %",
+      "sub": "7 / 9 cibles semaine",
+      "accent": "#B8860B",
+      "accent_light": "#ECD9A8"
+    },
+    "spirituel-signature": {
+      "eyebrow": "PRÉDICATION AVRIL",
+      "value": "—",
+      "sub": "DB Rapports prédication à brancher",
+      "accent": "#B8860B",
+      "accent_light": "#ECD9A8"
     }
   }
 }

@@ -141,12 +141,23 @@
   subtitle="W05 → W16 réel · W17 → W26 projection linéaire · 22 semaines"
 ) }}
 <div class="card">
-  {{ m.todo_placeholder(
+  {% call m.todo_placeholder(
     title="Évolution habit completion — historique à construire",
     reason="Une seule semaine de données (W16) est disponible. Il faut au moins 4 semaines pour un area chart pertinent. L'historique se remplira automatiquement à mesure que tu saisiras les habitudes chaque semaine.",
     needed_db="DB Habitudes · semaines passées",
     accent="#10B981"
-  ) }}
+  ) %}
+    <h5>W16 — Données disponibles (semaine courante)</h5>
+    <ul>
+      {% for p in piliers_def %}
+      {% set last_val = series[p.name][-1] if p.name in series else none %}
+      <li>
+        <strong>{{ p.name }}</strong> ·
+        {% if last_val is not none %}W16 : {{ last_val }}%{% else %}pas de données{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  {% endcall %}
 </div>
 {%- else %}
 

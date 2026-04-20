@@ -268,6 +268,28 @@
     opacity: 0.8;
     max-width: 440px;
   }
+  .todo-placeholder .todo-preview {
+    background: rgba(255,255,255,0.95);
+    border-left: 3px solid var(--todo-accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 6px;
+    text-align: left;
+    max-width: 520px;
+    width: 100%;
+    font-size: 13px;
+  }
+  .todo-placeholder .todo-preview h5 {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .todo-placeholder .todo-preview ul { list-style: none; padding: 0; margin: 0; }
+  .todo-placeholder .todo-preview li { padding: 4px 0; color: var(--text); border-bottom: 1px solid #F3F4F6; }
+  .todo-placeholder .todo-preview li:last-child { border: none; }
+  .todo-placeholder .todo-preview li strong { color: var(--todo-accent); }
 
   /* Icon utility */
   [data-lucide] {

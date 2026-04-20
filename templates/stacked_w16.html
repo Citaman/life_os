@@ -168,12 +168,19 @@
 {# ── TODO or Chart ─────────────────────────────────────────────────────── #}
 {% if grand_total == 0 %}
 
-{{ m.todo_placeholder(
+{% call m.todo_placeholder(
     title="Tâches W16 complétées par pilier — 0 tâche terminée",
     reason="Aucune tâche atomique dans Plan d'exécution n'est encore marquée 'Complété' avec une date dans la semaine W16 (13-19 avril). Le stacked column se remplit dès que tu coches des tâches.",
     needed_db="Plan d'exécution · Statut + Date",
     accent="#2F7D5B"
-) }}
+) %}
+  <h5>Tâches datées aujourd'hui ({{ snap.tasks_today.total }})</h5>
+  <ul>
+    {% for t in snap.tasks_today['items'] %}
+      <li><strong>{{ t.pilier }}</strong> · {{ t.status }} · {{ t.name }}</li>
+    {% endfor %}
+  </ul>
+{% endcall %}
 
 {% else %}
 

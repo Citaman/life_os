@@ -391,6 +391,85 @@ def main() -> None:
         "piliers": piliers_out,
     }
 
+    # ---------- KPI catalog ----------
+    kpi_catalog = {
+        # Dashboard — 3 hero KPIs
+        "dash-tasks-today": {
+            "eyebrow": "TÂCHES DU JOUR",
+            "value": f"{snapshots['tasks_today']['done']} / {snapshots['tasks_today']['total']}",
+            "sub": f"complétées · {max(0, snapshots['tasks_today']['total'] - snapshots['tasks_today']['done'])} en attente" if snapshots['tasks_today']['total'] else "aucune tâche datée aujourd'hui",
+            "accent": "#3B82F6",
+            "accent_light": "#DBEAFE",
+        },
+        "dash-badge-week": {
+            "eyebrow": f"BADGE SEMAINE {snapshots['current_week']}",
+            "value": f"{snapshots['badge_week']['score']} %" if snapshots['badge_week']['score'] is not None else "—",
+            "sub": f"{snapshots['badge_week']['status']} · {snapshots['badge_week']['total_fait']} / {snapshots['badge_week']['total_cible']} habitudes tenues" if snapshots['badge_week']['status'] else "aucune habitude saisie",
+            "accent": "#10B981" if snapshots['badge_week'].get('status') == 'VERT' else "#F59E0B" if snapshots['badge_week'].get('status') == 'JAUNE' else "#EF4444" if snapshots['badge_week'].get('status') == 'ROUGE' else "#6B7280",
+            "accent_light": "#D1FAE5" if snapshots['badge_week'].get('status') == 'VERT' else "#FEF3C7" if snapshots['badge_week'].get('status') == 'JAUNE' else "#FEE2E2" if snapshots['badge_week'].get('status') == 'ROUGE' else "#F3F4F6",
+        },
+        "dash-trimester-t2": {
+            "eyebrow": f"TRIMESTRE {snapshots['current_trimester']}",
+            "value": f"{snapshots['trimester_progress']['t2_percent']} %" if snapshots['trimester_progress']['t2_percent'] is not None else "—",
+            "sub": f"{snapshots['trimester_progress']['sous_total_done']} sous done · {snapshots['trimester_progress']['sous_total_active']} en cours · {snapshots['trimester_progress']['total_plan_pages']} pages",
+            "accent": "#F59E0B",
+            "accent_light": "#FEF3C7",
+        },
+    }
+
+    # Dashboard — 5 pilier cards
+    for p in snapshots['piliers'].values():
+        slug = p['slug'].replace('_', '-')
+        kpi_catalog[f"dash-pilier-{slug}"] = {
+            "eyebrow": p['name'].upper(),
+            "value": f"{p['progress_avg']} %" if p['progress_avg'] is not None else "—",
+            "sub": f"{len(p['achievements_active'])} achievement(s) actif(s)",
+            "sub2": " · ".join(a['name'][:40] for a in p['achievements_active'][:2]) if p['achievements_active'] else "aucun actif",
+            "accent": p['accent'],
+            "accent_light": p['tint_light'],
+        }
+
+    # Per pilier — 3 KPIs × 5 piliers = 15
+    for p in snapshots['piliers'].values():
+        slug = p['slug'].replace('_', '-')
+        habits = p.get('habits_w16', [])
+        total_fait = sum(h.get('fait', 0) for h in habits)
+        total_cible = sum(h.get('cible', 0) for h in habits)
+        habit_pct = round(total_fait / total_cible * 100) if total_cible else None
+
+        kpi_catalog[f"{slug}-achievements"] = {
+            "eyebrow": "ACHIEVEMENTS ACTIFS",
+            "value": f"{len(p['achievements_active'])} / 2",
+            "sub": "plafond Time Budget" if p['slug'] != 'creation' else "plafond Tech+Arts combinés",
+            "accent": p['accent'],
+            "accent_light": p['tint_light'],
+        }
+        kpi_catalog[f"{slug}-habits"] = {
+            "eyebrow": f"HABITUDES {snapshots['current_week']}",
+            "value": f"{habit_pct} %" if habit_pct is not None else "—",
+            "sub": f"{total_fait} / {total_cible} cibles semaine" if total_cible else "aucune habitude W16",
+            "accent": p['accent'],
+            "accent_light": p['tint_light'],
+        }
+        # Signature metric — all null for V2
+        sig_labels = {
+            "interieur": ("POIDS ACTUEL", "DB Mesures corps à brancher"),
+            "famille": ("DATE-NIGHT CETTE SEMAINE", "DB Couple à brancher"),
+            "pro_fi": ("NET WORTH", "DB Comptes à brancher"),
+            "creation": ("PROGRESSION TECH", f"{p['progress_avg']} % · pas de sous complété T2"),
+            "spirituel": ("PRÉDICATION AVRIL", "DB Rapports prédication à brancher"),
+        }
+        label, sub_text = sig_labels.get(p['slug'], ("SIGNATURE", ""))
+        kpi_catalog[f"{slug}-signature"] = {
+            "eyebrow": label,
+            "value": "—",
+            "sub": sub_text,
+            "accent": p['accent'],
+            "accent_light": p['tint_light'],
+        }
+
+    snapshots['kpi_catalog'] = kpi_catalog
+
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(snapshots, indent=2, ensure_ascii=False))
     print(f"Wrote {OUT_PATH}")
