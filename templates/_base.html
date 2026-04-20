@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Life OS{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root {
+    --bg: #F7F7F7;
+    --surface: #FFFFFF;
+    --text: #1A1A1A;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --shadow: 0 4px 24px rgba(0,0,0,0.06);
+    --radius: 16px;
+
+    /* Pilier palette */
+    --interieur: #2F7D5B;
+    --interieur-mid: #7FB09A;
+    --interieur-light: #D4E5DB;
+
+    --famille: #C84B4B;
+    --famille-mid: #E08B8B;
+    --famille-light: #F2D0D0;
+
+    --pro-fi: #1E4D8C;
+    --pro-fi-mid: #6A92C2;
+    --pro-fi-light: #C9D8E8;
+
+    --creation: #6B3FA0;
+    --creation-mid: #A584CA;
+    --creation-light: #DDCEE7;
+
+    --spirituel: #B8860B;
+    --spirituel-mid: #D8B052;
+    --spirituel-light: #ECD9A8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 24px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* Card + section primitives */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .section-header .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent, var(--muted));
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .section-header h1,
+  .section-header h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .section-header .subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* Icon utility */
+  [data-lucide] {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.75;
+    vertical-align: middle;
+  }
+  .icon-bubble {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-light, #EFEFEF);
+    color: var(--accent, var(--text));
+  }
+  .icon-bubble [data-lucide] { width: 18px; height: 18px; stroke-width: 2; }
+
+  /* Badge pills */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--accent-light, #EFEFEF);
+    color: var(--accent, var(--text));
+  }
+
+  /* Footer attribution */
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .footer time { font-family: 'Inter', monospace; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    body { padding: 16px; }
+    .card { padding: 18px; }
+  }
+
+  {% block extra_css %}{% endblock %}
+</style>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block content %}{% endblock %}
+
+<div class="footer">
+  Life OS · <time datetime="{{ snap.generated_at }}">mis à jour {{ snap.generated_at[:10] }}</time> · Source : Notion
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); }
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
