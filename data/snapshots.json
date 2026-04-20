@@ -1,0 +1,3363 @@
+{
+  "generated_at": "2026-04-20T05:32:03.218410Z",
+  "current_week": "W16",
+  "current_trimester": "T2 2026",
+  "current_date": "2026-04-19",
+  "today_fr": "vendredi 19 avril 2026",
+  "badge_week": {
+    "status": "VERT",
+    "score": 81,
+    "total_fait": 43,
+    "total_cible": 53,
+    "streak_weeks_vert": 3
+  },
+  "tasks_today": {
+    "done": 0,
+    "total": 4,
+    "items": [
+      {
+        "name": "Programmer 3 rappels Google Calendar (60/30/15j) échéances auto",
+        "pilier": "Pro & Financier",
+        "status": "Pas commencé"
+      },
+      {
+        "name": "Trancher outil tracker en 1 session 30 min",
+        "pilier": "Pro & Financier",
+        "status": "En cours"
+      },
+      {
+        "name": "Créer page Notion Auto (champs + scans cloud)",
+        "pilier": "Pro & Financier",
+        "status": "En cours"
+      },
+      {
+        "name": "Prendre RDV CT (Norauto/Dekra/Autosur)",
+        "pilier": "Pro & Financier",
+        "status": "Pas commencé"
+      }
+    ]
+  },
+  "trimester_progress": {
+    "achievements_total_active": 9,
+    "sous_total_active": 14,
+    "total_plan_pages": 1391
+  },
+  "time_week": {
+    "total": 168,
+    "buckets": [
+      {
+        "cat": "Sommeil",
+        "hours": 56,
+        "subs": []
+      },
+      {
+        "cat": "AVIV Travail",
+        "hours": 42,
+        "subs": [
+          {
+            "name": "Data work",
+            "hours": 30
+          },
+          {
+            "name": "Meetings",
+            "hours": 8
+          },
+          {
+            "name": "Admin",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "cat": "Admin / autre",
+        "hours": 23,
+        "subs": []
+      },
+      {
+        "cat": "Famille",
+        "hours": 22,
+        "subs": [
+          {
+            "name": "Couple",
+            "hours": 6
+          },
+          {
+            "name": "Lecture James",
+            "hours": 5
+          },
+          {
+            "name": "Jeux enfants",
+            "hours": 7
+          },
+          {
+            "name": "Cuisine",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "cat": "Spirituel",
+        "hours": 10,
+        "subs": [
+          {
+            "name": "Réunions",
+            "hours": 3
+          },
+          {
+            "name": "Prédication",
+            "hours": 3
+          },
+          {
+            "name": "Étude perso",
+            "hours": 2
+          },
+          {
+            "name": "Étude Jillian",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "cat": "Intérieur",
+        "hours": 8,
+        "subs": [
+          {
+            "name": "Sport",
+            "hours": 5
+          },
+          {
+            "name": "Récup",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "cat": "Création",
+        "hours": 7,
+        "subs": [
+          {
+            "name": "Maths S1",
+            "hours": 3
+          },
+          {
+            "name": "Micrograd",
+            "hours": 4
+          }
+        ]
+      }
+    ]
+  },
+  "historic_weekly_12w": {
+    "weeks": [
+      "W05",
+      "W06",
+      "W07",
+      "W08",
+      "W09",
+      "W10",
+      "W11",
+      "W12",
+      "W13",
+      "W14",
+      "W15",
+      "W16"
+    ],
+    "series": {
+      "Intérieur": [
+        45,
+        52,
+        60,
+        68,
+        72,
+        75,
+        78,
+        80,
+        82,
+        85,
+        82,
+        82
+      ],
+      "Famille": [
+        65,
+        68,
+        70,
+        72,
+        75,
+        78,
+        80,
+        82,
+        85,
+        85,
+        88,
+        90
+      ],
+      "Pro & Financier": [
+        50,
+        55,
+        60,
+        62,
+        65,
+        70,
+        72,
+        75,
+        78,
+        80,
+        82,
+        78
+      ],
+      "Création": [
+        30,
+        35,
+        42,
+        48,
+        52,
+        55,
+        58,
+        60,
+        65,
+        68,
+        70,
+        72
+      ],
+      "Spirituel": [
+        70,
+        75,
+        75,
+        78,
+        80,
+        82,
+        85,
+        85,
+        88,
+        88,
+        90,
+        82
+      ]
+    }
+  },
+  "piliers": {
+    "interieur": {
+      "slug": "interieur",
+      "name": "Intérieur",
+      "color_key": "green",
+      "accent": "#2F7D5B",
+      "tint_mid": "#7FB09A",
+      "tint_light": "#D4E5DB",
+      "progress_avg": 36,
+      "radar": {
+        "actuel": 82,
+        "cible": 85,
+        "gap": 3
+      },
+      "achievements_active": [
+        {
+          "id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "url": "https://www.notion.so/Atteindre-90-kg-via-body-recomposition-347845e8e836812aac62c8d3a52736ca",
+          "name": "Atteindre 90 kg via body recomposition",
+          "progress": 42,
+          "critere": "Poids 90 kg ±1 tenu 4 semaines glissantes, masse maigre préservée (mensurations stables ou +), 2 séances muscu/sem mini en maintenance",
+          "cible_unite": "kg : 90",
+          "deadline": null,
+          "start": "2026-04-20"
+        },
+        {
+          "id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "url": "https://www.notion.so/Sommeil-et-r-cup-ration-solides-347845e8e83681bfafd0d18fd73813a2",
+          "name": "Sommeil et récupération solides",
+          "progress": 30,
+          "critere": "Moyenne 7h ≥5 nuits/7 sur 4 semaines glissantes + qualité subjective ≥7/10 + lever ±30 min 6/7 jours (week-end inclus) + caféine cut-off 14h tenu",
+          "cible_unite": "h sommeil : 7 ; régularité lever : ±30 min 6/7j",
+          "deadline": null,
+          "start": "2026-04-20"
+        }
+      ],
+      "sous_achievements": [
+        {
+          "id": "347845e8-e836-8101-9437-ef3df106fe25",
+          "name": "Muscu palier 1 — Apprentissage technique (S1-S2)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Chaque exercice Séance A + B exécuté à charge légère avec 2-3 reps en réserve, validé par vidéo perso (1× par exo)",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8103-9cab-dfb12b106378",
+          "name": "Pause fenêtre / lever yeux toutes les heures",
+          "parent_id": "347845e8-e836-813f-ab88-ddbc1764ce8f",
+          "parent_name": "Santé mentale + équilibre émotionnel",
+          "critere": "Lever les yeux / regarder dehors quelques min toutes les heures pdt travail (timer), 6/8h ouvrées 5j/sem sur 4 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8106-aa00-ded20e6d0f34",
+          "name": "Nutri Phase 1 — Observation Yazio (S1-S2)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "14 jours consécutifs loggés Yazio (3 repas + collations + boissons) sans changer aucun comportement → livrable : moyenne kcal/j + répartition macros + 3 plus gros postes caloriques identifiés",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810c-9c7d-ef3392cc8da4",
+          "name": "Nuit optimisée (chambre 18-19°C + magnésium)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Sur 30 jours : chambre 18-19°C mesurée + noir total + magnésium glycinate 300-400 mg pris 30-60 min avant coucher 6/7 jours",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810e-a544-f4fed45b5215",
+          "name": "Réduire scrolling Twitter/YouTube 80-90%",
+          "parent_id": "347845e8-e836-813f-ab88-ddbc1764ce8f",
+          "parent_name": "Santé mentale + équilibre émotionnel",
+          "critere": "Screen Time iOS Twitter+YouTube ≤30 min/j en moyenne sur 4 semaines (vs baseline initial)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8112-bc7d-d06dbc9df360",
+          "name": "Palier poids 7 — 95 → 90 kg (finition)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 90 kg sur 14 jours consécutifs + body fat 15-18% estimé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-811f-8bd2-e1104ec0d1b6",
+          "name": "Lecture sci-fi — 1 livre/mois (remplace scrolling)",
+          "parent_id": "347845e8-e836-813f-ab88-ddbc1764ce8f",
+          "parent_name": "Santé mentale + équilibre émotionnel",
+          "critere": "1 livre sci-fi fini/mois pendant 3 mois consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8124-8ce8-df76a9b8d039",
+          "name": "Muscu palier 2 — Stabilisation 3×12 (S3-S4)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Atteindre 3×12 sur tous les exercices à la même charge sans grinder (forme propre conservée)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8127-b44f-eff9e957372f",
+          "name": "Palier poids 6 — 100 → 95 kg",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 95 kg sur 14 jours consécutifs + mensurations stables",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-812c-94f0-fa6969dee2a9",
+          "name": "Muscu palier 5 — Solide (M5-M8)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "DC 60 kg × 3×8 / Presse 140 kg × 3×10 / Goblet squat 24 kg × 3×12 validés 2 séances consécutives",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-812f-b239-ed2bc721ff4e",
+          "name": "Maintien long terme sommeil (M6+)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Sur 4 sem glissantes : moyenne 7h ≥5 nuits/7 + qualité ≥7/10 + lever ±30 min 6/7j + caféine jamais après 14h",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8132-8549-e64511285798",
+          "name": "Palier poids 3 — 115 → 110 kg",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 110 kg sur 14 jours consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8132-87e4-f19195bddb0a",
+          "name": "Palier poids 1 — 125 → 120 kg (test -1 kg/sem)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 120 kg sur 14 jours consécutifs",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8137-9378-db373bc65e4d",
+          "name": "Mobilité hanches + ischios (priorité squat)",
+          "parent_id": "347845e8-e836-8197-81c0-efa4d25d38e4",
+          "parent_name": "Améliorer ma flexibilité et mobilité",
+          "critere": "Toucher orteils jambes tendues (départ genoux fléchis si besoin) + squat profond 1 min tenu",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2026-10-01"
+        },
+        {
+          "id": "347845e8-e836-8141-ac51-e7d6a4c70304",
+          "name": "Palier poids 5 — 105 → 100 kg",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 100 kg sur 14 jours consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8149-a144-c4d9f60a4591",
+          "name": "Hydratation — 2L eau/j loggés Yazio",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "2L eau/j enregistrés Yazio 6/7 jours sur 21 jours",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8150-932a-f69107e9b52c",
+          "name": "Cardio palier 2 — 60 min × 5j/sem + 60 min samedi",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "60 min × 5j/sem + 60 min sortie samedi en zone 2 = total ≥250 min/sem tenu 4 semaines",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8169-b818-c3806d329297",
+          "name": "Cardio palier 1 — 45 min marche zone 2 × 5j/sem",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "45 min marche × 5j/sem en zone 2 (FC 130-145 bpm) tenu 4 semaines consécutives",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8170-a2bb-c79342db6970",
+          "name": "Muscu palier 3 — Premier palier charge (S5-S8)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "+2,5 kg sur chaque compound (DC, presse, rowing, dvp épaules) franchi → retombe à 3×10 puis remonte à 3×12",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8172-923d-c91c9f31e599",
+          "name": "Muscu palier 4 — Intermédiaire (M3-M4)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "DC barre 40 kg × 3×10 / Presse 100 kg × 3×10 / Tirage 50 kg × 3×10 validés sur 2 séances consécutives",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8188-940d-d8b65833b4c5",
+          "name": "Mesure trimestrielle sommeil (T3/T6/T9/T12)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Tous les 3 mois : 30 jours de log subjectif (durée + qualité /10) → moyenne calculée + comparaison T0/T3/T6/T9/T12",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818a-bf1a-c1bb4950c5eb",
+          "name": "Nutri Phase 3 — Structure 2000-2200 kcal / 180g prot (M2+)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "2000-2200 kcal ±100, tenu 6/7 jours sur 14 jours glissants + ≥180g protéines + rotation A/B/C en place",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818c-8cdf-c03ac5f2c7a3",
+          "name": "Gestion fragmentation Harper (règle tours Mirane)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Règle de tours nocturnes écrite avec Mirane + tenue 5/7 nuits sur 14 jours + viser 1 bloc 4h ininterrompues ≥4 nuits/sem",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818e-bbba-e1e2256d37d1",
+          "name": "Meal prep dominical opérationnel",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Chaque dimanche 11h-13h, 5 lunchs préparés (lun→ven) en tupperware photo Yazio, tenu 4 dimanches consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8191-910d-f3b4c5722afa",
+          "name": "Sommeil Phase 1 — Audit baseline 7 jours",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "7 nuits consécutives loggées (coucher / lever / nb réveils / durée / qualité /10) sans changer aucun comportement → livrable : moyenne durée + médiane qualité + frein dominant",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8193-be27-fc1cb0d66af9",
+          "name": "Cardio palier 3 — Marche inclinée ou rapide soutenue",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "60 min à 5,5-6 km/h ou 5 km/h pente 5% en restant zone 2 (FC ≤145 bpm), 4×/sem sur 4 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-819b-8b57-f484f24840fd",
+          "name": "Palier poids 2 — 120 → 115 kg",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 115 kg sur 14 jours consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a2-b941-e8485c666b8d",
+          "name": "Mobilité thoracique + épaules (développé couché propre)",
+          "parent_id": "347845e8-e836-8197-81c0-efa4d25d38e4",
+          "parent_name": "Améliorer ma flexibilité et mobilité",
+          "critere": "Overhead position (bras tendus au-dessus tête sans cambrer) + shoulder flexion 170°+",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2026-12-31"
+        },
+        {
+          "id": "347845e8-e836-81b0-a0c0-f512a12d7aac",
+          "name": "Récupération active (4-7-8 + NSDR + stretching)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Sur 30 jours : stretching 10 min post-muscu 3×/sem + respiration 4-7-8 ×4 cycles 5/7 soirs + marche zone 2 dimanche matin 20-30 min",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81b2-a562-ce519b0f677e",
+          "name": "Hygiène — Douche matin + soir",
+          "parent_id": "347845e8-e836-8130-8227-f1e09f7c5e38",
+          "parent_name": "Hygiène quotidienne stable",
+          "critere": "Douche matin + soir tenue 6/7 jours sur 21 jours",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81b3-a024-f31138b4b95e",
+          "name": "Pause respiration quotidienne pdt travail",
+          "parent_id": "347845e8-e836-813f-ab88-ddbc1764ce8f",
+          "parent_name": "Santé mentale + équilibre émotionnel",
+          "critere": "1 pause respiration 5 min/jour pdt travail (5/7 jours) sur 4 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ba-a92c-febfa3723e28",
+          "name": "Protocole matin (lumière + café +90 min)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Sur 30 jours, ≥20/30 matins avec : lumière extérieure 5-10 min dans 30 min après réveil + 500 ml eau au lever + café retardé ≥90 min après réveil",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81bc-add8-f5ab097de9f3",
+          "name": "Baseline tests + routine mise en place",
+          "parent_id": "347845e8-e836-8197-81c0-efa4d25d38e4",
+          "parent_name": "Améliorer ma flexibilité et mobilité",
+          "critere": "5 tests baseline documentés (photos/vidéos) + routine 10 min tenue 14 jours consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2026-07-15"
+        },
+        {
+          "id": "347845e8-e836-81c5-88e4-f7226555f64e",
+          "name": "Hygiène — Linge lavé / repassé / rangé sans backlog",
+          "parent_id": "347845e8-e836-8130-8227-f1e09f7c5e38",
+          "parent_name": "Hygiène quotidienne stable",
+          "critere": "Aucun linge sale en attente >7 jours + repassage hebdo dimanche soir + rangement placé dans la même semaine",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81db-8c4e-c9ad546358ca",
+          "name": "Nutri Phase 2 — Ajustement progressif (S3-S4)",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Déficit -300 à -500 kcal/j vs baseline Phase 1, tenu 12/14 jours + perte 0,5-1 kg/sem + énergie subjective ≥6/10",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81e7-834d-cd6d74b6942f",
+          "name": "Intégration yoga/mobilité complète + entretien long terme",
+          "parent_id": "347845e8-e836-8197-81c0-efa4d25d38e4",
+          "parent_name": "Améliorer ma flexibilité et mobilité",
+          "critere": "Séance yoga 30 min 2×/sem tenue 8 sem consécutives + overhead squat propre",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2027-03-01"
+        },
+        {
+          "id": "347845e8-e836-81f0-bfe7-d7bc1bc2779c",
+          "name": "Palier poids 4 — 110 → 105 kg",
+          "parent_id": "347845e8-e836-812a-ac62-c8d3a52736ca",
+          "parent_name": "Atteindre 90 kg via body recomposition",
+          "critere": "Moyenne mobile 7j du poids ≤ 105 kg sur 14 jours consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81fc-b8c9-ee85dc56bc5d",
+          "name": "Hygiène sommeil de base (S2-S3)",
+          "parent_id": "347845e8-e836-81bf-afd0-d18fd73813a2",
+          "parent_name": "Sommeil et récupération solides",
+          "critere": "Sur 21 jours : lever fixe ±30 min 6/7j (week-end inclus) + coucher 22h30 ±30 min 5/7j + caféine cut-off 14h 30/30j + écrans coupés 30 min avant coucher",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Séance sport",
+          "cible": 5,
+          "days": [
+            true,
+            false,
+            true,
+            true,
+            true,
+            false,
+            false
+          ],
+          "fait": 4,
+          "score_pct": 80
+        },
+        {
+          "name": "Hydratation 2 L",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true
+          ],
+          "fait": 6,
+          "score_pct": 86
+        },
+        {
+          "name": "Coucher 22 h 30",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true
+          ],
+          "fait": 6,
+          "score_pct": 86
+        }
+      ],
+      "habit_completion_12w": [
+        45,
+        52,
+        60,
+        68,
+        72,
+        75,
+        78,
+        80,
+        82,
+        85,
+        82,
+        82
+      ],
+      "time_pilier": {
+        "cat": "Intérieur",
+        "hours": 8,
+        "subs": [
+          {
+            "name": "Sport",
+            "hours": 5
+          },
+          {
+            "name": "Récup",
+            "hours": 3
+          }
+        ]
+      },
+      "roadmap": [
+        {
+          "name": "Atteindre 90 kg via body recomposition",
+          "start": "2026-04-20",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 42
+        },
+        {
+          "name": "Sommeil et récupération solides",
+          "start": "2026-04-20",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 30
+        },
+        {
+          "name": "Santé mentale + équilibre émotionnel",
+          "start": "2026-06-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Améliorer ma flexibilité et mobilité",
+          "start": "2026-06-01",
+          "end": "2027-03-01",
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Hygiène quotidienne stable",
+          "start": "2026-09-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        }
+      ],
+      "signature_metric": {
+        "label": "Poids actuel",
+        "value": "122,7 kg",
+        "sub": "125 → 122,7 · -2,3 kg"
+      }
+    },
+    "famille": {
+      "slug": "famille",
+      "name": "Famille",
+      "color_key": "red",
+      "accent": "#C84B4B",
+      "tint_mid": "#E08B8B",
+      "tint_light": "#F2D0D0",
+      "progress_avg": 52,
+      "radar": {
+        "actuel": 90,
+        "cible": 90,
+        "gap": 0
+      },
+      "achievements_active": [
+        {
+          "id": "347845e8-e836-8123-87f4-e1fab631f989",
+          "url": "https://www.notion.so/ducation-James-quilibr-e-3-ans-bilingue-347845e8e836812387f4e1fab631f989",
+          "name": "Éducation James équilibrée (3 ans, bilingue)",
+          "progress": 70,
+          "critere": "Lecture quotidienne + Montessori hebdo + sortie père-fils hebdo, validés sur 8 sem",
+          "cible_unite": "rituels/sem : 5 lectures + 1 sortie + 1 activité",
+          "deadline": null,
+          "start": "2026-04-20"
+        },
+        {
+          "id": "347845e8-e836-816c-a27f-dbe7ddde026e",
+          "url": "https://www.notion.so/Couple-solide-Mirane-rituels-Gottman-347845e8e836816ca27fdbe7ddde026e",
+          "name": "Couple solide Mirane (rituels Gottman)",
+          "progress": 35,
+          "critere": "≥6h/sem investissement couple (6 magic hours Gottman) sur 8 sem",
+          "cible_unite": "magic hours/sem : 6",
+          "deadline": null,
+          "start": "2026-04-20"
+        }
+      ],
+      "sous_achievements": [
+        {
+          "id": "347845e8-e836-8107-989d-c2c3bd754e14",
+          "name": "Motricité libre + portage Harper (quotidien)",
+          "parent_id": "347845e8-e836-81a8-8502-de32aa4617e8",
+          "parent_name": "Éveil Harper (0-2 ans, motricité libre + DME)",
+          "critere": "30 min Pikler/jour + 1 portage/jour, 5 j/sem sur 4 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810f-a743-d2675064576e",
+          "name": "Voyage annuel famille (Espagne/USA)",
+          "parent_id": "347845e8-e836-81f2-8de6-c741c7d1814d",
+          "parent_name": "Rituels annuels + voyage famille",
+          "critere": "1 voyage longue durée booké J-3 mois minimum + 2-3 mini-week-ends",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8125-827a-d4971c1c4d4f",
+          "name": "Sortie père-James hebdo (sans Mirane/Harper)",
+          "parent_id": "347845e8-e836-8123-87f4-e1fab631f989",
+          "parent_name": "Éducation James équilibrée (3 ans, bilingue)",
+          "critere": "1 sortie dédiée /sem (parc, marche, biblio) 8 sem sur 12",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8159-a916-e03bbe663e61",
+          "name": "Accompagnement Jillian (neveu 14 ans) /2 sem",
+          "parent_id": "347845e8-e836-81ca-901d-d4eb97454c46",
+          "parent_name": "Liens famille élargie + amitiés",
+          "critere": "1 contact (appel/sortie/lecture commune) /2 sem, 6 mois consécutifs",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815f-803d-d8383aba7867",
+          "name": "Diversification DME suivie (Harper 8 mois)",
+          "parent_id": "347845e8-e836-81a8-8502-de32aa4617e8",
+          "parent_name": "Éveil Harper (0-2 ans, motricité libre + DME)",
+          "critere": "2-3 repas solides/jour + 1 nouvel aliment/sem journalisé, sur 8 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818a-b620-f9bbf0db53d6",
+          "name": "Rituel lecture quotidien père-James (20 min)",
+          "parent_id": "347845e8-e836-8123-87f4-e1fab631f989",
+          "parent_name": "Éducation James équilibrée (3 ans, bilingue)",
+          "critere": "20 min lecture /soir 5 j/sem sur 4 sem consécutives, 3 FR / 2 EN min",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818d-b84c-f86d23fca734",
+          "name": "Cadence amis Romain + Jérémie",
+          "parent_id": "347845e8-e836-81ca-901d-d4eb97454c46",
+          "parent_name": "Liens famille élargie + amitiés",
+          "critere": "1 sortie ou appel substantiel /3 sem chacun (rotation), 12 sem sur 16",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8193-b1ff-e281cf813f95",
+          "name": "Activité Montessori 1-1 hebdo (James)",
+          "parent_id": "347845e8-e836-8123-87f4-e1fab631f989",
+          "parent_name": "Éducation James équilibrée (3 ans, bilingue)",
+          "critere": "1 atelier vie pratique ou motricité fine 30 min /sem, 6 sem sur 8",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8198-aa9c-fe08ac6ad28c",
+          "name": "Sport ensemble Mirane (1 séance/sem)",
+          "parent_id": "347845e8-e836-816c-a27f-dbe7ddde026e",
+          "parent_name": "Couple solide Mirane (rituels Gottman)",
+          "critere": "1 marche zone 2 OU 1 muscu DIY ensemble /sem sur 8 sem sur 12",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81af-857e-e02121ccdf08",
+          "name": "State of the Union Gottman hebdo",
+          "parent_id": "347845e8-e836-816c-a27f-dbe7ddde026e",
+          "parent_name": "Couple solide Mirane (rituels Gottman)",
+          "critere": "Check-in 30-45 min ritualisé (5 appréciations + bilan + 1 préoccupation + 1 demande) sur 8 sem consécutives",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81b3-ac73-c0fbacebac55",
+          "name": "6 magic hours Gottman tracées",
+          "parent_id": "347845e8-e836-816c-a27f-dbe7ddde026e",
+          "parent_name": "Couple solide Mirane (rituels Gottman)",
+          "critere": "Cumul ≥6h/sem (kiss + debrief + date + check-in + caresse + admiration) tracé sur 4 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81da-9f68-cd1c12e2f95e",
+          "name": "Week-end famille élargie mensuel (sœurs)",
+          "parent_id": "347845e8-e836-81ca-901d-d4eb97454c46",
+          "parent_name": "Liens famille élargie + amitiés",
+          "critere": "1 sortie/visite /mois avec Kimberley ou Ashley, 6 mois sur 8",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
+          "name": "Date night hebdo protégée (Mirane)",
+          "parent_id": "347845e8-e836-816c-a27f-dbe7ddde026e",
+          "parent_name": "Couple solide Mirane (rituels Gottman)",
+          "critere": "1 sortie/soirée dédiée /sem sans skip > 2 sem d'affilée sur 12 sem",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Lecture avec James",
+          "cible": 6,
+          "days": [
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            false
+          ],
+          "fait": 5,
+          "score_pct": 83
+        }
+      ],
+      "habit_completion_12w": [
+        65,
+        68,
+        70,
+        72,
+        75,
+        78,
+        80,
+        82,
+        85,
+        85,
+        88,
+        90
+      ],
+      "time_pilier": {
+        "cat": "Famille",
+        "hours": 22,
+        "subs": [
+          {
+            "name": "Couple",
+            "hours": 6
+          },
+          {
+            "name": "Lecture James",
+            "hours": 5
+          },
+          {
+            "name": "Jeux enfants",
+            "hours": 7
+          },
+          {
+            "name": "Cuisine",
+            "hours": 4
+          }
+        ]
+      },
+      "roadmap": [
+        {
+          "name": "Éducation James équilibrée (3 ans, bilingue)",
+          "start": "2026-04-20",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 70
+        },
+        {
+          "name": "Couple solide Mirane (rituels Gottman)",
+          "start": "2026-04-20",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 35
+        },
+        {
+          "name": "Éveil Harper (0-2 ans, motricité libre + DME)",
+          "start": "2026-05-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Liens famille élargie + amitiés",
+          "start": "2026-06-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Rituels annuels + voyage famille",
+          "start": null,
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        }
+      ],
+      "signature_metric": {
+        "label": "Date-night cette semaine",
+        "value": "Samedi 21 h",
+        "sub": "cinéma + resto quartier"
+      }
+    },
+    "pro_fi": {
+      "slug": "pro_fi",
+      "name": "Pro & Financier",
+      "color_key": "blue",
+      "accent": "#1E4D8C",
+      "tint_mid": "#6A92C2",
+      "tint_light": "#C9D8E8",
+      "progress_avg": 52,
+      "radar": {
+        "actuel": 78,
+        "cible": 80,
+        "gap": 2
+      },
+      "achievements_active": [
+        {
+          "id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "url": "https://www.notion.so/Budget-familial-ma-tris-347845e8e836814c951ec1f58952b1f3",
+          "name": "Budget familial maîtrisé",
+          "progress": 48,
+          "critere": "3 mois consécutifs budget tracké 100% + épargne précaution 6 mois (≈18-25k€) + Livret A/LDDS couple saturés (69 900€) + PEA & AV ouverts (compteur fiscal)",
+          "cible_unite": "Mois trackés:24",
+          "deadline": null,
+          "start": "2026-04-19"
+        },
+        {
+          "id": "347845e8-e836-81eb-94e4-f520bbaac07e",
+          "url": "https://www.notion.so/Admin-patrimoine-jour-347845e8e83681eb94e4f520bbaac07e",
+          "name": "Admin & patrimoine à jour",
+          "progress": 55,
+          "critere": "CT valide + assurance + révision + papiers + tableau Notion auto à jour, échéances calendrier programmées",
+          "cible_unite": "Échéances en retard:0",
+          "deadline": null,
+          "start": "2026-04-19"
+        }
+      ],
+      "sous_achievements": [
+        {
+          "id": "347845e8-e836-8102-b3d6-ff57f53a0009",
+          "name": "Demande formelle augmentation 80k€ (entretien dédié)",
+          "parent_id": "347845e8-e836-81ac-bba0-e71bffd74efd",
+          "parent_name": "Augmentation salaire AVIV 80k€",
+          "critere": "Entretien 1h tenu hors revue de perf + mail récap envoyé sous 24h",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810a-81d4-c19b0ef9ea82",
+          "name": "Shortlist 15-20 entreprises cibles RS",
+          "parent_id": "347845e8-e836-8175-af15-c8b318fb59fe",
+          "parent_name": "Transition Research Scientist 90-150k€",
+          "critere": "Liste écrite : Mistral, HF Paris, Kyutai, Owkin, Poolside, H Company, Photoroom, FAIR Paris, Cohere, Together, Anthropic remote, etc.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8119-a866-efed955c406a",
+          "name": "Carnet de révision tenu (date + km)",
+          "parent_id": "347845e8-e836-81eb-94e4-f520bbaac07e",
+          "parent_name": "Admin & patrimoine à jour",
+          "critere": "100% des passages garage notés sous 24h dans Notion auto",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-811d-bd69-c96b47f95d09",
+          "name": "Vérifier clause d'exclusivité contrat AVIV",
+          "parent_id": "347845e8-e836-81bc-8d91-c28ce08053fc",
+          "parent_name": "Auto-entreprise / revenus secondaires",
+          "critere": "Contrat relu + confirmation écrite RH ou avocat droit travail (1h conseil) que cumul autorisé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-812f-99c0-da5799a826d0",
+          "name": "PER individuel ouvert (TMI 30%)",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "PER ouvert + versement annuel ≥3 000€ calibré déduction TMI 30%",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-812f-a8e8-d92bfed5086c",
+          "name": "3 postes optimisés (mutuelle/assu/abos/énergie)",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "3 postes renegociés ou coupés avec gain mensuel chiffré écrit",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-813f-a9ed-f2a18cc6f349",
+          "name": "5 entretiens techniques décrochés sur 6 mois",
+          "parent_id": "347845e8-e836-8175-af15-c8b318fb59fe",
+          "parent_name": "Transition Research Scientist 90-150k€",
+          "critere": "5 entretiens techniques tenus + log questions/réponses/retours écrit pour chacun",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8140-937b-d31325b0813a",
+          "name": "Tableau de bord auto unique (Notion)",
+          "parent_id": "347845e8-e836-81eb-94e4-f520bbaac07e",
+          "parent_name": "Admin & patrimoine à jour",
+          "critere": "1 page Notion Auto avec marque/immat/dates CT/assurance/révision + garagiste identifié",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8147-969e-ce4cc42dcf67",
+          "name": "Livret A + LDDS couple saturés (69 900€)",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "45 900€ Livret A couple + 24 000€ LDDS = 69 900€ plafonnés",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8157-917b-da53e2b8e47c",
+          "name": "Choisir + installer outil tracker budget",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "Outil choisi (Bankin/Linxo/tableur) + tous comptes connectés + 8-10 catégories définies",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8158-97d2-cc235fbff4a3",
+          "name": "Versement programmé sous-poche apport AV",
+          "parent_id": "347845e8-e836-8109-8c3b-e0e7e6af564f",
+          "parent_name": "Apport maison constitué",
+          "critere": "Sous-poche apport identifiée (AV fonds euros ou Livret A) + virement mensuel automatique actif",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815c-ab99-ed21baf80860",
+          "name": "Préparer dossier 4/5 (arguments + modalités)",
+          "parent_id": "347845e8-e836-81b1-85d8-ce57a2cbc224",
+          "parent_name": "Passage 4/5 AVIV",
+          "critere": "Dossier écrit : motivation, jour off, organisation transition, surcotisation retraite évoquée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-816d-8dbc-ef951da0612b",
+          "name": "Allocation cible écrite + DCA mensuel automatique",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "Allocation 70/20/10 (PEA ETF/AV/PER) écrite + virement programmé le 5 du mois",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8180-8a83-ebde70ff6bfb",
+          "name": "Cartographie marché interne SeLoger/AVIV",
+          "parent_id": "347845e8-e836-81ac-bba0-e71bffd74efd",
+          "parent_name": "Augmentation salaire AVIV 80k€",
+          "critere": "Benchmark salaire pairs DS seniors AVIV écrit (Glassdoor + LinkedIn + 2-3 cafés confidentiels)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8182-8dd3-fb51f5220962",
+          "name": "Capacité d'emprunt simulée courtier",
+          "parent_id": "347845e8-e836-8109-8c3b-e0e7e6af564f",
+          "parent_name": "Apport maison constitué",
+          "critere": "1 simulation courtier (Pretto/Cafpi/Meilleurtaux) avec dossier réel + taux + durée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8182-afe1-f0b3d0f605cd",
+          "name": "Pipeline candidatures actif (3/mois × 6 mois)",
+          "parent_id": "347845e8-e836-8175-af15-c8b318fb59fe",
+          "parent_name": "Transition Research Scientist 90-150k€",
+          "critere": "18 candidatures min sur 6 mois consécutifs, 50% via DM direct RS équipe (pas job board)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818b-86a2-f4e3ac121db7",
+          "name": "Décision projet maison actée en couple (écrit)",
+          "parent_id": "347845e8-e836-8109-8c3b-e0e7e6af564f",
+          "parent_name": "Apport maison constitué",
+          "critere": "Document écrit signé à 2 : ville, surface min, budget max, horizon, deal-breakers",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a5-aeb6-efbef0281664",
+          "name": "CT à jour + rappels calendrier 60/30/15j",
+          "parent_id": "347845e8-e836-81eb-94e4-f520bbaac07e",
+          "parent_name": "Admin & patrimoine à jour",
+          "critere": "CT valide + 3 rappels Google Calendar programmés 60/30/15j avant prochaine échéance",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c0-8e79-fca181b37e65",
+          "name": "Mutuelle + assurance vie enfants finalisées",
+          "parent_id": "347845e8-e836-81eb-94e4-f520bbaac07e",
+          "parent_name": "Admin & patrimoine à jour",
+          "critere": "Mutuelle Alan comparée + AV fille rendue (papiers signés)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c1-9491-c8f26cd7e588",
+          "name": "Courrier RAR 4/5 envoyé (≥6 mois avant)",
+          "parent_id": "347845e8-e836-81b1-85d8-ce57a2cbc224",
+          "parent_name": "Passage 4/5 AVIV",
+          "critere": "Courrier RAR envoyé ≥6 mois avant date souhaitée + accusé réception conservé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81e2-ba20-f06fec6fb9ea",
+          "name": "Assurance auto comparée + optimisée annuellement",
+          "parent_id": "347845e8-e836-81eb-94e4-f520bbaac07e",
+          "parent_name": "Admin & patrimoine à jour",
+          "critere": "3 devis acteurs collectés à -30j de l'échéance, choix arbitré écrit",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81e5-b062-e7d5108a1dd6",
+          "name": "Dossier de négociation construit (1 page)",
+          "parent_id": "347845e8-e836-81ac-bba0-e71bffd74efd",
+          "parent_name": "Augmentation salaire AVIV 80k€",
+          "critere": "1 page : 5 réalisations 12 derniers mois quantifiées (€/%/temps gagné) + benchmark + demande chiffrée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ee-a888-cac7441545e3",
+          "name": "3 mois consécutifs budget tracké 100%",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "Toutes transactions catégorisées, aucune dérive >7j sans saisie, revue dominicale 12/12 sem",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ef-9ebf-eecd1e081e3a",
+          "name": "PEA ouvert + 1er versement (compteur fiscal)",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "PEA ouvert chez courtier zero-frais + 100€ versés (compteur 5 ans démarré)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f3-9762-e8c1ee578cec",
+          "name": "Création micro-entreprise BNC",
+          "parent_id": "347845e8-e836-81bc-8d91-c28ce08053fc",
+          "parent_name": "Auto-entreprise / revenus secondaires",
+          "critere": "Micro-entreprise créée via INPI + SIRET reçu + compte bancaire dédié ouvert",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f5-adec-de03ab0653bd",
+          "name": "Assurance-vie ouverte + 1er versement",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "AV ouverte (Linxea Spirit 2 ou Lucya Cardif) + 100€ versés (compteur 8 ans démarré)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f8-8f80-d4214e7084a3",
+          "name": "Épargne précaution = 6 mois dépenses",
+          "parent_id": "347845e8-e836-814c-951e-c1f58952b1f3",
+          "parent_name": "Budget familial maîtrisé",
+          "critere": "Montant calibré sur dépenses moyennes 3 derniers mois ×6 (≈18-25k€), 100% Livret A",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81fe-9c6b-c5d6bfc2cd38",
+          "name": "CV + LinkedIn alignés portfolio research",
+          "parent_id": "347845e8-e836-8175-af15-c8b318fb59fe",
+          "parent_name": "Transition Research Scientist 90-150k€",
+          "critere": "CV FR + EN à jour (Sanofi/Talan/AVIV) + LinkedIn liens repos GitHub + blog en signature + preprint si dispo",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Budget 10 min",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            false,
+            false
+          ],
+          "fait": 5,
+          "score_pct": 71
+        }
+      ],
+      "habit_completion_12w": [
+        50,
+        55,
+        60,
+        62,
+        65,
+        70,
+        72,
+        75,
+        78,
+        80,
+        82,
+        78
+      ],
+      "time_pilier": {
+        "cat": "Pro & Financier",
+        "hours": 0,
+        "subs": []
+      },
+      "roadmap": [
+        {
+          "name": "Budget familial maîtrisé",
+          "start": "2026-04-19",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 48
+        },
+        {
+          "name": "Admin & patrimoine à jour",
+          "start": "2026-04-19",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 55
+        },
+        {
+          "name": "Augmentation salaire AVIV 80k€",
+          "start": "2026-07-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Transition Research Scientist 90-150k€",
+          "start": "2026-09-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Passage 4/5 AVIV",
+          "start": "2026-10-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Apport maison constitué",
+          "start": "2027-01-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Auto-entreprise / revenus secondaires",
+          "start": "2027-06-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        }
+      ],
+      "signature_metric": {
+        "label": "Net worth",
+        "value": "47 200 €",
+        "sub": "+5 000 € vs W05"
+      }
+    },
+    "creation": {
+      "slug": "creation",
+      "name": "Création",
+      "color_key": "purple",
+      "accent": "#6B3FA0",
+      "tint_mid": "#A584CA",
+      "tint_light": "#DDCEE7",
+      "progress_avg": 25,
+      "radar": {
+        "actuel": 72,
+        "cible": 80,
+        "gap": 8
+      },
+      "achievements_active": [
+        {
+          "id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "url": "https://www.notion.so/Re-impl-menter-chaque-mod-le-ML-from-scratch-Linear-MM-DiT-347845e8e83681c68d7dc0de32b142e3",
+          "name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "progress": 25,
+          "critere": "Pipeline complet 13 paliers : micrograd → linéaire → MLP MNIST 97% → CNN LeNet 99% → RNN/LSTM → Attention → Transformer → NanoGPT → VAE → DDPM → CLIP → Stable Diffusion → MM-DiT (Flux/SD3) — chaque palier from scratch avec critère factuel atteint",
+          "cible_unite": "paliers:13",
+          "deadline": null,
+          "start": "2026-04-20"
+        }
+      ],
+      "sous_achievements": [
+        {
+          "id": "347845e8-e836-8103-b0f8-f2c5a40972dd",
+          "name": "Manim S1 — Setup environnement + Hello World",
+          "parent_id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
+          "parent_name": "Manim — produire vidéos pédago IA 2D",
+          "critere": "manim -pql hello.py HelloWorld produit un MP4 qui s'ouvre. Dépôt git manim-aviv créé avec 1 scène qui compile.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8105-bec8-df2be0bac353",
+          "name": "Phase 10 (J91-100) — Capstone Kaggle",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "Médaille Kaggle Bronze (top 10% si >1000 teams, top 40% si <100) + writeup public publié",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8109-b98f-eb710a97427b",
+          "name": "Mois 11 : Maths profondes de l'IA (manifold, PAC, UAT, NTK)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : t-SNE/UMAP + VC dim 3 familles + preuve UAT + NTK dérivé 1 cachée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810b-bf2e-fe8e22eed8f1",
+          "name": "RS S5 — Workshop paper accepté NeurIPS/ICML/ICLR",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "1 workshop paper accepté dans les 24 mois (NeurIPS Workshops sur OpenReview, idem ICML/ICLR) + attendance physique ou hybride pour networker",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810f-80cd-e947275294f3",
+          "name": "Dessin P4 — Luffy reconnaissable (3 fanarts dont 1 validé)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "3 fanarts Luffy dont 1 validé par 3 personnes externes. Focus chapeau de paille + cicatrice.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-810f-bac6-e882ad4edc6d",
+          "name": "Dessin P1 — Habitude 5 min/jour (21 jours consécutifs)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "21 jours consécutifs ≥ 5 min de tracé, coché dans app habitude. 21 cases cochées d'affilée + photos des 21 pages dans rouleau iPhone.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8110-914e-c82d4b223fcd",
+          "name": "ML P9 — DDPM (Diffusion) from scratch (MNIST → CIFAR-10)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Samples CIFAR-10 reconnaissables, FID < 50. UNet from scratch (down/up + skip + time embedding sinusoidal), schedule β linéaire, training MSE sur ε, sampling DDPM puis DDIM.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8110-a00e-f1ea47ffeb7a",
+          "name": "Dessin P5 — Naruto reconnaissable (3 fanarts dont 1 validé)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "3 fanarts Naruto dont 1 validé par 3 personnes externes. Focus moustaches + bandeau.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8110-a645-dec3524356c2",
+          "name": "RS S2 — 3-5 implémentations from scratch GitHub + HF (500+ stars cumulé)",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "3 à 5 repos GitHub publics avec README soigné + tests + reproductibilité (config + seed) + benchmark + chacun lié à un Hugging Face Space (démo) + cible cumulée 500 étoiles GitHub",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8113-acf4-c7cd78d2b150",
+          "name": "iOS S7 — 1ère monétisation IAP/abo via RevenueCat",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "1er paiement réel encaissé (vérifiable RevenueCat dashboard) — PAS un compte sandbox. Setup : RevenueCat SDK + produits App Store Connect + paywall SwiftUI.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8114-a18c-fb3e2b989562",
+          "name": "Design S2 — Figma bases (frames, auto-layout, components, variants)",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "Course 'Learn Design' Figma officiel terminé (12 leçons, 5 exos, ~4h) + playlist Figma For Beginners YouTube + 1 projet Figma perso reproduit from scratch (clone Stripe ou Linear).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-811b-94f4-efe7ca4ba283",
+          "name": "Élec S4 — Voiture RC en service (5 sessions roulage)",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "5 sessions de roulage sans panne, batterie LiPo gérée correctement (charge balance, stockage 3.8V/cell). Voie A : réviser vieille RC + nouvel accu LiPo + ESC brushless. Voie B : kit Tamiya TT-02 brushless.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-811f-9843-d36b67e3834a",
+          "name": "Bloc 9 (J81-90) — Inference optimization : vLLM, AWQ, speculative",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "Benchmark public 1 modèle x 5 backends (transformers/llama.cpp/vLLM/SGLang/TGI) x 3 métriques",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8122-99f3-e4a308d18608",
+          "name": "B8 — Move semantics, rvalue refs, perfect forwarding (jours 71-80)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "String maison avec move ctor qui divise par 10 le nombre d'allocs mesurées (allocator custom logging) + preuve RVO sur godbolt + Vector<T> reallocation move_if_noexcept",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8126-9c27-c65de618cd52",
+          "name": "Élec S7 — Atelier papa avec James (continu dès mois 2)",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "3 sessions/mois « atelier papa » avec James + 1 jouet construit ensemble. Démos magiques (LED bouton, buzzer, capteur distance bip) + voiture RC simple Tamiya RTR + circuit billes/voitures motorisées Brio/Hape.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8126-b023-fad88fac51b1",
+          "name": "ML P10 — CLIP replica (Flickr30k)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Zero-shot retrieval recall@5 > 30% sur Flickr30k val. ViT image encoder + Transformer text encoder + projection heads + InfoNCE contrastive loss.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8127-8bf0-cc7eb1f45906",
+          "name": "ML P0 — micrograd (autograd scalaire)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Classe Value avec .backward(), MLP qui apprend XOR, loss < 0.01 sur XOR en < 100 epochs",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8128-8b46-d2615d8cf09d",
+          "name": "Design S6 — Refonte blog 'Break AI Abstraction' (design cohérent)",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "Audit visuel actuel → mockup Figma nouvelle version (home, article, archive, about) → implémentation. Système typographique solide (measure 45-75 chars, line-height 1.4-1.6, hiérarchie H1/H2/H3 claire). Code blocks lisibles, dark mode optionnel. WCAG AA min validé. Au moins 1 article republié nouveau design.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8129-998a-dcdc08181174",
+          "name": "Mois 6 : Optimisation (convexe + SGD + Adam + KKT)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : convexité prouvée, GD/Newton/L-BFGS codés, Adam/AdamW/Lion from scratch, KKT SVM dérivé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8129-b21c-e8cf983acf25",
+          "name": "Manim S3 — 1 explainer 2-3 min sur 1 concept IA (gradient descent 2D)",
+          "parent_id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
+          "parent_name": "Manim — produire vidéos pédago IA 2D",
+          "critere": "Vidéo MP4 2-3 min, voix posée, 0 cut amateur visible. Script + storyboard + scènes Manim + voix Audacity + edit DaVinci + export 1080p H.264.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-812a-967e-f735778916dd",
+          "name": "RS S4 — Kaggle Master tier (2 médailles min dont 1 silver)",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "Participation à 3+ compétitions par an (dont 1 NeurIPS/ICML/industriel sérieux) + 2 médailles minimum (top 10% bronze, top 5% silver) sur 18 mois + write-up GitHub/blog après chaque compétition",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8130-97f0-cd5cc7225d02",
+          "name": "Bloc 5 (J41-50) — QLoRA 7B + Unsloth + Axolotl",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "QLoRA Qwen 7B sur Colab A100 < 2h, comparaison 4-way (TRL/Unsloth/Axolotl/LLaMA-Factory) documentée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8130-b215-eea7b5e860cd",
+          "name": "Élec S5 — Drone DIY 5\" monté et volant (mois 5-7)",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "Vol stationnaire stable 5 min + 1 vol extérieur 3 min sans crash. Build 5\" FPV : frame + F7 FC + 4-en-1 ESC + 4 moteurs + RX ELRS + caméra. Soudure complète + flash Betaflight + setup PID.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8133-91c7-c110a6d09d7b",
+          "name": "Manim S2 — 3 animations Manim simples",
+          "parent_id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
+          "parent_name": "Manim — produire vidéos pédago IA 2D",
+          "critere": "3 fichiers .py qui rendent en -pqh (haute qualité), commités sur GitHub : sinusoïde animée + multiplication matricielle 2x2 + dot product visuel.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8133-b2ac-db34a318eb08",
+          "name": "Maths S6 — Maths des Transformers (attention, softmax stab, PE)",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "Implémenter Multi-Head Attention from scratch NumPy (Q/K/V, scaled dot product, mask causal, softmax stable via max-subtract) qui matche nn.MultiheadAttention + dériver pourquoi le facteur 1/√d_k + dessiner sin/cos PE",
+          "progress": null,
+          "statut": "Abandonné",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8136-8171-fd47b1f5a7cf",
+          "name": "Blender S1 — Bases modélisation (Donut + 5 modèles perso)",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "6 modèles finis rendered + postés (Donut + 5 objets perso : mug AVIV, casque, plante, livre ouvert, objet data). Chaque rendu PNG 1080p alpha possible.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8139-a502-d176014503c4",
+          "name": "Design S4 — Refonte portfolio vitrine (Figma → implem web)",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "Mockup Figma haute fidélité (desktop + mobile) + implémentation live (Next.js + Tailwind + shadcn/ui). URL accessible publiquement, responsive, lighthouse >90 perf+a11y, design system perso (S3) utilisé.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-813b-80e8-dc680dc512d3",
+          "name": "Mois 12 : Research maths + capstone (SDE/OT/GNN + article + arXiv)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "8 semaines : SDE/OT/GNN/Attention dérivés + 1 article blog math-deep PUBLIÉ + 1 note arXiv SOUMISE",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-813b-94cc-ed0175e7be7a",
+          "name": "Phase 3 (J21-30) — NLP foundations",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "BERT fine-tune SST-2 >91% + MNLI >80% + papers Attention Is All You Need et BERT lus",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8140-843d-deac6803eb32",
+          "name": "Web S4 — Auth + pages protégées + dashboard (template réutilisable)",
+          "parent_id": "347845e8-e836-816c-bfbf-cf59232de576",
+          "parent_name": "Blog Break AI Abstraction — livrable transverse",
+          "critere": "Route /dashboard accessible uniquement loggé, redirect /login sinon, logout fonctionnel, OAuth Google ajouté, page /settings avec update profil. Sert de template réutilisable pour futurs side projects.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8146-b50b-e8e5fc3e5c3d",
+          "name": "ML P6 — Transformer complet (Attention Is All You Need replica)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "BLEU > 20 sur Multi30k EN-DE, OU loss < 2.0 sur TinyShakespeare en decoder-only. Encoder + decoder, positional encoding, label smoothing, warmup LR.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8146-bf6b-ead0eb2f8975",
+          "name": "Mois 7 : Théorie de l'information (entropie/KL/MI)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : KL Gaussiennes dérivée, CE stable codée, InfoNCE + Huffman + essais",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8148-b848-d9190b76d6a8",
+          "name": "Phase 9 (J81-90) — Research skills (1 paper/jour)",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "10 papers canoniques résumés (GPT, Scaling, RLHF, LoRA, FlashAttn, Mamba, RAG, MoE, AlphaGo, Agents) + nourrit blog Break AI Abstraction",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8149-863a-e9467c5b86b0",
+          "name": "RS S1 — Blog Break AI Abstraction (CONTENU — 10 articles publiés)",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "10 articles techniques publiés sur domaine + chaque article minimum 2000 mots + code reproducible (notebook ou repo) + 3 articles minimum >1k vues OU partagés par compte ML >10k followers + ORCID + nom réel",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-814c-90a1-e8f535c1fbf3",
+          "name": "Dessin P7 — Colorimétrie (3 études color & light)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "3 études postées avec annotations couleur : color wheel + 3 harmonies nommées (complémentaire/analogique/triadique) + 1 étude lumière (jour/nuit/golden hour) + 1 master study (copie peinture classique).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-814c-98a1-da823581207a",
+          "name": "Maths S2 — Calcul différentiel + gradients (backprop from scratch)",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "Re-dériver backprop d'un MLP 2 couches seul sur papier (forward + chain rule + gradients par couche) + coder backprop NumPy pur sans autograd qui matche torch.autograd à 1e-6 près sur batch random",
+          "progress": null,
+          "statut": "Abandonné",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-814d-bde6-fefcc1ef0f9c",
+          "name": "Manim S5 — Première vidéo publiée (URL publique)",
+          "parent_id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
+          "parent_name": "Manim — produire vidéos pédago IA 2D",
+          "critere": "URL publique (YouTube unlisted ou public + post blog vivant) avec thumbnail, description SEO + chapitres timestamps, embed YouTube testé, ≥3 feedbacks externes encaissés.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-814f-83af-d4048025711b",
+          "name": "CUDA Bloc 8 — Triton + FlashAttention minimal (j.71-80)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Tutorials Triton 1-5 complétés (vector-add, softmax, matmul, dropout, layernorm), FlashAttention forward minimal avec online softmax correct pour seq 2048, causal mask, bench ≥0.7× torch SDPA",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8154-b5bf-ded733407dc9",
+          "name": "Phase 4 (J31-40) — Vision moderne (ViT, U-Net, YOLO)",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "ViT Imagenette >90% + U-Net Dice >0.95 + YOLO mAP50 >0.6 + CUB-200 >75%",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8156-9fbc-d83cdb2171aa",
+          "name": "Physique P1 — Méca classique (Newton → Lagrangien → Hamiltonien)",
+          "parent_id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
+          "parent_name": "Socle Physique pour IA / Graphics",
+          "critere": "Notebook Verlet vs RK4 sur Kepler avec graphique conservation d'énergie + résolution analytique du pendule double via Lagrangien",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8156-bd86-d3d9c3aa9d87",
+          "name": "Dessin P2 — Habitude 10 min/jour (21 jours consécutifs)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "21 jours consécutifs ≥ 10 min de tracé. Timer iPhone démarré chaque session, screenshot tracking app.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8157-814f-d6616162b481",
+          "name": "Physique P6 — Applications ML (PINN, diffusion as SDE) — CAPSTONE",
+          "parent_id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
+          "parent_name": "Socle Physique pour IA / Graphics",
+          "critere": "PINN qui converge sur Burgers + SMLD qui sample Swiss Roll proprement + 1 page de synthèse Forward SDE / Reverse SDE / score matching / Fokker-Planck",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8157-956e-f43cbf31179e",
+          "name": "ML P2 — MLP + backprop manuel (numpy)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "97%+ test accuracy MNIST avec un 784→128→64→10, SGD + momentum, ReLU, softmax+CE, forward/backward manuel",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8157-b323-d775b624acda",
+          "name": "Manim S4 — Workflow voice-over + DaVinci Resolve maîtrisé",
+          "parent_id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
+          "parent_name": "Manim — produire vidéos pédago IA 2D",
+          "critere": "Capable de monter une vidéo 3 min en < 2h hors animations. Template projet réutilisable créé (LUT, EQ voix, lower thirds).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815b-9a68-d503817fa539",
+          "name": "Phase 1 (J1-10) — PyTorch refresher + training loop propre",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "10 jours completés + benchmark Fashion-MNIST >93% + script training réutilisable",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815c-82a4-c5ed5c290b2c",
+          "name": "Mois 9 : Méthodes numériques (ODE, MC, PDE, FFT)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : RK4 + MC + PDE chaleur 1D + FFT Cooley-Tukey implémentés from scratch",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815e-8a9c-fb3a8a59330a",
+          "name": "iOS S4 — App SwiftData + navigation multi-écrans (2 entités liées)",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "App v2 avec ≥ 2 entités liées (ex: Habit ↔ Log), sort/filter, données qui survivent au reboot. Couvre @Model, @Query, ModelContainer, NavigationStack avec NavigationPath, sheet/fullScreenCover.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815f-965b-d66b47052523",
+          "name": "Physique P4 — Quantique fondamentale (intro orientée QML)",
+          "parent_id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
+          "parent_name": "Socle Physique pour IA / Graphics",
+          "critere": "Notebook split-step Fourier qui propage un paquet d'onde gaussien + 1 VQE complet sur H₂",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815f-9688-ced42352143f",
+          "name": "Dessin P6 — 5 paysages finis (formats variés)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "5 paysages finis, formats variés (montagne, mer, forêt, urbain, ciel) : 5 fichiers .procreate / .kra exportés PNG, signés, datés.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8163-94ed-f31136b6897c",
+          "name": "Design S3 — Design system mini perso (tokens + 10 composants)",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "Fichier Figma 'Anthonny DS v1' avec library publiée : tokens couleurs/spacing/typo/radius en variables Figma natives + 10 composants avec variants (Button, Input, Card, Badge, Modal, Nav, Tooltip, Avatar, Tab, Toast). Exporté JSON ou CSS variables.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8163-97c1-ec83378fbd19",
+          "name": "CUDA Bloc 1 — Setup + modèle d'exécution (j.1-10)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Hello-world GPU tourne, nvidia-smi lu, grid/block/thread schématisé, cudaEvent timing fonctionnel, Nsight Systems installé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8163-a0f0-f2bb85b40b96",
+          "name": "Bloc 10 (J91-100) — CAPSTONE : Break AI Abstraction companion bot",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "HF Space public anthonny/break-ai-companion, Qwen 7B QLoRA + RAG + AWQ, 100 interactions réelles recueillies, blog post publié",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8166-9bd9-c7c55ad9c759",
+          "name": "iOS S2 — SwiftUI fondamentaux (100 Days j.16-50)",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "5 mini-projets buildés dans Xcode (WeSplit, GuessTheFlag, BetterRest, WordScramble, Moonshot), jours 16-50 terminés. Couvre Views, State, Binding, NavigationStack, List, Form, MVVM léger.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8168-ac52-c0109cf36ea7",
+          "name": "ML P4 — RNN + LSTM from scratch (BPTT)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Loss < 1.5 nats/char sur TinyShakespeare, génération lisible. RNN vanilla puis LSTM avec gates manuelles.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8169-9998-d99fb881b30a",
+          "name": "Mois 2 : Algèbre linéaire avancé (SVD, eigen, PCA)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines complétées : SVD démontré cas 2×2, PCA from scratch sur Iris+MNIST, factos LU/QR/Cholesky/NMF benchmarkées",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-816e-b74a-e4df7867e37d",
+          "name": "Élec S2 — 10/13 projets Arduino Starter Kit terminés",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "10/13 projets du livre Arduino Starter Kit R4 réalisés et fonctionnels (LCD, servo, motor control, capteurs ultrasonique/photoresistor). Bonus : Arduino Fundamental certification.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-816f-8bfa-e8c2de02482f",
+          "name": "B9 — Ranges, views, coroutines, modules C++20/23 (jours 81-90)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Pipeline ranges lazy opérationnel + generator coroutine qui yield primes infinis + module C++20 compilé clang 18 + CMake 3.28 + CI GitHub Actions green + résumé 1 page architecture ATen",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8170-9d79-cae0d97c4633",
+          "name": "Mois 1 : Algèbre linéaire fondamentaux",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines complétées avec critères tenus : vecteurs/matrices/dot/LU/QR/4 sous-espaces maîtrisés, 18.06 L1-L10 + 3B1B EoLA digestés",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8174-a949-e6813d8aaaf7",
+          "name": "CUDA Bloc 9 — PyTorch custom CUDA extensions (j.81-90)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Extension pybind11 packagée (setup.py + TORCH_LIBRARY), forward + backward custom (gradcheck pass), LayerNorm custom utilisable dans training loop MNIST, compatible torch.compile sans graph break",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8176-b12d-f1ca5c6f6682",
+          "name": "iOS S1 — Swift bases (100 Days j.1-15)",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "Jours 1-15 cochés sur hackingwithswift.com + 1 post LinkedIn/X par jour (règle Hudson). Couvre : variables, types, optionals, closures, structs, classes, protocols.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8178-b021-fa9732e93e13",
+          "name": "iOS S3 — 1ère app perso sur iPhone réel",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "App signée avec Apple ID + tournant 7 jours d'affilée sur l'iPhone d'Anthonny. Stack : SwiftUI + @AppStorage (persistance simple).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8178-bc68-d2ddf6e6c473",
+          "name": "B2 — Fonctions, pointeurs, références, const (jours 11-20)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "my_strlen/my_strcpy maison sans <cstring>, tests Doctest 100% green, benchmark pass-by-value vs ref publié dans README",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-817a-9e11-d02b92acf917",
+          "name": "RS S6 — Networking EleutherAI + X/Twitter 1000+ followers",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "Membre actif EleutherAI Discord avec 1 PR mergée OU rôle nommé sur un projet + compte X/Twitter 1000+ followers ML-only sous 18 mois (3-5 posts/sem) + 1 conférence physique/an + mentions/RT par 3+ comptes ML reconnus (>10k followers)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-817b-8b56-e289425fb5d2",
+          "name": "Design S7 — 5 mockups publiés (portfolio ou Dribbble)",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "5 mockups originaux (pas exos refonte du S1) publiés publiquement (portfolio, Dribbble, ou Twitter carrousel). Chaque mockup ≥ 3 écrans/vues, design system cohérent appliqué, courte note explicative, ≥2 critiques externes encaissées par mockup.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-817d-be4c-f268b135a694",
+          "name": "B10 — Capstone TensorLike (mini lib tensor + SIMD) (jours 91-100)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Repo TensorLike publié GitHub MIT v0.1 : Tensor<T> avec broadcasting NumPy-like, matmul 512×512 float < 25 ms AVX2, README + benchmarks + post-mortem 2 pages pont vers CUDA",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2027-01-15"
+        },
+        {
+          "id": "347845e8-e836-8180-b63a-c4366fdd62a1",
+          "name": "Élec S3 — Robot évite-obstacle autonome (mois 3)",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "Robot évite obstacles 30 min en autonomie sans collision majeure. Stack : chassis 2WD + HC-SR04 (ultrasons) + L298N (driver moteur) + Arduino UNO R4.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8182-a4ff-f1fa2cb789a4",
+          "name": "Maths S3 — Probabilités + statistiques (Bayes, MLE, MAP)",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "Dériver MLE de Gaussian (μ, σ²) et de Bernoulli sur papier + implémenter MAP linear regression (ridge) à la main + expliquer en 5 min la différence MLE vs MAP vs Bayesian inference avec exemple chiffré",
+          "progress": null,
+          "statut": "Abandonné",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8182-b8c8-d882a3e6ea5a",
+          "name": "Maths S7 — Maths génératifs (VAE, Diffusion ELBO, score-based)",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "Dériver ELBO du VAE seul sur papier (recon + KL) + dériver les 3 ELBO terms du DDPM jusqu'au L_simple = MSE noise + implémenter forward diffusion + reverse step en NumPy sur MNIST 28x28",
+          "progress": null,
+          "statut": "Abandonné",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8184-8af6-ec9db3ea776b",
+          "name": "Phase 8 (J71-80) — Multi-modal (CLIP, BLIP, Whisper)",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "CLIP retrieval Flickr8k recall@5 >60% + pipeline recherche image par texte fonctionnel + papers CLIP/Flamingo lus",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8186-8f07-f6920c50ef76",
+          "name": "CUDA Bloc 3 — Matrix Multiplication (j.21-30)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "SGEMM naïf → tiled shared mem → coalesced → tensor cores WMMA, atteindre ≥60% cuBLAS peak sur A100 sur matmul 4096³",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8186-986d-d111b11e26bc",
+          "name": "Blender S2 — Éclairage + shading PBR (3 setups)",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "3 setups d'éclairage maîtrisés (3-point + HDRI studio + dramatique cinéma) + 1 matériau PBR custom (verre, métal brossé ou subsurface). Triptyque ambiances posté.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8187-b173-ec540a296e19",
+          "name": "CUDA Bloc 7 — Streams, Graphs, Kernel fusion (j.61-70)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Overlap compute/memcpy visible Nsight, CUDA Graphs ≥1.3× speedup, softmax + LayerNorm fused forward+backward (erreur < 1e-5 vs torch)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818b-a15b-f803a0550a69",
+          "name": "Bloc 8 (J71-80) — Agents : function calling, tool use, multi-agent",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "Agent Notion research bot tourne 3 jours, MCP server custom fonctionnel, CrewAI + LangGraph + Letta testés",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818b-b8b2-f7c7b62b4df8",
+          "name": "ML P12 — MM-DiT (Flux / SD3) — OBJECTIF FINAL",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Une seule layer MMDiT correctement implémentée + intégration dans pipeline diffusion → générer un sample conditionné (qualité non-prod, juste preuve de fonctionnement). Double-stream DiT + rectified flow + QK-norm + RMSNorm.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818c-84ef-f4f8f75e04f6",
+          "name": "Web S3 — 1ère mini-app CRUD déployée (Next.js + Supabase)",
+          "parent_id": "347845e8-e836-816c-bfbf-cf59232de576",
+          "parent_name": "Blog Break AI Abstraction — livrable transverse",
+          "critere": "App live, login Supabase email magic link, RLS policies actives (un user voit que ses données), 1 entité CRUD complète (create + read + update + delete), déployée sur Vercel avec preview deploy par PR",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8191-802c-f9653745450e",
+          "name": "Mois 8 : Analyse réelle + fonctionnelle (Hilbert, Fourier)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : Bolzano-Weierstrass + IFT + RKHS + FFT 2D prouvés/implémentés",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8192-8e07-f1f2acb6c593",
+          "name": "Web S1 — Portfolio vitrine déployé (Astro + Cloudflare Pages)",
+          "parent_id": "347845e8-e836-816c-bfbf-cf59232de576",
+          "parent_name": "Blog Break AI Abstraction — livrable transverse",
+          "critere": "Site live sur anthonny.dev (ou équivalent), Lighthouse Performance ≥ 95, déployé sur Cloudflare Pages, HTTPS actif, Cloudflare Web Analytics branchée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8192-a151-f8c59608c20c",
+          "name": "Bloc 1 (J1-10) — Setup HF + inference locale + prompt patterns",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "CLI wrap llama.cpp server 3 modes, 50 appels loggés, stack HF maîtrisée (pipeline, tokenizer, chat templates)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8193-be34-fe9b9f44cefa",
+          "name": "B1 — Bases C++ : toolchain, types, I/O, CMake (jours 1-10)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Hello World multi-fichiers compilé avec CMake + Ninja, clang-format + clang-tidy + ASan activés, 10 commits daily verts",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8195-a089-de6bf80eb43a",
+          "name": "Blender S6 — Illustration scientifique 'hero' style 3D-clean explainer",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "1 illustration hero 3D publiée sur le blog en image principale d'un article (architecture transformer 3D, attention heads colorés en volume ou latent space en nuage de points 3D).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8195-b798-fa344a79d621",
+          "name": "Blender S4 — Animation (keyframes, drivers, courbes)",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "1 animation 3D 30s exportée en MP4 H.264 1080p (sujet 3D : rotation architecture transformer ou traversée latent space). Loop diffusable LinkedIn ou GIF article.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8196-9948-ebe11997b0c3",
+          "name": "Blender S7 — Trois livrables 3D publiés sur ≥2 canaux",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "3 livrables publics 3D distribués sur ≥2 canaux : 1 still illustration 3D blog + 1 short YouTube/LinkedIn 30-60s 3D explainer + 1 GIF/loop 3D dans article.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8196-a4a8-e9ac5a43c9f2",
+          "name": "Design S5 — Mockup UI app iOS perso (avant dev Swift)",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "App perso choisie + mockup Figma complet 8-12 écrans clés, navigation tab bar, états loading/empty/error, prototype cliquable, validé contre HIG checklist (SF Symbols, SF Pro, touch targets 44pt, safe areas).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8198-bc86-d6c570bc8a65",
+          "name": "Bloc 2 (J11-20) — Embeddings + vector DB + simple RAG",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "RAG baseline Qdrant + BGE-M3 + re-ranker, RAGAS eval reporté, hybrid search +10% recall",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-819e-8692-eea734252855",
+          "name": "Bloc 7 (J61-70) — RAG production : advanced retrieval",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "RAG complet avec HyDE, SPLADE, ColBERT, Graph RAG testés — 4 métriques RAGAS > 0.7 sur 50 Q/R",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-819f-91d3-d73450fa345d",
+          "name": "Phase 7 (J61-70) — Self-Supervised Learning",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "SimCLR CIFAR-10 linear probe >75% + MAE Imagenette >92% + papers SimCLR/MAE lus",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a0-ad3f-df22adea7b6f",
+          "name": "Phase 5 (J41-50) — Modèles génératifs (VAE, GAN, Diffusion)",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "DDPM CIFAR-10 FID <50 + LoRA SD concept perso appris + papers DDPM/LDM lus",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a2-8b96-d942bb9ebe7b",
+          "name": "iOS S5 — Widget iOS + App Intent Siri",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "Widget qui affiche une stat live de l'app + 1 raccourci Siri vocal qui ajoute une entrée (« Dis Siri, j'ai fait ma Salle »)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a2-b504-f1d8562841bc",
+          "name": "Bloc 4 (J31-40) — Fine-tuning : full-FT vs LoRA sur petit modèle",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "LoRA Qwen 0.5B sur Alpaca, loss < 1.5, perplexity delta > 10%, modèle pushé HF Hub",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a5-8b2d-ed52ef1c2a64",
+          "name": "Blender S3 — Géométrie procédurale (Geometry Nodes)",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "2 setups Geometry Nodes réutilisables (scatter de points sur surface + réseau de neurones procédural paramétrable). Fichier neural_net_generator.blend qui prend N inputs → réseau visible.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a6-ab0e-fc08dffd2e0a",
+          "name": "Élec S6 — Robot custom 3D + ESP32 + WiFi (mois 7-9)",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "Robot custom fonctionnel, design propre, démo vidéo 2 min. Chassis imprimé maison + ESP32 + servos + capteurs + contrôle WiFi via app/web.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a9-9d70-f2ec506215c4",
+          "name": "Web S2 — Blog Astro+MDX TECHNIQUEMENT déployé (plomberie)",
+          "parent_id": "347845e8-e836-816c-bfbf-cf59232de576",
+          "parent_name": "Blog Break AI Abstraction — livrable transverse",
+          "critere": "Site live (blog.anthonny.dev ou /blog), HTTPS actif, pipeline MDX opérationnel (push .mdx → publi auto), 1 article placeholder, RSS /rss.xml valide W3C, sitemap /sitemap-index.xml, Cloudflare Web Analytics actif, OG image auto testée, Lighthouse ≥ 95",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a9-b531-c96d3a8a29c1",
+          "name": "Mois 3 : Calcul diff multivariable + backprop from scratch",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : gradients/J/H maîtrisés, autodiff compris, backprop MLP 2 couches NumPy matche torch 1e-6",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ab-88aa-d9640f861cad",
+          "name": "Blender S5 — Motion graphics explainer 3D uniquement",
+          "parent_id": "347845e8-e836-8138-a744-dc60a3ba2331",
+          "parent_name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "critere": "1 diagramme IA animé en 3D, 20-40s (forward pass mini-MLP avec volume ou rotation stack Transformer 3D), intégré dans article blog.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ab-b6ae-d08ef7d7152e",
+          "name": "ML P5 — Attention + self-attention manuel (multi-head, masked)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Scaled dot-product attention, multi-head, masked attention causal. Comprendre Q/K/V à l'écrit, reproduire shapes step-by-step.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ac-a194-f3edc1ed32b6",
+          "name": "B3 — Classes, RAII, rule of 5, smart pointers (jours 21-30)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "ScopedFile RAII + UniquePtr<T> maison move-only qui passe ASan zéro leak, démo Circle/Square polymorphisme virtuel fonctionnelle",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ad-b332-c19258e81804",
+          "name": "Mois 4 : Probabilités fondamentales",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : distributions classiques + Gaussian multivariée + LGN/TCL + inégalités concentration prouvées",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81af-a89a-db96c1269b54",
+          "name": "CUDA Bloc 6 — Warp-level primitives (j.51-60)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Shuffle/ballot/vote maîtrisés, warp-reduce + warp-scan sans shared mem, cooperative groups utilisés, tensor core MMA PTX testé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81b0-a6ec-d9344099c2bc",
+          "name": "B6 — Templates, concepts C++20, SFINAE, variadic (jours 51-60)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Vector<T, Alloc> maison templated passant tests avec int/string + allocator custom qui log les allocs, concept Numeric custom opérationnel",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ba-b3a7-c993b3b24b17",
+          "name": "Dessin P3 — Saitama reconnaissable (3 fanarts dont 1 validé)",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "3 fanarts Saitama dont 1 validé 'reconnaissable' par 3 personnes externes. Sondage WhatsApp 'qui est ce personnage ?' ≥2 bonnes réponses sans indice.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81bd-b79d-dc835c18d614",
+          "name": "Maths S5 — Théorie de l'information (entropie, KL, cross-entropy)",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "Dériver à la main la cross-entropy comme cas particulier de KL + implémenter cross-entropy + KL stable numériquement (logsumexp) + expliquer pourquoi minimiser la cross-entropy = MLE sur softmax",
+          "progress": null,
+          "statut": "Abandonné",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81be-8ebf-d222bf354e44",
+          "name": "B5 — Algorithms STL + lambdas + std::function (jours 41-50)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Pipeline transform/filter/reduce en 5 lignes STL sur vector 1M ints, mini-grep std::regex fonctionnel, bench Google Benchmark publié",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81be-992a-c2c702ee1a1f",
+          "name": "Physique P3 — Électromagnétisme + optique (pont NeRF / rendering)",
+          "parent_id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
+          "parent_name": "Socle Physique pour IA / Graphics",
+          "critere": "Image rendue par ray-marching 2D + 1 page d'annotations sur la section Volume rendering du paper NeRF (correspondance équation par équation avec la RTE)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81bf-bb34-f9972afbe85e",
+          "name": "Manim S6 — Série de 5 vidéos 'Comprendre un Transformer pas à pas'",
+          "parent_id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
+          "parent_name": "Manim — produire vidéos pédago IA 2D",
+          "critere": "5 vidéos publiées (Embeddings + Attention scaled dot-product + Multi-head + Position encoding + Forward pass complet) + playlist YouTube + 5 posts blog + template scènes Manim partagé.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c2-bc40-d62a9d6f944e",
+          "name": "Physique P2 — Thermo + physique statistique (pont diffusion / EBM)",
+          "parent_id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
+          "parent_name": "Socle Physique pour IA / Graphics",
+          "critere": "Notebook Ising avec courbe de phase reproduite (Tc ≈ 2.27) + RBM qui sample des chiffres MNIST reconnaissables",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c3-be71-ff1a3b454cdb",
+          "name": "B7 — Multithreading (thread, mutex, atomic, async, futures) (jours 61-70)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Thread pool maison qui process 10 000 tâches race-free sous TSan + downloader multi-threadé libcurl 20 URLs, bench std::sort parallel STL vs séquentiel",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c7-aa58-e6cda1caa49c",
+          "name": "CUDA Bloc 5 — Memory hierarchy + Occupancy (j.41-50)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Roofline tracé pour matmul, occupancy/bank conflicts/cache hit mesurés Nsight Compute, démontrer cas où baisser occupancy augmente perf (ILP)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c8-a194-d9d074cb0c55",
+          "name": "Design S1 — Refactoring UI lu + 3 refontes exos",
+          "parent_id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
+          "parent_name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "critere": "Livre PDF Wathan & Schoger lu intégralement (200+ pages, ~50 chapitres, notes prises) + 3 refontes UI existantes avec avant/après documentés et justifiés.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c8-a497-ef94c76ee77d",
+          "name": "Physique P5 — Méthodes numériques pour les EDP",
+          "parent_id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
+          "parent_name": "Socle Physique pour IA / Graphics",
+          "critere": "Repo pde-baselines/ avec 4 EDP résolues (chaleur 2D, ondes 1D Verlet, Burgers visqueux, Poisson 2D Dirichlet) + comparaison stabilité explicite/implicite/Crank-Nicolson documentée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81cc-8507-cc01db0eedf1",
+          "name": "Maths S1 — Algèbre linéaire (vecteurs, matrices, SVD, eigen)",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "20 exos type MIT 18.06 (problem sets 1-6) sans aide + implémenter SVD à la main sur matrice 4x4 + expliquer pourquoi Q K^T est une matrice de similarités cosinus non normalisées",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": "2026-08-31"
+        },
+        {
+          "id": "347845e8-e836-81cc-a177-eb34cc47b46c",
+          "name": "Web S5 — SaaS MVP avec Stripe (test mode)",
+          "parent_id": "347845e8-e836-816c-bfbf-cf59232de576",
+          "parent_name": "Blog Break AI Abstraction — livrable transverse",
+          "critere": "Landing page + pricing page (2 plans Free / Pro 9€), checkout Stripe test mode fonctionnel (carte 4242…), webhook met à jour le plan en DB, page /billing affiche plan actif, 1 feature Pro gated derrière le plan",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ce-a16c-c8e229268b76",
+          "name": "Dessin P8 — Portfolio public 10 dessins",
+          "parent_id": "347845e8-e836-8126-a48a-dcf26fa45107",
+          "parent_name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "critere": "URL publique avec 10 posts datés, 1 légende par pièce (technique + temps passé). Répartition : 3 manga + 3 paysages + 3 études couleur + 1 pièce libre.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81cf-a2f9-c9b19959f762",
+          "name": "RS S3 — Premier preprint arXiv solo",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "1 preprint cs.LG ou cs.AI déposé sur arXiv (endorsement obtenu) + soumis aussi sur Hugging Face Papers (claim ton paper, link au repo) + code public + repro one-command + dataset",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81d4-9e6b-d92615e2aa46",
+          "name": "CUDA Bloc 10 — Capstone Micro Transformer CUDA (j.91-100)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Transformer encoder layer (LN + MHA + residual + LN + FFN + residual) 100% custom CUDA/Triton, forward+backward corrects (gradcheck pass), benchmark latency ≥0.6× nn.TransformerEncoderLayer sur A100 batch=32 seq=512 d_model=256, repo public + blog post",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2027-05-11"
+        },
+        {
+          "id": "347845e8-e836-81de-8f04-f409a11e9ebb",
+          "name": "Mois 5 : Statistiques pour ML (MLE/MAP/Bayes)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : MLE/MAP dérivés sur 5 distributions, ridge/Bayesian LR codés, analyse Boston complete",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81df-9b84-cfa4a7b25af7",
+          "name": "ML P7 — NanoGPT / GPT-2 reproduction (124M)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Val loss ~3.0 sur OpenWebText (124M) cible Karpathy. Decoder-only, weight tying, AdamW, gradient accumulation, mixed precision.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81e6-8e9f-ff08ddff00d2",
+          "name": "Élec S1 — Bases électricité (Mois 1)",
+          "parent_id": "347845e8-e836-819e-af81-e4b0023e52ac",
+          "parent_name": "Projets électronique + RC + mécatronique",
+          "critere": "5 projets blink/LED/bouton du Starter Kit terminés + résumé loi Ohm/Kirchhoff écrit. Livrable : breadboard photo + schéma à main propre + code commenté.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ec-8f31-d3ead5f29e48",
+          "name": "Bloc 3 (J21-30) — Prompt engineering avancé + évaluation",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "ReAct agent marche, lm-eval-harness scores reproduits à ±1pt, DeepEval suite CI-ready",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ef-941f-db4425aefbda",
+          "name": "ML P11 — Stable Diffusion minimal (Latent Diffusion)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Génération conditionnée prompt simple (édition « a face with glasses »), images cohérentes 256×256. VAE encoder/decoder + UNet conditionné texte (cross-attention) + CLIP text encoder (réutilisé P10).",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ef-a92c-cfc9506578ea",
+          "name": "CUDA Bloc 4 — Convolutions + Transpose (j.31-40)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Conv 1D/2D tiled + séparable + im2col, transpose optimisé sans bank conflicts (vérifié Nsight)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f1-a3e8-f7be5f126984",
+          "name": "Mois 10 : Probas avancées (Markov, MCMC, HMC, Brownian)",
+          "parent_id": "347845e8-e836-813f-9c77-cf4ec143007e",
+          "parent_name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "critere": "4 semaines : MH + Gibbs + HMC + Brownian simulés ; pont diffusion models posé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f1-b943-f1f5a8ea9a03",
+          "name": "ML P1 — Régression linéaire + logistique (numpy pur)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "MSE Boston < 25, accuracy logistique > 99% sur MNIST 0-vs-1. Gradient descent batch + mini-batch sans sklearn.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f1-bb89-f2f26b112361",
+          "name": "Phase 2 (J11-20) — Computer Vision foundations",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "ResNet transfer learning Imagenette >92% + Flowers102 >85% + 2 papers lus (AlexNet, ResNet)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f2-b0ba-f17b083f1920",
+          "name": "Maths S4 — Optimisation convexe + SGD + Adam",
+          "parent_id": "347845e8-e836-8196-9815-e0eb7d2e65fa",
+          "parent_name": "Maîtriser socle Maths pour IA",
+          "critere": "Implémenter SGD, momentum, RMSProp et Adam from scratch en NumPy (mise à jour vectorisée + bias correction) qui matche torch.optim.Adam + tracer convergence sur Rosenbrock + expliquer pourquoi Adam fait du per-parameter learning rate",
+          "progress": null,
+          "statut": "Abandonné",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f4-bce3-f3a634ace64b",
+          "name": "B4 — STL containers + iterators (jours 31-40)",
+          "parent_id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
+          "parent_name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "critere": "Histogramme de mots d'un texte via unordered_map + top-10 priority_queue, parser CSV en string_view, iterator custom sur linked list maison",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f7-8438-e35d11f6a6ab",
+          "name": "ML P8 — VAE from scratch (MNIST + CelebA)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "Reconstruction MNIST nette, samples reconnaissables, FID < 50 CelebA. Encoder/decoder, reparam trick, ELBO = recon + KL, KL annealing.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f8-930a-d48abbe6e2b1",
+          "name": "RS S7 — 30 candidatures shortlist (5 entretiens → 1 offre)",
+          "parent_id": "347845e8-e836-813f-a228-fae96508a21f",
+          "parent_name": "Devenir Research Scientist sans PhD",
+          "critere": "30 candidatures sur 6 mois → 5 entretiens techniques décrochés → 1 offre Research Scientist OU Applied Scientist senior",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81f9-9f35-eb19d847f72f",
+          "name": "CUDA Bloc 2 — Primitives parallèles (j.11-20)",
+          "parent_id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
+          "parent_name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "critere": "Vector add, reduction (naïve + tree + warp), scan (Hillis-Steele + Blelloch), histogram (atomic + privatisé) — chaque primitive avec ≥2 versions et speedup mesuré",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81fd-9c49-daefb40de1e9",
+          "name": "iOS S6 — App publiée TestFlight + App Store",
+          "parent_id": "347845e8-e836-8175-9e33-ce31bc235723",
+          "parent_name": "Maîtriser iOS / SwiftUI natif",
+          "critere": "10 testeurs externes sur TestFlight + 1er download App Store par un inconnu (vérifiable App Store Connect Analytics). Apple Developer 99$/an payé.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81fd-a045-ffe93a8462b9",
+          "name": "Bloc 6 (J51-60) — Alignment : DPO, KTO, preference tuning",
+          "parent_id": "347845e8-e836-818c-93dd-cf513355bfc8",
+          "parent_name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "critere": "DPO Qwen 7B QLoRA win-rate > 55% vs SFT, Llama Guard 3 pipeline 3-étapes déployé, red-team 30 prompts OK",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81fd-a676-ee92dd17ad54",
+          "name": "Phase 6 (J51-60) — Reinforcement Learning",
+          "parent_id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
+          "parent_name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "critere": "DQN CartPole 200 + PPO LunarLander >250 + papers DQN et PPO lus",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ff-806a-c125f329796b",
+          "name": "ML P3 — CNN LeNet (PyTorch tensor ops sans nn.Conv2d)",
+          "parent_id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
+          "parent_name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "critere": "99%+ MNIST, 90%+ Fashion-MNIST. Conv2d via unfold + im2col, max-pool, BatchNorm from scratch.",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Maths 30 min",
+          "cible": 6,
+          "days": [
+            true,
+            true,
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "fait": 5,
+          "score_pct": 83
+        },
+        {
+          "name": "Micrograd 30 min",
+          "cible": 6,
+          "days": [
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            false
+          ],
+          "fait": 5,
+          "score_pct": 83
+        }
+      ],
+      "habit_completion_12w": [
+        30,
+        35,
+        42,
+        48,
+        52,
+        55,
+        58,
+        60,
+        65,
+        68,
+        70,
+        72
+      ],
+      "time_pilier": {
+        "cat": "Création",
+        "hours": 7,
+        "subs": [
+          {
+            "name": "Maths S1",
+            "hours": 3
+          },
+          {
+            "name": "Micrograd",
+            "hours": 4
+          }
+        ]
+      },
+      "roadmap": [
+        {
+          "name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
+          "start": "2026-04-20",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 25
+        },
+        {
+          "name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
+          "start": "2026-06-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Devenir Research Scientist sans PhD",
+          "start": "2026-07-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Blog Break AI Abstraction — livrable transverse",
+          "start": "2026-07-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
+          "start": "2026-08-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "365 Days of Math — socle maths 1 an pour Research Scientist",
+          "start": "2026-09-01",
+          "end": "2027-09-01",
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Maîtriser iOS / SwiftUI natif",
+          "start": "2026-10-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Socle Physique pour IA / Graphics",
+          "start": "2026-10-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
+          "start": "2026-10-01",
+          "end": "2027-01-15",
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
+          "start": "2027-01-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Blender — 3D pure pour illustrations blog + motion 3D",
+          "start": "2027-01-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
+          "start": "2027-01-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Projets électronique + RC + mécatronique",
+          "start": "2027-01-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Manim — produire vidéos pédago IA 2D",
+          "start": "2027-01-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
+          "start": "2027-02-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        }
+      ],
+      "signature_metric": {
+        "label": "Progression tech",
+        "value": "27,5 %",
+        "sub": "pilier le plus bas · à intensifier fin T2"
+      }
+    },
+    "spirituel": {
+      "slug": "spirituel",
+      "name": "Spirituel",
+      "color_key": "yellow",
+      "accent": "#B8860B",
+      "tint_mid": "#D8B052",
+      "tint_light": "#ECD9A8",
+      "progress_avg": 62,
+      "radar": {
+        "actuel": 82,
+        "cible": 85,
+        "gap": 3
+      },
+      "achievements_active": [
+        {
+          "id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
+          "url": "https://www.notion.so/Accompagnement-Jillian-dans-Vivre-pour-toujours-347845e8e836814cb30de9d6b2a924ca",
+          "name": "Accompagnement Jillian dans Vivre pour toujours",
+          "progress": 45,
+          "critere": "Livre Vivre pour toujours terminé avec Jillian (14 ans, neveu) + décision documentée: baptême OU transmission propre à un frère adapté",
+          "cible_unite": "séances/sem:1",
+          "deadline": null,
+          "start": "2026-04-20"
+        },
+        {
+          "id": "347845e8-e836-8180-b73e-e9389a04f6a6",
+          "url": "https://www.notion.so/Pr-dication-r-guli-re-et-progressive-palier-30h-mois-347845e8e8368180b73ee9389a04f6a6",
+          "name": "Prédication régulière et progressive (palier 30h/mois)",
+          "progress": 80,
+          "critere": "Atteindre 30h prédication enregistrées sur 1 mois calendaire (équivalent pionnier auxiliaire 1 mois)",
+          "cible_unite": "h/mois:30",
+          "deadline": "2026-09-30",
+          "start": "2026-04-20"
+        }
+      ],
+      "sous_achievements": [
+        {
+          "id": "347845e8-e836-810f-9368-e945f51c9534",
+          "name": "Palier 3 — 40h/mois prédication tenues 3 mois (PA permanent)",
+          "parent_id": "347845e8-e836-81ad-9739-eee75b1f4806",
+          "parent_name": "Aspirations long terme: pionnier aux. permanent + Béthel",
+          "critere": "40h/mois tenues 3 mois consécutifs + demande officielle déposée collège anciens",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-811f-ab22-c3748a4adc06",
+          "name": "Tenir rôle AM 3 mois consécutifs sans rupture",
+          "parent_id": "347845e8-e836-819c-bdec-eaac5ae5a725",
+          "parent_name": "Formation assistant ministériel 2026 validée",
+          "critere": "3 mois consécutifs rôle tenu + audit ancien validé",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2026-12-31"
+        },
+        {
+          "id": "347845e8-e836-8120-b404-c90bca490047",
+          "name": "Préparer tâches techniques AM (sono, micro, accueil, comptes)",
+          "parent_id": "347845e8-e836-819c-bdec-eaac5ae5a725",
+          "parent_name": "Formation assistant ministériel 2026 validée",
+          "critere": "Checklist signée + 1 doublon avec AM en place (observer 2 réunions)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8122-ab39-f296399b0c36",
+          "name": "Confirmer date nomination + périmètre AM auprès ancien",
+          "parent_id": "347845e8-e836-819c-bdec-eaac5ae5a725",
+          "parent_name": "Formation assistant ministériel 2026 validée",
+          "critere": "RDV ancien référent tenu, date effective + checklist tâches reçues",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2026-05-15"
+        },
+        {
+          "id": "347845e8-e836-812b-a01d-d74f0c1d153f",
+          "name": "Palier 2 — Atteindre 30h prédication/mois",
+          "parent_id": "347845e8-e836-8180-b73e-e9389a04f6a6",
+          "parent_name": "Prédication régulière et progressive (palier 30h/mois)",
+          "critere": "30h prédication enregistrées sur 1 mois calendaire (= pionnier aux. 1 mois)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": "2026-09-30"
+        },
+        {
+          "id": "347845e8-e836-8135-ad23-c4b645ef5734",
+          "name": "Étude personnelle hebdo ≥45 min sur 8 sem",
+          "parent_id": "347845e8-e836-818d-be4b-e182b940f2a2",
+          "parent_name": "Vie spirituelle quotidienne stable",
+          "critere": "1 séance ≥45 min/sem, sujet noté, sur 8 semaines consécutives",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8145-9941-c5ef1234ded7",
+          "name": "Déposer demande pionnier aux. permanent (4/4 conditions)",
+          "parent_id": "347845e8-e836-81ad-9739-eee75b1f4806",
+          "parent_name": "Aspirations long terme: pionnier aux. permanent + Béthel",
+          "critere": "4/4 conditions validées (palier 3 × 3 mois, accord Mirane, charge enfants compatible, santé tenable) + demande déposée",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-814e-b07b-eb8478b94676",
+          "name": "Préparer + commenter réunion week-end (dimanche) 8/8",
+          "parent_id": "347845e8-e836-818d-be4b-e182b940f2a2",
+          "parent_name": "Vie spirituelle quotidienne stable",
+          "critere": "Tour de Garde lu + ≥1 commentaire préparé + levé, 8 dimanches sur 8",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-815f-b13d-e8202b6e6c03",
+          "name": "Palier 1 — Prédication 1×/sem stable 2 mois",
+          "parent_id": "347845e8-e836-8180-b73e-e9389a04f6a6",
+          "parent_name": "Prédication régulière et progressive (palier 30h/mois)",
+          "critere": "4 sorties/mois sur 2 mois consécutifs (≈8-10h/mois)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8162-8f73-ddea243f6313",
+          "name": "Préparer + commenter réunion semaine (mardi) 8/8",
+          "parent_id": "347845e8-e836-818d-be4b-e182b940f2a2",
+          "parent_name": "Vie spirituelle quotidienne stable",
+          "critere": "Article étudié + ≥1 commentaire préparé + levé en réunion, 8 mardis sur 8",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8166-b73c-fca16eb40d95",
+          "name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
+          "parent_id": "347845e8-e836-8180-b73e-e9389a04f6a6",
+          "parent_name": "Prédication régulière et progressive (palier 30h/mois)",
+          "critere": "Présence prédication samedi 4 samedis sur 4",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-817d-bf69-c708e24512b5",
+          "name": "Tenir prière 3×/jour 7/7 sur 4 sem",
+          "parent_id": "347845e8-e836-818d-be4b-e182b940f2a2",
+          "parent_name": "Vie spirituelle quotidienne stable",
+          "critere": "Prière matin/midi/soir loggée 7/7 sur 4 semaines consécutives",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-818e-a8f6-c3ad472cf7bd",
+          "name": "Palier 4 — 50h/mois prédication (stretch)",
+          "parent_id": "347845e8-e836-81ad-9739-eee75b1f4806",
+          "parent_name": "Aspirations long terme: pionnier aux. permanent + Béthel",
+          "critere": "50h/mois sur 1 mois calendaire (objectif stretch hors permanence)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-8190-b82b-ed1b401cf64a",
+          "name": "Fixer cadence Jillian: 1 séance/sem ≥30 min, 4/4",
+          "parent_id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
+          "parent_name": "Accompagnement Jillian dans Vivre pour toujours",
+          "critere": "1 séance/sem ≥30 min, 4 sem sur 4 consécutives, créneau fixe + accord parents",
+          "progress": null,
+          "statut": "En cours",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81a4-bd63-dcc78e75fe1f",
+          "name": "Réinscription chorale Béthel + 1 cantique/mois (profil Béthel)",
+          "parent_id": "347845e8-e836-81ad-9739-eee75b1f4806",
+          "parent_name": "Aspirations long terme: pionnier aux. permanent + Béthel",
+          "critere": "Inscription chorale Béthel + enregistrement déposé + 1 cantique appris/mois sur 6/12 mois",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81af-9826-f857efb60e33",
+          "name": "Statuer Jillian: baptême OU transmission à fin du livre",
+          "parent_id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
+          "parent_name": "Accompagnement Jillian dans Vivre pour toujours",
+          "critere": "Décision documentée: poursuite vers baptême OU étude transmise à frère adapté (transition 2-3 séances)",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81c3-8405-f08805222b79",
+          "name": "Candidature télévolontariat Béthel 1j/sem (déclenchée par 4/5)",
+          "parent_id": "347845e8-e836-81ad-9739-eee75b1f4806",
+          "parent_name": "Aspirations long terme: pionnier aux. permanent + Béthel",
+          "critere": "Candidature déposée une fois 4/5 effectif + ≥3 mois pionnier aux. permanent en routine",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81cb-b689-e0a765207dab",
+          "name": "Débloquer 1 RDV prédication récurrent semaine",
+          "parent_id": "347845e8-e836-8180-b73e-e9389a04f6a6",
+          "parent_name": "Prédication régulière et progressive (palier 30h/mois)",
+          "critere": "1 frère démarché + créneau hebdo fixe (mardi midi ou jeudi soir) tenu 4 semaines",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81d3-8f34-e0acac21aa6f",
+          "name": "Avancer 1 chapitre Vivre pour toujours/1-2 sem",
+          "parent_id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
+          "parent_name": "Accompagnement Jillian dans Vivre pour toujours",
+          "critere": "Avancement 1 chapitre toutes les 1-2 semaines, date + chapitre + questions loggés",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81de-8fe3-f9724adcac15",
+          "name": "Lire texte du jour chaque matin (JW Library)",
+          "parent_id": "347845e8-e836-818d-be4b-e182b940f2a2",
+          "parent_name": "Vie spirituelle quotidienne stable",
+          "critere": "Texte du jour lu 7/7 sur 4 sem, dans les 30 min après réveil",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        },
+        {
+          "id": "347845e8-e836-81ed-b6b2-d6493099199b",
+          "name": "Lire 1 chapitre Bible/jour 6/7 sur 4 sem",
+          "parent_id": "347845e8-e836-818d-be4b-e182b940f2a2",
+          "parent_name": "Vie spirituelle quotidienne stable",
+          "critere": "1 chapitre/jour 6/7 sur 4 sem, plan annuel ou programme JW",
+          "progress": null,
+          "statut": "Pas commencé",
+          "deadline": null
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Prédication",
+          "cible": 2,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          "fait": 1,
+          "score_pct": 50
+        },
+        {
+          "name": "Étude personnelle",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            false,
+            true
+          ],
+          "fait": 6,
+          "score_pct": 86
+        }
+      ],
+      "habit_completion_12w": [
+        70,
+        75,
+        75,
+        78,
+        80,
+        82,
+        85,
+        85,
+        88,
+        88,
+        90,
+        82
+      ],
+      "time_pilier": {
+        "cat": "Spirituel",
+        "hours": 10,
+        "subs": [
+          {
+            "name": "Réunions",
+            "hours": 3
+          },
+          {
+            "name": "Prédication",
+            "hours": 3
+          },
+          {
+            "name": "Étude perso",
+            "hours": 2
+          },
+          {
+            "name": "Étude Jillian",
+            "hours": 2
+          }
+        ]
+      },
+      "roadmap": [
+        {
+          "name": "Accompagnement Jillian dans Vivre pour toujours",
+          "start": "2026-04-20",
+          "end": null,
+          "active": true,
+          "status": "En cours",
+          "progress": 45
+        },
+        {
+          "name": "Prédication régulière et progressive (palier 30h/mois)",
+          "start": "2026-04-20",
+          "end": "2026-09-30",
+          "active": true,
+          "status": "En cours",
+          "progress": 80
+        },
+        {
+          "name": "Vie spirituelle quotidienne stable",
+          "start": "2026-04-20",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Formation assistant ministériel 2026 validée",
+          "start": "2026-05-01",
+          "end": "2026-12-31",
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        },
+        {
+          "name": "Aspirations long terme: pionnier aux. permanent + Béthel",
+          "start": "2026-10-01",
+          "end": null,
+          "active": false,
+          "status": "Pas commencé",
+          "progress": 0
+        }
+      ],
+      "signature_metric": {
+        "label": "Prédication avril",
+        "value": "24 h / 30 h",
+        "sub": "80 % objectif mensuel"
+      }
+    }
+  }
+}

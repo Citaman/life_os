@@ -91,7 +91,7 @@ TIME_ALLOCATION = {
 
 
 def parse_percent(text: str | None) -> int | None:
-    """Extract a percent value from a Progression actuelle text field."""
+    """Extract a percent value from a Progression actuelle text field (rarely populated in V2)."""
     if not text:
         return None
     import re
@@ -100,6 +100,47 @@ def parse_percent(text: str | None) -> int | None:
     if m:
         return int(m.group(1))
     return None
+
+
+# Progress overrides when Notion Progression actuelle field doesn't contain a %.
+# Sourced from SPEC_V8. Replace by real sous-rollup computation below.
+# Key = achievement name (exact match) or short substring.
+PROGRESS_OVERRIDE = {
+    "Atteindre 90 kg via body recomposition": 42,
+    "Sommeil et récupération solides": 60,
+    "Couple solide Mirane": 35,
+    "Éducation James équilibrée": 70,
+    "Admin & patrimoine à jour": 55,
+    "Budget familial maîtrisé": 48,
+    "Re-implémenter chaque modèle ML from scratch": 25,
+    "Prédication régulière et progressive": 80,
+    "Accompagnement Jillian dans Vivre pour toujours": 45,
+}
+
+
+def rollup_progress_from_sous(achievement_id: str, plan_pages: list[dict[str, Any]]) -> int | None:
+    """Compute achievement progress as % sous-achievements marked done."""
+    children = [p for p in plan_pages if p.get("Type") == "Sous-achievement" and achievement_id in (p.get("Parent") or [])]
+    if not children:
+        return None
+    done_statuses = {"Complété", "Atteint"}
+    done = sum(1 for c in children if c.get("Statut") in done_statuses)
+    return round(done / len(children) * 100)
+
+
+def achievement_progress(a: dict[str, Any], plan: list[dict[str, Any]]) -> int:
+    """Priority: explicit % in text > override > sous-rollup > 0."""
+    pct = parse_percent(a.get("Progression actuelle"))
+    if pct is not None:
+        return pct
+    name = a.get("Nom", "")
+    for key, val in PROGRESS_OVERRIDE.items():
+        if key.lower() in name.lower():
+            return val
+    rollup = rollup_progress_from_sous(a["id"], plan)
+    if rollup is not None:
+        return rollup
+    return 0
 
 
 def compute_pilier_progress(plan_pages: list[dict[str, Any]], pilier_name: str) -> int:
@@ -112,9 +153,8 @@ def compute_pilier_progress(plan_pages: list[dict[str, Any]], pilier_name: str) 
             continue
         if p.get("Statut") != "En cours":
             continue
-        pct = parse_percent(p.get("Progression actuelle"))
-        if pct is not None:
-            values.append(pct)
+        pct = achievement_progress(p, plan_pages)
+        values.append(pct)
     if not values:
         return 0
     return round(sum(values) / len(values))
@@ -150,7 +190,7 @@ def achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[s
                     "id": p["id"],
                     "url": p["url"],
                     "name": p.get("Nom"),
-                    "progress": parse_percent(p.get("Progression actuelle")),
+                    "progress": achievement_progress(p, plan),
                     "critere": p.get("Critère de réussite"),
                     "cible_unite": p.get("Unité + Cible"),
                     "deadline": (p.get("Deadline") or {}).get("start"),
@@ -161,14 +201,17 @@ def achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[s
 
 
 def sous_achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[str, Any]]:
+    id_to_name = {p["id"]: p.get("Nom") for p in plan}
     out = []
     for p in plan:
         if p.get("Type") == "Sous-achievement" and p.get("Pilier") == pilier_name:
+            parent_id = (p.get("Parent") or [None])[0] if p.get("Parent") else None
             out.append(
                 {
                     "id": p["id"],
                     "name": p.get("Nom"),
-                    "parent": (p.get("Parent") or [None])[0] if p.get("Parent") else None,
+                    "parent_id": parent_id,
+                    "parent_name": id_to_name.get(parent_id) if parent_id else None,
                     "critere": p.get("Critère de réussite"),
                     "progress": parse_percent(p.get("Progression actuelle")),
                     "statut": p.get("Statut"),
@@ -182,14 +225,15 @@ def roadmap_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[str, A
     """All achievements (active + future) ordered by start date."""
     out = []
     for p in plan:
-        if p.get("Type") == "Achievement" and p.get("Pilier") == pilier_name:
+        if p.get("Type") == "Achievement" and p.get("Pilier") == pilier_name and p.get("Statut") != "Abandonné":
             out.append(
                 {
                     "name": p.get("Nom"),
                     "start": (p.get("Date prévue début") or {}).get("start"),
                     "end": (p.get("Deadline") or {}).get("start"),
                     "active": p.get("Statut") == "En cours",
-                    "progress": parse_percent(p.get("Progression actuelle")) or 0,
+                    "status": p.get("Statut"),
+                    "progress": achievement_progress(p, plan),
                 }
             )
     return sorted(out, key=lambda a: a.get("start") or "2099")
