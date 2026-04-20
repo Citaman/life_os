@@ -1,0 +1,261 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Sankey · {{ pilier.name }}{% endblock %}
+
+{% block extra_css %}
+.sankey-wrap {
+  min-width: 600px;
+  overflow-x: auto;
+}
+.sankey-inner {
+  position: relative;
+  width: 100%;
+}
+#sankey-pilier-svg {
+  display: block;
+  width: 100%;
+  height: 420px;
+}
+.pilier-accent-bar {
+  height: 4px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.sankey-card-header {
+  margin-bottom: 20px;
+}
+.sankey-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.sankey-card-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.subs-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.sub-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+{% endblock %}
+
+{% block content %}
+{{ m.section_header(
+    eyebrow="TEMPS HEBDOMADAIRE",
+    title="Flux Sankey · " + pilier.name,
+    subtitle=pilier.time_pilier.hours|string + " h hebdo réparties entre sous-activités",
+    accent=pilier.accent
+) }}
+
+<div class="card">
+  <div class="pilier-accent-bar" style="background: linear-gradient(90deg, {{ pilier.accent }}, {{ pilier.tint_mid }});"></div>
+
+  <div class="sankey-card-header">
+    <div class="sankey-card-title">{{ pilier.name }} — Allocation hebdomadaire</div>
+    <div class="sankey-card-sub">Flux de répartition du temps · {{ pilier.time_pilier.hours }} h totales</div>
+  </div>
+
+  <div class="sankey-wrap">
+    <div class="sankey-inner">
+      <svg id="sankey-pilier-svg"
+           viewBox="0 0 800 420"
+           preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <div class="subs-breakdown">
+    {% for sub in pilier.time_pilier.subs %}
+    <span class="sub-pill"
+          style="background: {{ pilier.accent }}26; color: {{ pilier.accent }};">
+      {{ sub.name }} · {{ sub.hours }}h
+    </span>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script>
+(function () {
+  /* ── pilier data injected from Jinja ── */
+  const PILIER_NAME  = {{ pilier.name | tojson }};
+  const PILIER_HOURS = {{ pilier.time_pilier.hours }};
+  const PILIER_SUBS  = {{ pilier.time_pilier.subs | tojson }};
+  const ACCENT       = {{ pilier.accent | tojson }};
+  const TINT_MID     = {{ pilier.tint_mid | tojson }};
+  const TINT_LIGHT   = {{ pilier.tint_light | tojson }};
+
+  /* ── build nodes + links: L0 pilier → L1 subs ── */
+  function buildGraph() {
+    const nodes = [];
+    const links = [];
+
+    /* Root node = the pilier itself */
+    const rootLabel = PILIER_NAME + " " + PILIER_HOURS + " h";
+    nodes.push({ id: 0, name: rootLabel, layer: 0 });
+
+    PILIER_SUBS.forEach(function (sub, i) {
+      nodes.push({ id: i + 1, name: sub.name, hours: sub.hours, layer: 1 });
+      links.push({ source: 0, target: i + 1, value: sub.hours });
+    });
+
+    return { nodes: nodes, links: links };
+  }
+
+  /* ── render ── */
+  function renderSankey() {
+    const svgEl = document.getElementById("sankey-pilier-svg");
+    if (!svgEl) return;
+
+    const rect = svgEl.getBoundingClientRect();
+    const W = Math.max(rect.width || 0, 600);
+    const H = 420;
+
+    /* Race-condition guard: retry if container not yet laid out */
+    if (W < 100) {
+      setTimeout(renderSankey, 100);
+      return;
+    }
+
+    const margin = { top: 20, right: 160, bottom: 20, left: 20 };
+    const innerW = W - margin.left - margin.right;
+    const innerH = H - margin.top - margin.bottom;
+
+    const svg = d3.select("#sankey-pilier-svg")
+      .attr("width", W)
+      .attr("height", H)
+      .attr("viewBox", "0 0 " + W + " " + H)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    svg.selectAll("*").remove();
+
+    const g = svg.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const { nodes: rawNodes, links: rawLinks } = buildGraph();
+
+    /* Handle edge case: no subs → just show a single block */
+    if (rawLinks.length === 0) {
+      g.append("text")
+        .attr("x", innerW / 2)
+        .attr("y", innerH / 2)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("font-family", "Inter, system-ui, sans-serif")
+        .attr("font-size", 14)
+        .attr("font-weight", 600)
+        .attr("fill", ACCENT)
+        .text(PILIER_NAME + " — données à venir");
+      return;
+    }
+
+    const sankey = d3.sankey()
+      .nodeId(function (d) { return d.index; })
+      .nodeWidth(20)
+      .nodePadding(14)
+      .extent([[0, 0], [innerW, innerH]]);
+
+    const graph = sankey({
+      nodes: rawNodes.map(function (d, i) { return Object.assign({}, d, { index: i }); }),
+      links: rawLinks.map(function (l) { return Object.assign({}, l); }),
+    });
+
+    /* ── links ── */
+    const linkG = g.append("g").attr("fill", "none");
+
+    linkG.selectAll("path")
+      .data(graph.links)
+      .join("path")
+      .attr("d", d3.sankeyLinkHorizontal())
+      .attr("stroke", ACCENT)
+      .attr("stroke-width", function (d) { return Math.max(1, d.width); })
+      .attr("stroke-opacity", 0.35)
+      .style("cursor", "pointer")
+      .on("mouseover", function () {
+        d3.select(this).attr("stroke-opacity", 0.6);
+      })
+      .on("mouseout", function () {
+        d3.select(this).attr("stroke-opacity", 0.35);
+      })
+      .append("title")
+      .text(function (d) {
+        const src = d.source.name;
+        const tgt = d.target.name;
+        return src + " \u2192 " + tgt + "\n" + d.value + " h";
+      });
+
+    /* ── nodes ── */
+    const nodeG = g.append("g");
+
+    nodeG.selectAll("rect")
+      .data(graph.nodes)
+      .join("rect")
+      .attr("x", function (d) { return d.x0; })
+      .attr("y", function (d) { return d.y0; })
+      .attr("width", function (d) { return d.x1 - d.x0; })
+      .attr("height", function (d) { return Math.max(1, d.y1 - d.y0); })
+      .attr("fill", function (d) {
+        /* Root node slightly darker, sub-nodes use tint_mid */
+        return d.layer === 0 ? ACCENT : TINT_MID;
+      })
+      .attr("rx", 4)
+      .attr("ry", 4)
+      .style("cursor", "default")
+      .append("title")
+      .text(function (d) {
+        return d.name + "\n" + (d.hours != null ? d.hours : PILIER_HOURS) + " h";
+      });
+
+    /* ── labels ── */
+    nodeG.selectAll("text")
+      .data(graph.nodes)
+      .join("text")
+      /* Left side: label right of node; right side: label left of node */
+      .attr("x", function (d) {
+        return d.x1 < innerW / 2 ? d.x1 + 10 : d.x0 - 10;
+      })
+      .attr("y", function (d) { return (d.y0 + d.y1) / 2; })
+      .attr("dy", "0.35em")
+      .attr("text-anchor", function (d) {
+        return d.x1 < innerW / 2 ? "start" : "end";
+      })
+      .attr("font-family", "Inter, system-ui, sans-serif")
+      .attr("font-size", 11)
+      .attr("font-weight", function (d) { return d.layer === 0 ? 700 : 600; })
+      .attr("fill", "#1A1A1A")
+      .text(function (d) {
+        const h = d.hours != null ? d.hours : PILIER_HOURS;
+        return d.name + (d.layer === 0 ? "" : " · " + h + "h");
+      });
+  }
+
+  /* ── race-condition fix: wait for full page load then check width ── */
+  window.addEventListener("load", function () {
+    const svgEl = document.getElementById("sankey-pilier-svg");
+    if (!svgEl) return;
+    const w = svgEl.getBoundingClientRect().width;
+    if (w > 100) {
+      renderSankey();
+    } else {
+      setTimeout(renderSankey, 100);
+    }
+  });
+})();
+</script>
+{% endblock %}

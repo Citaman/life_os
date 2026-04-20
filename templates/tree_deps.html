@@ -1,0 +1,369 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+
+{% block title %}Dépendances · {{ pilier.name }}{% endblock %}
+
+{% block extra_css %}
+.tree-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 24px 24px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.summary-bar strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.summary-bar .sep {
+  color: var(--border);
+  user-select: none;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 18px;
+  font-size: 12px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 500;
+}
+.empty-state {
+  text-align: center;
+  padding: 56px 32px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1.5px dashed var(--border);
+}
+.overflow-note {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 6px;
+  padding-left: 4px;
+}
+{% endblock %}
+
+{% block content %}
+
+{# ── Compute tree data ──────────────────────────────────────────────── #}
+
+{# Build lookup: achievement id → achievement #}
+{%- set ach_map = {} -%}
+{%- for a in pilier.achievements_active | sort(attribute='name') -%}
+  {%- set _ = ach_map.update({a.id: a}) -%}
+{%- endfor -%}
+
+{# For each achievement, gather its sous (limited to 15 if >20) #}
+{# Structure: list of {ach, sous_group, capped, total_count} #}
+{%- set groups = [] -%}
+{%- for a in pilier.achievements_active | sort(attribute='name') -%}
+  {%- set matched = [] -%}
+  {%- for s in pilier.sous_achievements -%}
+    {%- if s.parent_id == a.id -%}
+      {%- set _ = matched.append(s) -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- set total_count = matched | length -%}
+  {%- set capped = total_count > 20 -%}
+  {%- set display_sous = matched[:15] if capped else matched -%}
+  {%- set _ = groups.append({'ach': a, 'sous': display_sous, 'capped': capped, 'total': total_count}) -%}
+{%- endfor -%}
+
+{# Also collect orphan sous (parent_id not in active achievements) #}
+{%- set ach_ids = pilier.achievements_active | map(attribute='id') | list -%}
+{%- set orphans = [] -%}
+{%- for s in pilier.sous_achievements -%}
+  {%- if s.parent_id not in ach_ids -%}
+    {%- set _ = orphans.append(s) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{# Count totals for summary #}
+{%- set total_ach = pilier.achievements_active | length -%}
+{%- set total_sous = pilier.sous_achievements | length -%}
+{%- set done_statuts = ['Complété', 'Atteint'] -%}
+{%- set sous_done = pilier.sous_achievements | selectattr('statut', 'in', done_statuts) | list | length -%}
+
+{# SVG geometry ─────────────────────────────────────────────────────── #}
+{# Count total displayed sous nodes #}
+{%- set display_sous_count_ns = namespace(v=0) -%}
+{%- for g in groups -%}
+  {%- set display_sous_count_ns.v = display_sous_count_ns.v + (g.sous | length) -%}
+{%- endfor -%}
+{%- set display_sous_count = display_sous_count_ns.v -%}
+
+{%- set svg_w = 900 -%}
+{%- set svg_h_raw = display_sous_count * 38 + 100 -%}
+{%- set svg_h = 400 if svg_h_raw < 400 else svg_h_raw -%}
+
+{# Node positions ────────────────────────────────────────────────────── #}
+{# x_ach=100 center, x_sous=520 center, node sizes: ach r=16, sous r=9 #}
+{%- set x_ach = 100 -%}
+{%- set x_sous = 520 -%}
+{%- set r_ach = 16 -%}
+{%- set r_sous = 9 -%}
+{%- set y_start = 60 -%}
+{%- set row_gap = 38 -%}
+
+{# We build SVG elements as a list of strings — Jinja can't mutate ints easily
+   so we use a namespace to track y_cursor #}
+{%- set ns = namespace(y_cursor=y_start) -%}
+
+{# Precompute per-group: y_ach (midpoint of sous), list of sous (id, y) #}
+{%- set g_computed = [] -%}
+{%- for g in groups -%}
+  {%- set sous_ys = [] -%}
+  {%- for s in g.sous -%}
+    {%- set _ = sous_ys.append(ns.y_cursor) -%}
+    {%- set ns.y_cursor = ns.y_cursor + row_gap -%}
+  {%- endfor -%}
+  {# If no sous: place achievement alone #}
+  {%- if sous_ys | length == 0 -%}
+    {%- set y_ach_val = ns.y_cursor -%}
+    {%- set ns.y_cursor = ns.y_cursor + row_gap -%}
+  {%- else -%}
+    {%- set y_sum_ns = namespace(total=0) -%}
+    {%- for y in sous_ys -%}
+      {%- set y_sum_ns.total = y_sum_ns.total + y -%}
+    {%- endfor -%}
+    {%- set y_ach_val = (y_sum_ns.total / sous_ys | length) | round | int -%}
+  {%- endif -%}
+  {# Add vertical gap between achievement groups #}
+  {%- if not loop.last -%}
+    {%- set ns.y_cursor = ns.y_cursor + 14 -%}
+  {%- endif -%}
+  {%- set _ = g_computed.append({'ach': g.ach, 'sous': g.sous, 'sous_ys': sous_ys, 'y_ach': y_ach_val, 'capped': g.capped, 'total': g.total}) -%}
+{%- endfor -%}
+
+{# ── Header ─────────────────────────────────────────────────────────── #}
+{{ m.section_header(
+  eyebrow="SYSTÉMIQUE",
+  title="Dépendances · " + pilier.name,
+  subtitle="Chaque nœud = Achievement ou Sous-achievement · arcs révèlent quoi bloque quoi",
+  accent=pilier.accent
+) }}
+
+{# ── Empty state ─────────────────────────────────────────────────────── #}
+{% if total_sous == 0 %}
+<div class="empty-state">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="1.5" style="margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;">
+    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+  </svg>
+  Pas de sous-achievements enregistrés pour ce pilier. Remplir dans Notion.
+</div>
+
+{% else %}
+
+{# ── Tree SVG card ──────────────────────────────────────────────────── #}
+<div class="card tree-card">
+  <div class="chart-container" style="min-width:600px;">
+    <svg
+      width="{{ svg_w }}"
+      height="{{ svg_h }}"
+      viewBox="0 0 {{ svg_w }} {{ svg_h }}"
+      xmlns="http://www.w3.org/2000/svg"
+      style="display:block; font-family:'Inter',sans-serif;"
+    >
+      {# ── Column header labels ─────────────────────────────────────── #}
+      <text x="{{ x_ach }}" y="22" text-anchor="middle" font-size="10" font-weight="600"
+            letter-spacing="0.14em" fill="{{ pilier.accent }}" text-transform="uppercase">ACHIEVEMENTS</text>
+      <text x="{{ x_sous }}" y="22" text-anchor="middle" font-size="10" font-weight="600"
+            letter-spacing="0.14em" fill="{{ pilier.tint_mid }}">SOUS-ACHIEVEMENTS</text>
+
+      {# Hairline column separators #}
+      <line x1="{{ x_ach }}" y1="30" x2="{{ x_ach }}" y2="{{ svg_h - 16 }}"
+            stroke="{{ pilier.tint_light }}" stroke-width="1" stroke-dasharray="3 4" opacity="0.6"/>
+      <line x1="{{ x_sous }}" y1="30" x2="{{ x_sous }}" y2="{{ svg_h - 16 }}"
+            stroke="{{ pilier.tint_light }}" stroke-width="1" stroke-dasharray="3 4" opacity="0.4"/>
+
+      {# ── Edges (draw before nodes so nodes render on top) ─────────── #}
+      {% for g in g_computed %}
+        {% set y_ach = g.y_ach %}
+        {% for idx in range(g.sous | length) %}
+          {% set s = g.sous[idx] %}
+          {% set y_sous = g.sous_ys[idx] %}
+          {# Edge color: green if done, light gray otherwise #}
+          {% if s.statut in ['Complété', 'Atteint'] %}
+            {% set edge_color = '#10B981' %}
+          {% else %}
+            {% set edge_color = '#D1D5DB' %}
+          {% endif %}
+          <path
+            d="M {{ x_ach + r_ach }},{{ y_ach }} C {{ x_ach + 100 }},{{ y_ach }} {{ x_sous - 100 }},{{ y_sous }} {{ x_sous - r_sous - 1 }},{{ y_sous }}"
+            fill="none"
+            stroke="{{ edge_color }}"
+            stroke-width="1.5"
+            opacity="0.85"
+          />
+        {% endfor %}
+      {% endfor %}
+
+      {# ── Achievement nodes (L1) ───────────────────────────────────── #}
+      {% for g in g_computed %}
+        {% set a = g.ach %}
+        {% set y_ach = g.y_ach %}
+        {% set label = (a.name[:40] + '…') if a.name | length > 40 else a.name %}
+        {# Outer glow ring #}
+        <circle cx="{{ x_ach }}" cy="{{ y_ach }}" r="{{ r_ach + 4 }}"
+                fill="{{ pilier.accent }}" opacity="0.10"/>
+        {# Main node #}
+        <circle cx="{{ x_ach }}" cy="{{ y_ach }}" r="{{ r_ach }}"
+                fill="{{ pilier.accent }}" stroke="{{ pilier.accent }}" stroke-width="0.5"/>
+        {# Progress text inside node #}
+        {% if a.progress is not none %}
+        <text x="{{ x_ach }}" y="{{ y_ach + 1 }}"
+              text-anchor="middle" dominant-baseline="central"
+              font-size="9" font-weight="700" fill="#FFFFFF">{{ a.progress }}%</text>
+        {% endif %}
+        {# Label right of node #}
+        <text x="{{ x_ach + r_ach + 10 }}" y="{{ y_ach + 1 }}"
+              dominant-baseline="central"
+              font-size="12" font-weight="600" fill="#1A1A1A">{{ label }}</text>
+        {# Deadline if present #}
+        {% if a.deadline %}
+        <text x="{{ x_ach + r_ach + 10 }}" y="{{ y_ach + 16 }}"
+              dominant-baseline="central"
+              font-size="10" fill="#6B7280">{{ a.deadline }}</text>
+        {% endif %}
+      {% endfor %}
+
+      {# ── Sous-achievement nodes (L2) ─────────────────────────────── #}
+      {% for g in g_computed %}
+        {% for idx in range(g.sous | length) %}
+          {% set s = g.sous[idx] %}
+          {% set y_sous = g.sous_ys[idx] %}
+          {% set label = (s.name[:50] + '…') if s.name | length > 50 else s.name %}
+          {# Node fill: green if done, tint_mid otherwise #}
+          {% if s.statut in ['Complété', 'Atteint'] %}
+            {% set node_fill = '#10B981' %}
+            {% set text_fill = '#FFFFFF' %}
+          {% else %}
+            {% set node_fill = pilier.tint_mid %}
+            {% set text_fill = '#1A1A1A' %}
+          {% endif %}
+          <circle cx="{{ x_sous }}" cy="{{ y_sous }}" r="{{ r_sous }}"
+                  fill="{{ node_fill }}" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
+          {# Label right of node #}
+          <text x="{{ x_sous + r_sous + 8 }}" y="{{ y_sous + 1 }}"
+                dominant-baseline="central"
+                font-size="11" font-weight="{% if s.statut in ['En cours'] %}600{% else %}400{% endif %}"
+                fill="#1A1A1A">{{ label }}</text>
+          {# Statut pill — small badge #}
+          {% if s.statut and s.statut not in ['Pas commencé'] %}
+          <rect x="{{ x_sous + r_sous + 9 + [label | length * 6, 250] | min }}" y="{{ y_sous - 8 }}"
+                width="52" height="14" rx="7"
+                fill="{% if s.statut in ['Complété','Atteint'] %}#ECFDF5{% elif s.statut == 'En cours' %}#FEF3C7{% else %}#F3F4F6{% endif %}"/>
+          <text x="{{ x_sous + r_sous + 9 + [label | length * 6, 250] | min + 26 }}" y="{{ y_sous - 1 }}"
+                text-anchor="middle" dominant-baseline="central"
+                font-size="8.5" font-weight="600"
+                fill="{% if s.statut in ['Complété','Atteint'] %}#047857{% elif s.statut == 'En cours' %}#B45309{% else %}#6B7280{% endif %}">
+            {{ s.statut | truncate(8, True, '') }}
+          </text>
+          {% endif %}
+          {# Deadline #}
+          {% if s.deadline %}
+          <text x="{{ x_sous + r_sous + 8 }}" y="{{ y_sous + 14 }}"
+                dominant-baseline="central"
+                font-size="9" fill="#9CA3AF">{{ s.deadline }}</text>
+          {% endif %}
+        {% endfor %}
+        {# "Capped" overflow note for this group #}
+        {% if g.capped %}
+          {%- set last_y = g.sous_ys[-1] if g.sous_ys else g.y_ach -%}
+          <text x="{{ x_sous - r_sous - 1 }}" y="{{ last_y + 24 }}"
+                font-size="10" font-style="italic" fill="#9CA3AF">
+            +{{ g.total - 15 }} sous-achievements restants — voir DB Plan d'exécution
+          </text>
+        {% endif %}
+      {% endfor %}
+
+    </svg>
+  </div>
+
+  {# Overflow notes below (if any groups are capped) #}
+  {% for g in g_computed %}
+    {% if g.capped %}
+    <p class="overflow-note">
+      "{{ (g.ach.name[:55] + '…') if g.ach.name | length > 55 else g.ach.name }}" — affichage limité à 15 / {{ g.total }} sous-achievements. +{{ g.total - 15 }} restants visibles dans la DB Plan d'exécution.
+    </p>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{# ── Summary bar ────────────────────────────────────────────────────── #}
+<div class="summary-bar">
+  <strong>{{ total_ach }}</strong> Achievement{{ 's' if total_ach > 1 else '' }}
+  <span class="sep">·</span>
+  <strong>{{ total_sous }}</strong> sous-achievement{{ 's' if total_sous > 1 else '' }}
+  <span class="sep">·</span>
+  <strong style="color:#10B981;">{{ sous_done }}</strong> atteint{{ 's' if sous_done > 1 else '' }} / {{ total_sous }} total
+  {% if orphans | length > 0 %}
+  <span class="sep">·</span>
+  <span style="color:#9CA3AF;">{{ orphans | length }} hors achievements actifs</span>
+  {% endif %}
+</div>
+
+{# ── Legend ─────────────────────────────────────────────────────────── #}
+<div class="legend-row">
+  <div class="legend-item">
+    <svg width="32" height="32" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="10" fill="{{ pilier.accent }}"/>
+      <text x="16" y="17" text-anchor="middle" dominant-baseline="central"
+            font-size="7" font-weight="700" fill="#FFFFFF" font-family="Inter">%</text>
+    </svg>
+    <span>Achievement actif</span>
+  </div>
+  <div class="legend-item">
+    <svg width="20" height="20" viewBox="0 0 20 20">
+      <circle cx="10" cy="10" r="6" fill="{{ pilier.tint_mid }}"/>
+    </svg>
+    <span>Sous-achievement</span>
+  </div>
+  <div class="legend-item">
+    <svg width="20" height="20" viewBox="0 0 20 20">
+      <circle cx="10" cy="10" r="6" fill="#10B981"/>
+    </svg>
+    <span>Atteint / Complété</span>
+  </div>
+  <div class="legend-item">
+    <svg width="36" height="12" viewBox="0 0 36 12">
+      <path d="M 0,6 C 9,6 27,6 36,6" fill="none" stroke="#10B981" stroke-width="1.5"/>
+    </svg>
+    <span>Arc vert = Atteint</span>
+  </div>
+  <div class="legend-item">
+    <svg width="36" height="12" viewBox="0 0 36 12">
+      <path d="M 0,6 C 9,6 27,6 36,6" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
+    </svg>
+    <span>Arc gris = En cours / Pas commencé</span>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
