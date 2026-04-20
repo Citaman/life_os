@@ -1,0 +1,92 @@
+{# Reusable Jinja macros for V2 embeds. Keep pure: no dependency on the full snap, just primitives. #}
+
+{%- macro progress_ring(pct, size=120, stroke=10, color="#2F7D5B", label="") -%}
+{%- set r = (size - stroke) / 2 -%}
+{%- set c = 6.2831853 * r -%}
+{%- set offset = c * (1 - (pct or 0) / 100) -%}
+<svg width="{{ size }}" height="{{ size }}" viewBox="0 0 {{ size }} {{ size }}" class="progress-ring">
+  <circle cx="{{ size/2 }}" cy="{{ size/2 }}" r="{{ r }}" fill="none" stroke="#E5E7EB" stroke-width="{{ stroke }}"/>
+  <circle cx="{{ size/2 }}" cy="{{ size/2 }}" r="{{ r }}" fill="none" stroke="{{ color }}" stroke-width="{{ stroke }}"
+          stroke-dasharray="{{ c }}" stroke-dashoffset="{{ offset }}" stroke-linecap="round"
+          transform="rotate(-90 {{ size/2 }} {{ size/2 }})"/>
+  <text x="{{ size/2 }}" y="{{ size/2 }}" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter" font-weight="700" font-size="{{ size*0.22 }}" fill="#1A1A1A">{{ pct or 0 }}%</text>
+  {% if label %}
+  <text x="{{ size/2 }}" y="{{ size/2 + size*0.18 }}" text-anchor="middle"
+        font-family="Inter" font-weight="500" font-size="{{ size*0.09 }}" fill="#6B7280">{{ label }}</text>
+  {% endif %}
+</svg>
+{%- endmacro -%}
+
+{%- macro sparkline(values, accent="#2F7D5B", w=240, h=56) -%}
+{%- if values and values|length > 1 -%}
+  {%- set mn = values|min -%}
+  {%- set mx = values|max -%}
+  {%- set rng = (mx - mn) or 1 -%}
+  {%- set dx = w / (values|length - 1) -%}
+  {%- set points = [] -%}
+  {%- for v in values -%}
+    {%- set x = loop.index0 * dx -%}
+    {%- set y = h - ((v - mn) / rng) * (h - 8) - 4 -%}
+    {%- set _ = points.append([x, y]) -%}
+  {%- endfor -%}
+  {%- set pathd = [] -%}
+  {%- for p in points -%}
+    {%- set _ = pathd.append(('M' if loop.first else 'L') ~ p[0]|round(2) ~ ',' ~ p[1]|round(2)) -%}
+  {%- endfor -%}
+  <svg width="{{ w }}" height="{{ h }}" viewBox="0 0 {{ w }} {{ h }}" class="sparkline">
+    <path d="{{ pathd|join(' ') }} L {{ w }},{{ h }} L 0,{{ h }} Z" fill="{{ accent }}" opacity="0.12"/>
+    <path d="{{ pathd|join(' ') }}" fill="none" stroke="{{ accent }}" stroke-width="1.8" stroke-linejoin="round"/>
+    <circle cx="{{ points[-1][0]|round(2) }}" cy="{{ points[-1][1]|round(2) }}" r="3" fill="{{ accent }}"/>
+  </svg>
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro kpi_card(label, value, sub, accent="#2F7D5B", accent_light="#D4E5DB", sparkline_values=none) -%}
+<div class="kpi-card" style="--accent: {{ accent }}; --accent-light: {{ accent_light }};">
+  <div class="kpi-label">{{ label }}</div>
+  <div class="kpi-value">{{ value }}</div>
+  {% if sub %}<div class="kpi-sub">{{ sub }}</div>{% endif %}
+  {% if sparkline_values %}{{ sparkline(sparkline_values, accent, w=200, h=48) }}{% endif %}
+</div>
+{%- endmacro -%}
+
+{%- macro pilier_badge(name, accent="#2F7D5B", accent_light="#D4E5DB") -%}
+<span class="pilier-pill" style="background: {{ accent_light }}; color: {{ accent }};">{{ name }}</span>
+{%- endmacro -%}
+
+{%- macro section_header(eyebrow="", title="", subtitle="", accent="#6B7280") -%}
+<div class="section-header" style="--accent: {{ accent }};">
+  {% if eyebrow %}<div class="eyebrow">{{ eyebrow }}</div>{% endif %}
+  {% if title %}<h2>{{ title }}</h2>{% endif %}
+  {% if subtitle %}<p class="subtitle">{{ subtitle }}</p>{% endif %}
+</div>
+{%- endmacro -%}
+
+{%- macro heatmap_cell(state, color_tenu="#2F7D5B", color_partiel="#7FB09A", color_manque="#D4E5DB") -%}
+{%- set bg = color_tenu if state == 'tenu' else color_partiel if state == 'partiel' else color_manque if state == 'manque' else '#F3F4F6' -%}
+<div class="heat-cell" style="background: {{ bg }}; {{ 'border: 1px dashed #E5E7EB;' if state == 'void' else '' }}"></div>
+{%- endmacro -%}
+
+{%- macro bar_horizontal(value, max_val=100, accent="#2F7D5B", width_px=120, height_px=8) -%}
+{%- set pct = (value / max_val * 100) if max_val else 0 -%}
+<div class="bar-h" style="width: {{ width_px }}px; height: {{ height_px }}px; background: #F3F4F6; border-radius: 999px; overflow: hidden;">
+  <div style="width: {{ pct|round(1) }}%; height: 100%; background: {{ accent }}; border-radius: 999px;"></div>
+</div>
+{%- endmacro -%}
+
+{%- macro status_pill(status) -%}
+{%- set map = {
+  'Atteint': ('#ECFDF5', '#047857'),
+  'Complété': ('#ECFDF5', '#047857'),
+  'En cours': ('#FEF3C7', '#B45309'),
+  'Actif': ('#DBEAFE', '#1E40AF'),
+  'Planifié': ('#F3F4F6', '#6B7280'),
+  'Pas commencé': ('#F3F4F6', '#6B7280'),
+  'Reporté': ('#FED7AA', '#9A3412'),
+  'Suivi': ('#EDE9FE', '#5B21B6'),
+  'Abandonné': ('#FEE2E2', '#B91C1C'),
+} -%}
+{%- set colors = map.get(status, ('#F3F4F6', '#6B7280')) -%}
+<span class="status-pill" style="background: {{ colors[0] }}; color: {{ colors[1] }};">{{ status or '—' }}</span>
+{%- endmacro -%}

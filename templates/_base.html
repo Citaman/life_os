@@ -91,6 +91,127 @@
     margin: 0 auto;
   }
 
+  /* KPI card */
+  .kpi-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    border-top: 3px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .kpi-value {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 4vw, 48px);
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .kpi-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .sparkline { display: block; margin-top: 8px; }
+
+  /* Pilier pill */
+  .pilier-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* Status pill */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Heatmap cells */
+  .heat-cell {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+  }
+  .heat-grid {
+    display: grid;
+    grid-template-columns: auto repeat(7, 32px);
+    gap: 4px;
+    align-items: center;
+  }
+  .heat-grid .day-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Progress ring */
+  .progress-ring { display: block; margin: 0 auto; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  table th, table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  table th {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  table tr:last-child td { border-bottom: none; }
+  table tbody tr:hover { background: rgba(0,0,0,0.015); }
+
+  /* Grid utility */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* SVG chart container */
+  .chart-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .chart-container svg { max-width: 100%; height: auto; }
+
   /* Icon utility */
   [data-lucide] {
     width: 16px;
