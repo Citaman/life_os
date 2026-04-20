@@ -335,9 +335,9 @@
 
   {# ── Historic weeks: indices 8,9,10 of habit_completion_12w = W13,W14,W15 #}
   {#    Index 11 = W16 (we use actual days[] instead)                         #}
-  {%- set w13_pct = pilier.habit_completion_12w[8] -%}
-  {%- set w14_pct = pilier.habit_completion_12w[9] -%}
-  {%- set w15_pct = pilier.habit_completion_12w[10] -%}
+  {%- set w13_pct = pilier.habit_completion_12w[8] if pilier.habit_completion_12w|length > 8 else none -%}
+  {%- set w14_pct = pilier.habit_completion_12w[9] if pilier.habit_completion_12w|length > 9 else none -%}
+  {%- set w15_pct = pilier.habit_completion_12w[10] if pilier.habit_completion_12w|length > 10 else none -%}
 
   {# ── Pattern seeds — deterministic 7-day patterns per completion band      #}
   {# Band A: >=85% → 6+ days tenu — pattern A [1,1,1,1,1,1,0]               #}
@@ -406,19 +406,34 @@
       {% for habit in pilier.habits_w16 %}
       {%- set h_idx = loop.index0 -%}
 
-      {# Compute per-habit historic patterns for W13/W14/W15 #}
-      {%- set b13 = get_band(w13_pct) | trim -%}
-      {%- set b14 = get_band(w14_pct) | trim -%}
-      {%- set b15 = get_band(w15_pct) | trim -%}
+      {# Compute per-habit historic patterns for W13/W14/W15 — only when non-null #}
+      {%- set w13_null = w13_pct is none -%}
+      {%- set w14_null = w14_pct is none -%}
+      {%- set w15_null = w15_pct is none -%}
 
-      {# Compute rotations: (h_idx + week_offset) % 3 #}
-      {%- set rot13 = (h_idx + 0) % 3 -%}
-      {%- set rot14 = (h_idx + 1) % 3 -%}
-      {%- set rot15 = (h_idx + 2) % 3 -%}
+      {%- if not w13_null -%}
+        {%- set b13 = get_band(w13_pct) | trim -%}
+        {%- set rot13 = (h_idx + 0) % 3 -%}
+        {%- set pat13 = band_patterns[b13][rot13] -%}
+      {%- else -%}
+        {%- set pat13 = none -%}
+      {%- endif -%}
 
-      {%- set pat13 = band_patterns[b13][rot13] -%}
-      {%- set pat14 = band_patterns[b14][rot14] -%}
-      {%- set pat15 = band_patterns[b15][rot15] -%}
+      {%- if not w14_null -%}
+        {%- set b14 = get_band(w14_pct) | trim -%}
+        {%- set rot14 = (h_idx + 1) % 3 -%}
+        {%- set pat14 = band_patterns[b14][rot14] -%}
+      {%- else -%}
+        {%- set pat14 = none -%}
+      {%- endif -%}
+
+      {%- if not w15_null -%}
+        {%- set b15 = get_band(w15_pct) | trim -%}
+        {%- set rot15 = (h_idx + 2) % 3 -%}
+        {%- set pat15 = band_patterns[b15][rot15] -%}
+      {%- else -%}
+        {%- set pat15 = none -%}
+      {%- endif -%}
 
       {# Score pill color — green if >=80%, amber if >=60%, red otherwise #}
       {%- if habit.score_pct >= 80 -%}
@@ -450,7 +465,9 @@
           {# ── W13 row #}
           <div class="hm-row-label">W13</div>
           {% for i in range(7) %}
-            {%- if pat13[i] == 1 -%}
+            {%- if w13_null -%}
+          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="W13 {{ day_names[i] }} — données non saisies"></div>
+            {%- elif pat13[i] == 1 -%}
           <div class="hm-cell" style="background: {{ pilier.accent }};" title="W13 {{ day_names[i] }} — tenu"></div>
             {%- else -%}
           <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W13 {{ day_names[i] }} — manqué"></div>
@@ -460,7 +477,9 @@
           {# ── W14 row #}
           <div class="hm-row-label">W14</div>
           {% for i in range(7) %}
-            {%- if pat14[i] == 1 -%}
+            {%- if w14_null -%}
+          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="W14 {{ day_names[i] }} — données non saisies"></div>
+            {%- elif pat14[i] == 1 -%}
           <div class="hm-cell" style="background: {{ pilier.accent }};" title="W14 {{ day_names[i] }} — tenu"></div>
             {%- else -%}
           <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W14 {{ day_names[i] }} — manqué"></div>
@@ -470,7 +489,9 @@
           {# ── W15 row #}
           <div class="hm-row-label">W15</div>
           {% for i in range(7) %}
-            {%- if pat15[i] == 1 -%}
+            {%- if w15_null -%}
+          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="W15 {{ day_names[i] }} — données non saisies"></div>
+            {%- elif pat15[i] == 1 -%}
           <div class="hm-cell" style="background: {{ pilier.accent }};" title="W15 {{ day_names[i] }} — tenu"></div>
             {%- else -%}
           <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W15 {{ day_names[i] }} — manqué"></div>
@@ -511,7 +532,18 @@
           <div class="hm-legend-cell-avenir"></div>
           A venir
         </div>
+        <div class="hm-legend-item">
+          <div class="hm-legend-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB; box-sizing: border-box;"></div>
+          Non saisi
+        </div>
       </div>
+
+      {# ── Transparency note ────────────────────────────────────────────── #}
+      {%- if w13_null or w14_null or w15_null -%}
+      <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; font-style: italic;">
+        Historique W13-W15 transparent tant que les semaines passées ne sont pas saisies dans la DB Habitudes.
+      </p>
+      {%- endif -%}
 
       {# ── Score global (left panel summary) ────────────────────────────── #}
       <div class="score-global" style="--pg-accent: {{ pilier.accent }};">

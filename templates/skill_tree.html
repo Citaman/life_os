@@ -105,46 +105,87 @@
     accent="#6B3FA0"
   ) }}
 
+{# ── Derive skills from real roadmap ──────────────────────────────────── #}
+{%- set roadmap = snap.piliers.creation.roadmap -%}
+
+{# Map roadmap names to canonical skill slugs.
+   Keys are substrings to match (case-insensitive matching done in Python
+   is not available in Jinja — so we match via 'in' operator on lowercased name).
+   We define ordered skill slots per track, resolved from roadmap. #}
+
+{# Helper: find first roadmap item whose name contains needle (case-sensitive enough) #}
+{%- macro find_item(needle) -%}
+{%- endmacro -%}
+
+{# Build skill lookup: slug → roadmap item or None #}
+{%- set skill_map = {} -%}
+{%- for item in roadmap -%}
+  {%- set n = item.name | lower -%}
+  {%- if "micrograd" in n or ("scratch" in n and "ml" in n) or ("from scratch" in n and "model" in n) -%}
+    {%- if "ml_p0" not in skill_map -%}{%- set _ = skill_map.update({"ml_p0": item}) -%}{%- endif -%}
+  {%- elif "100 days of deep learning" in n or "deep learning" in n -%}
+    {%- if "dl_100" not in skill_map -%}{%- set _ = skill_map.update({"dl_100": item}) -%}{%- endif -%}
+  {%- elif "100 days of llm" in n or "llm" in n -%}
+    {%- if "llm_100" not in skill_map -%}{%- set _ = skill_map.update({"llm_100": item}) -%}{%- endif -%}
+  {%- elif "365 days of math" in n or "365" in n -%}
+    {%- if "math_365" not in skill_map -%}{%- set _ = skill_map.update({"math_365": item}) -%}{%- endif -%}
+  {%- elif "100 days of c++" in n or "c++" in n -%}
+    {%- if "cpp_100" not in skill_map -%}{%- set _ = skill_map.update({"cpp_100": item}) -%}{%- endif -%}
+  {%- elif "100 days of cuda" in n or "cuda" in n -%}
+    {%- if "cuda_100" not in skill_map -%}{%- set _ = skill_map.update({"cuda_100": item}) -%}{%- endif -%}
+  {%- elif "research scientist" in n -%}
+    {%- if "research" not in skill_map -%}{%- set _ = skill_map.update({"research": item}) -%}{%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{# Total roadmap length to detect empty state #}
+{%- set roadmap_len = roadmap | length -%}
+
+{% if roadmap_len == 0 %}
+
+{{ m.todo_placeholder(
+    title="Skill Tree · Création — aucun roadmap",
+    reason="Aucun achievement Création trouvé dans le snapshot. Ajoute des achievements dans la DB Plan d'exécution avec Pilier=Création pour voir l'arbre de compétences.",
+    needed_db="Plan d'exécution · Pilier=Création",
+    accent="#6B3FA0"
+) }}
+
+{% else %}
+
+{# ── Helper: render one node from a skill_map entry ─────────────────── #}
+{# State rules: ≥80% filled #6B3FA0 + glow, 1-79% semi-filled, 0/null dashed #}
+
+{# We precompute per-node values for JS injection #}
+{%- set n_ml_p0    = skill_map.get("ml_p0") -%}
+{%- set n_dl_100   = skill_map.get("dl_100") -%}
+{%- set n_llm_100  = skill_map.get("llm_100") -%}
+{%- set n_math_365 = skill_map.get("math_365") -%}
+{%- set n_cpp_100  = skill_map.get("cpp_100") -%}
+{%- set n_cuda_100 = skill_map.get("cuda_100") -%}
+{%- set n_research = skill_map.get("research") -%}
+
+{# Build node list for rendering — each node: cx, cy, label_lines, pct_display, state #}
+{# Track 1 (y=90):  ML P0 → Deep Learning → LLMs → Research Scientist #}
+{# Track 2 (y=240): 365 Days Math #}
+{# Track 3 (y=390): 100 Days C++ → 100 Days CUDA #}
+
+{%- macro node_state(item) -%}
+{%- if item is none -%}not_found
+{%- elif item.progress is none or item.progress == 0 -%}not_started
+{%- elif item.progress >= 80 -%}completed
+{%- else -%}in_progress
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro node_pct_display(item) -%}
+{%- if item is none -%}—
+{%- elif item.progress is none -%}non démarré
+{%- elif item.progress == 0 -%}non démarré
+{%- else -%}{{ item.progress }}%
+{%- endif -%}
+{%- endmacro -%}
+
   <div class="skill-tree-card">
-
-    {#
-      ────────────────────────────────────────────────────
-      NODES (fixed positions):
-        Track 1 (y=90):
-          n0  Algèbre linéaire   (100,90)  30%
-          n1  Backpropagation    (280,90)  25%
-          n2  Deep Learning      (460,90)   0%
-          n3  LLMs               (640,90)   0%
-          n4  Transformer        (820,90)   0%
-
-        Track 2 (y=240):
-          n5  Micrograd P0       (280,240) 25%
-          n6  PyTorch            (460,240) 60%
-
-        Track 3 (y=390):
-          n7  100 Days C++       (460,390)  0%
-          n8  100 Days CUDA      (640,390)  0%
-
-      EDGES:
-        n0 → n1   (Track 1 prereq)
-        n1 → n2
-        n2 → n3
-        n3 → n4
-        n5 → n6   (Track 2 prereq)
-        n7 → n8   (Track 3 prereq)
-        n5 → n2   (cross-track: Micrograd → Deep Learning post-Micrograd)
-
-      Node style rules:
-        ≥ 80% : filled #6B3FA0, white text, glow
-        1–79% : filled rgba(107,63,160,0.5), white text
-           0% : no fill, dashed stroke #6B3FA0 opacity 0.4, label opacity 0.4
-
-      Edge opacity:
-        Target 0% → 0.25
-        Target 1–79% → 0.55
-        Target 100% → 1.0
-    ────────────────────────────────────────────────────
-    #}
 
     <div class="skill-tree-svg-wrap">
       <svg width="900" height="480" viewBox="0 0 900 480"
@@ -152,7 +193,6 @@
            aria-label="Skill Tree Création — 3 tracks de compétences">
 
         <defs>
-          <!-- Glow filter for completed nodes -->
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
             <feMerge>
@@ -160,7 +200,6 @@
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          <!-- Subtle glow for in-progress nodes -->
           <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
             <feMerge>
@@ -174,242 +213,156 @@
         <rect x="58" y="54" width="830" height="72" rx="8"
               fill="rgba(107,63,160,0.04)" stroke="rgba(107,63,160,0.08)"
               stroke-width="1"/>
-        <rect x="58" y="204" width="450" height="72" rx="8"
+        <rect x="58" y="204" width="270" height="72" rx="8"
               fill="rgba(107,63,160,0.04)" stroke="rgba(107,63,160,0.08)"
               stroke-width="1"/>
         <rect x="420" y="354" width="260" height="72" rx="8"
               fill="rgba(107,63,160,0.04)" stroke="rgba(107,63,160,0.08)"
               stroke-width="1"/>
 
-        <!-- ── Track labels (left side) ─────────────────────────────── -->
-        <!-- Track 1 label -->
+        <!-- ── Track labels ─────────────────────────────── -->
         <text x="16" y="90" text-anchor="middle" dominant-baseline="middle"
               font-family="Inter, sans-serif" font-size="9" font-weight="700"
               fill="#6B3FA0" opacity="0.7" letter-spacing="0.14em"
               transform="rotate(-90,16,90)">TRACK 1</text>
-
-        <!-- Track 2 label -->
         <text x="16" y="240" text-anchor="middle" dominant-baseline="middle"
               font-family="Inter, sans-serif" font-size="9" font-weight="700"
               fill="#6B3FA0" opacity="0.7" letter-spacing="0.14em"
               transform="rotate(-90,16,240)">TRACK 2</text>
-
-        <!-- Track 3 label -->
         <text x="16" y="390" text-anchor="middle" dominant-baseline="middle"
               font-family="Inter, sans-serif" font-size="9" font-weight="700"
               fill="#6B3FA0" opacity="0.7" letter-spacing="0.14em"
               transform="rotate(-90,16,390)">TRACK 3</text>
 
-        <!-- Track 1 description -->
+        <!-- Track descriptions -->
         <text x="74" y="44" font-family="Inter, sans-serif" font-size="9"
-              font-weight="500" fill="#6B3FA0" opacity="0.5"
-              letter-spacing="0.05em">
-          Maths → ML → DL → LLMs → Transformer
+              font-weight="500" fill="#6B3FA0" opacity="0.5" letter-spacing="0.05em">
+          ML from scratch → Deep Learning → LLMs → Research Scientist
         </text>
-
-        <!-- Track 2 description -->
         <text x="74" y="194" font-family="Inter, sans-serif" font-size="9"
-              font-weight="500" fill="#6B3FA0" opacity="0.5"
-              letter-spacing="0.05em">
-          Outillage pratique : Micrograd → PyTorch
+              font-weight="500" fill="#6B3FA0" opacity="0.5" letter-spacing="0.05em">
+          365 Days Math — socle maths 1 an
         </text>
-
-        <!-- Track 3 description -->
         <text x="430" y="344" font-family="Inter, sans-serif" font-size="9"
-              font-weight="500" fill="#6B3FA0" opacity="0.5"
-              letter-spacing="0.05em">
+              font-weight="500" fill="#6B3FA0" opacity="0.5" letter-spacing="0.05em">
           Systèmes bas niveau
         </text>
 
         <!-- ══════════════════════════════════════════════════════════ -->
-        <!-- EDGES (drawn first, under nodes)                          -->
+        <!-- EDGES                                                      -->
         <!-- ══════════════════════════════════════════════════════════ -->
 
-        <!-- n0(100,90) → n1(280,90) — target 25% → opacity 0.38 -->
+        {# Edge opacity rules: target not_started→0.22, in_progress→0.38, completed→0.75 #}
+
+        {%- set op_t1_1 = "0.38" if node_state(n_ml_p0) == "in_progress" else "0.75" if node_state(n_ml_p0) == "completed" else "0.22" -%}
+        {%- set op_t1_2 = "0.38" if node_state(n_dl_100) == "in_progress" else "0.75" if node_state(n_dl_100) == "completed" else "0.22" -%}
+        {%- set op_t1_3 = "0.38" if node_state(n_llm_100) == "in_progress" else "0.75" if node_state(n_llm_100) == "completed" else "0.22" -%}
+        {%- set op_t1_4 = "0.38" if node_state(n_research) == "in_progress" else "0.75" if node_state(n_research) == "completed" else "0.22" -%}
+        {%- set op_t3_1 = "0.38" if node_state(n_cpp_100) == "in_progress" else "0.75" if node_state(n_cpp_100) == "completed" else "0.22" -%}
+        {%- set op_t3_2 = "0.38" if node_state(n_cuda_100) == "in_progress" else "0.75" if node_state(n_cuda_100) == "completed" else "0.22" -%}
+
+        <!-- T1: n0(100,90) → n1(280,90) -->
         <path d="M 136,90 C 180,90 236,90 244,90"
               fill="none" stroke="#6B3FA0" stroke-width="1.5"
-              stroke-dasharray="4 3" opacity="0.38"/>
-        <!-- arrowhead -->
+              stroke-dasharray="4 3" opacity="{{ op_t1_1 }}"/>
         <polygon points="244,86 252,90 244,94"
-                 fill="#6B3FA0" opacity="0.38"/>
+                 fill="#6B3FA0" opacity="{{ op_t1_1 }}"/>
 
-        <!-- n1(280,90) → n2(460,90) — target 0% → opacity 0.22 -->
+        <!-- T1: n1(280,90) → n2(460,90) -->
         <path d="M 316,90 C 360,90 416,90 424,90"
               fill="none" stroke="#6B3FA0" stroke-width="1.5"
-              stroke-dasharray="4 3" opacity="0.22"/>
+              stroke-dasharray="4 3" opacity="{{ op_t1_2 }}"/>
         <polygon points="424,86 432,90 424,94"
-                 fill="#6B3FA0" opacity="0.22"/>
+                 fill="#6B3FA0" opacity="{{ op_t1_2 }}"/>
 
-        <!-- n2(460,90) → n3(640,90) — target 0% → opacity 0.22 -->
+        <!-- T1: n2(460,90) → n3(640,90) -->
         <path d="M 496,90 C 540,90 596,90 604,90"
               fill="none" stroke="#6B3FA0" stroke-width="1.5"
-              stroke-dasharray="4 3" opacity="0.22"/>
+              stroke-dasharray="4 3" opacity="{{ op_t1_3 }}"/>
         <polygon points="604,86 612,90 604,94"
-                 fill="#6B3FA0" opacity="0.22"/>
+                 fill="#6B3FA0" opacity="{{ op_t1_3 }}"/>
 
-        <!-- n3(640,90) → n4(820,90) — target 0% → opacity 0.22 -->
+        <!-- T1: n3(640,90) → n4(820,90) Research Scientist -->
         <path d="M 676,90 C 720,90 776,90 784,90"
               fill="none" stroke="#6B3FA0" stroke-width="1.5"
-              stroke-dasharray="4 3" opacity="0.22"/>
+              stroke-dasharray="4 3" opacity="{{ op_t1_4 }}"/>
         <polygon points="784,86 792,90 784,94"
-                 fill="#6B3FA0" opacity="0.22"/>
+                 fill="#6B3FA0" opacity="{{ op_t1_4 }}"/>
 
-        <!-- n5(280,240) → n6(460,240) — target 60% → opacity 0.55 -->
-        <path d="M 316,240 C 360,240 416,240 424,240"
-              fill="none" stroke="#6B3FA0" stroke-width="1.5"
-              stroke-dasharray="4 3" opacity="0.55"/>
-        <polygon points="424,236 432,240 424,244"
-                 fill="#6B3FA0" opacity="0.55"/>
-
-        <!-- n7(460,390) → n8(640,390) — target 0% → opacity 0.22 -->
+        <!-- T3: n5(460,390) → n6(640,390) -->
         <path d="M 496,390 C 540,390 596,390 604,390"
               fill="none" stroke="#6B3FA0" stroke-width="1.5"
-              stroke-dasharray="4 3" opacity="0.22"/>
+              stroke-dasharray="4 3" opacity="{{ op_t3_2 }}"/>
         <polygon points="604,386 612,390 604,394"
-                 fill="#6B3FA0" opacity="0.22"/>
-
-        <!-- n5(280,240) → n2(460,90) cross-track — target 0% → opacity 0.18 -->
-        <!-- Curved Bézier going up-right from Micrograd to Deep Learning -->
-        <path d="M 300,207 C 340,160 400,110 428,100"
-              fill="none" stroke="#6B3FA0" stroke-width="1.2"
-              stroke-dasharray="3 4" opacity="0.18"/>
-        <polygon points="424,97 432,100 427,107"
-                 fill="#6B3FA0" opacity="0.18"/>
+                 fill="#6B3FA0" opacity="{{ op_t3_2 }}"/>
 
         <!-- ══════════════════════════════════════════════════════════ -->
         <!-- NODES                                                      -->
         <!-- ══════════════════════════════════════════════════════════ -->
 
-        <!-- ── n0: Algèbre linéaire (100, 90) — 30% — in-progress ── -->
-        <circle cx="100" cy="90" r="36"
+        {# Macro: render a single skill node #}
+        {%- macro skill_node(cx, cy, item, label_lines) -%}
+          {%- set state = node_state(item) -%}
+          {%- set pct_text = node_pct_display(item) -%}
+          {%- set opacity = "1.0" if state != "not_started" else "0.4" -%}
+          {% if state == "completed" %}
+        <circle cx="{{ cx }}" cy="{{ cy }}" r="36"
+                fill="#6B3FA0"
+                filter="url(#glow)"/>
+          {% elif state == "in_progress" %}
+        <circle cx="{{ cx }}" cy="{{ cy }}" r="36"
                 fill="rgba(107,63,160,0.50)"
                 filter="url(#glow-soft)"/>
-        <text x="100" y="86" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA">30%</text>
-        <!-- label -->
-        <text x="100" y="138" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">Algèbre</text>
-        <text x="100" y="152" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">linéaire</text>
-
-        <!-- ── n1: Backpropagation (280, 90) — 25% — in-progress ── -->
-        <circle cx="280" cy="90" r="36"
-                fill="rgba(107,63,160,0.50)"
-                filter="url(#glow-soft)"/>
-        <text x="280" y="86" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA">25%</text>
-        <text x="280" y="138" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">Backpropa-</text>
-        <text x="280" y="152" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">gation</text>
-
-        <!-- ── n2: Deep Learning (460, 90) — 0% — not started ── -->
-        <circle cx="460" cy="90" r="36"
+          {% else %}
+        <circle cx="{{ cx }}" cy="{{ cy }}" r="36"
                 fill="none"
                 stroke="#6B3FA0" stroke-width="1.5"
                 stroke-dasharray="5 3"
                 opacity="0.4"/>
-        <text x="460" y="86" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA" opacity="0.4">0%</text>
-        <text x="460" y="138" text-anchor="middle"
+          {% endif %}
+        <text x="{{ cx }}" y="{{ cy - 4 }}" text-anchor="middle" dominant-baseline="middle"
+              font-family="Inter, sans-serif" font-size="10" font-weight="700"
+              fill="#FAFAFA" opacity="{{ opacity }}">{{ pct_text }}</text>
+          {% set label_y_start = cy + 48 %}
+          {% for line in label_lines %}
+        <text x="{{ cx }}" y="{{ label_y_start + loop.index0 * 14 }}" text-anchor="middle"
               font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">Deep</text>
-        <text x="460" y="152" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">Learning</text>
+              fill="#DDCEE7" opacity="{{ opacity }}">{{ line }}</text>
+          {% endfor %}
+          {% if item is not none and item.status %}
+        <text x="{{ cx }}" y="{{ label_y_start + (label_lines | length) * 14 + 2 }}" text-anchor="middle"
+              font-family="Inter, sans-serif" font-size="9" font-weight="400"
+              fill="#6B3FA0" opacity="0.6">{{ item.status }}</text>
+          {% endif %}
+        {%- endmacro -%}
 
-        <!-- ── n3: LLMs (640, 90) — 0% — not started ── -->
-        <circle cx="640" cy="90" r="36"
-                fill="none"
-                stroke="#6B3FA0" stroke-width="1.5"
-                stroke-dasharray="5 3"
-                opacity="0.4"/>
-        <text x="640" y="86" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA" opacity="0.4">0%</text>
-        <text x="640" y="138" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">LLMs</text>
+        <!-- ── Track 1 ─────────────────────────────────────────────────── -->
 
-        <!-- ── n4: Transformer from scratch (820, 90) — 0% — not started ── -->
-        <circle cx="820" cy="90" r="36"
-                fill="none"
-                stroke="#6B3FA0" stroke-width="1.5"
-                stroke-dasharray="5 3"
-                opacity="0.4"/>
-        <text x="820" y="86" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA" opacity="0.4">0%</text>
-        <text x="820" y="138" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">Transformer</text>
-        <text x="820" y="152" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">from scratch</text>
+        <!-- n0: ML from scratch (100, 90) -->
+        {{ skill_node(100, 90, n_ml_p0, ["ML from", "scratch"]) }}
 
-        <!-- ── n5: Micrograd P0 (280, 240) — 25% — in-progress ── -->
-        <circle cx="280" cy="240" r="36"
-                fill="rgba(107,63,160,0.50)"
-                filter="url(#glow-soft)"/>
-        <text x="280" y="236" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA">25%</text>
-        <text x="280" y="288" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">Micrograd</text>
-        <text x="280" y="302" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">P0</text>
+        <!-- n1: Deep Learning (280, 90) -->
+        {{ skill_node(280, 90, n_dl_100, ["100 Days", "Deep Learn."]) }}
 
-        <!-- ── n6: PyTorch (460, 240) — 60% — in-progress ── -->
-        <circle cx="460" cy="240" r="36"
-                fill="rgba(107,63,160,0.50)"
-                filter="url(#glow-soft)"/>
-        <text x="460" y="236" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA">60%</text>
-        <text x="460" y="288" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7">PyTorch</text>
+        <!-- n2: LLMs (460, 90) -->
+        {{ skill_node(460, 90, n_llm_100, ["100 Days", "LLMs"]) }}
 
-        <!-- ── n7: 100 Days C++ (460, 390) — 0% — not started ── -->
-        <circle cx="460" cy="390" r="36"
-                fill="none"
-                stroke="#6B3FA0" stroke-width="1.5"
-                stroke-dasharray="5 3"
-                opacity="0.4"/>
-        <text x="460" y="386" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA" opacity="0.4">0%</text>
-        <text x="460" y="438" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">100 Days</text>
-        <text x="460" y="452" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">C++</text>
+        <!-- n3: Research Scientist (640, 90) -->
+        {{ skill_node(640, 90, n_research, ["Research", "Scientist"]) }}
 
-        <!-- ── n8: 100 Days CUDA (640, 390) — 0% — not started ── -->
-        <circle cx="640" cy="390" r="36"
-                fill="none"
-                stroke="#6B3FA0" stroke-width="1.5"
-                stroke-dasharray="5 3"
-                opacity="0.4"/>
-        <text x="640" y="386" text-anchor="middle" dominant-baseline="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="700"
-              fill="#FAFAFA" opacity="0.4">0%</text>
-        <text x="640" y="438" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">100 Days</text>
-        <text x="640" y="452" text-anchor="middle"
-              font-family="Inter, sans-serif" font-size="11" font-weight="600"
-              fill="#DDCEE7" opacity="0.4">CUDA</text>
+        <!-- n4: 365 Days Math (820, 90) — cross-track prereq for Research -->
+        {{ skill_node(820, 90, n_math_365, ["365 Days", "Math"]) }}
+
+        <!-- ── Track 2 (Math, y=240) ───────────────────────────────────── -->
+        <!-- (Math shown on Track 1 slot n4 since it feeds Research; Track 2 row kept for visual balance) -->
+
+        <!-- ── Track 3 (y=390) ────────────────────────────────────────── -->
+
+        <!-- n5: 100 Days C++ (460, 390) -->
+        {{ skill_node(460, 390, n_cpp_100, ["100 Days", "C++"]) }}
+
+        <!-- n6: 100 Days CUDA (640, 390) -->
+        {{ skill_node(640, 390, n_cuda_100, ["100 Days", "CUDA"]) }}
 
       </svg>
     </div>{# /.skill-tree-svg-wrap #}
@@ -418,7 +371,7 @@
     <div class="skill-tree-legend">
       <div class="legend-item">
         <div class="legend-dot legend-dot--completed"></div>
-        <span>Completé (≥ 80%)</span>
+        <span>Complété (≥ 80%)</span>
       </div>
       <div class="legend-item">
         <div class="legend-dot legend-dot--in-progress"></div>
@@ -426,18 +379,22 @@
       </div>
       <div class="legend-item">
         <div class="legend-dot legend-dot--not-started"></div>
-        <span>Pas encore démarré (0%)</span>
+        <span>Pas encore démarré</span>
       </div>
     </div>
 
     <!-- ── Road-ahead note ───────────────────────────────────────── -->
     <div class="skill-tree-note">
-      <strong>Prochains à démarrer :</strong>
-      Deep Learning post-Micrograd (juin 2026) puis LLMs (août 2026).
-      Track 3 (C++ → CUDA) en parallèle dès que Track 2 atteint 80%.
+      <strong>Roadmap Création :</strong>
+      {{ roadmap | length }} achievement{{ 's' if roadmap | length > 1 else '' }} au total ·
+      {% set active_count = roadmap | selectattr('active') | list | length %}
+      {{ active_count }} actif{{ 's' if active_count > 1 else '' }} en ce moment.
+      Les items planifiés se déverrouilleront au fur et à mesure des jalons atteints.
     </div>
 
   </div>{# /.skill-tree-card #}
+
+{% endif %}
 
 </div>{# /.skill-tree-page #}
 {% endblock %}

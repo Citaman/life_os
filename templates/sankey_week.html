@@ -98,6 +98,16 @@
     subtitle="168 h totales · où part réellement le temps"
 ) }}
 
+{% if not snap.time_week %}
+<div class="card">
+  {{ m.todo_placeholder(
+    title="Flux Sankey — Semaine 168 h",
+    reason="Aucune DB Time Tracker n'est encore branchée. Quand tu commences à tracker les heures (manuellement ou via intégration Toggl/Rize), ce Sankey se remplit avec les vraies valeurs.",
+    needed_db="DB Time Tracker",
+    accent="#3B82F6"
+  ) }}
+</div>
+{% else %}
 <div class="card">
   <div class="sankey-card-header">
     <div class="sankey-card-title">Sankey · Week 168h — Piliers — Activités</div>
@@ -117,9 +127,11 @@
     <div class="pilier-badge-row" id="top-badges"></div>
   </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
+{% if snap.time_week %}
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
 <script>
@@ -342,4 +354,5 @@
   });
 })();
 </script>
+{% endif %}
 {% endblock %}

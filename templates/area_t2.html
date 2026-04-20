@@ -122,6 +122,34 @@
   {"name": "Spirituel",       "slug": "spirituel",  "accent": snap.piliers.spirituel.accent}
 ] %}
 
+{# ── Null-guard: count total non-null data points across all series ── #}
+{%- set ns_area = namespace(real_points=0) -%}
+{%- for p in piliers_def -%}
+  {%- if p.name in series -%}
+    {%- for v in series[p.name] -%}
+      {%- if v is not none -%}
+        {%- set ns_area.real_points = ns_area.real_points + 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if ns_area.real_points <= 10 %}
+{{ m.section_header(
+  eyebrow="PROGRESSION T2 2026",
+  title="Évolution habit completion",
+  subtitle="W05 → W16 réel · W17 → W26 projection linéaire · 22 semaines"
+) }}
+<div class="card">
+  {{ m.todo_placeholder(
+    title="Évolution habit completion — historique à construire",
+    reason="Une seule semaine de données (W16) est disponible. Il faut au moins 4 semaines pour un area chart pertinent. L'historique se remplira automatiquement à mesure que tu saisiras les habitudes chaque semaine.",
+    needed_db="DB Habitudes · semaines passées",
+    accent="#10B981"
+  ) }}
+</div>
+{%- else %}
+
 {# ── Compute insights (Jinja2-safe, no negative index) ───── #}
 {# We build derived data: last_val and first_val per pilier    #}
 {# using the `last` and `first` filters                        #}
@@ -439,5 +467,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+{%- endif %}
 {% endblock %}
 

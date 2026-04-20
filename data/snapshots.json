@@ -1,152 +1,107 @@
 {
-  "generated_at": "2026-04-20T05:32:03.218410Z",
+  "generated_at": "2026-04-20T08:01:00.414389Z",
   "current_week": "W16",
   "current_trimester": "T2 2026",
   "current_date": "2026-04-19",
-  "today_fr": "vendredi 19 avril 2026",
+  "today_fr": "dimanche 19 avril 2026",
   "badge_week": {
     "status": "VERT",
     "score": 81,
     "total_fait": 43,
     "total_cible": 53,
-    "streak_weeks_vert": 3
+    "streak_weeks_vert": null
   },
   "tasks_today": {
     "done": 0,
     "total": 4,
     "items": [
       {
+        "id": "347845e8-e836-8100-b775-f139217f62c0",
         "name": "Programmer 3 rappels Google Calendar (60/30/15j) échéances auto",
         "pilier": "Pro & Financier",
         "status": "Pas commencé"
       },
       {
+        "id": "347845e8-e836-819e-9b3e-c6b2b82305c9",
         "name": "Trancher outil tracker en 1 session 30 min",
         "pilier": "Pro & Financier",
         "status": "En cours"
       },
       {
+        "id": "347845e8-e836-81c6-bafd-e2bf4b2a8917",
         "name": "Créer page Notion Auto (champs + scans cloud)",
         "pilier": "Pro & Financier",
         "status": "En cours"
       },
       {
+        "id": "347845e8-e836-81dc-9d43-ec2f266bdd03",
         "name": "Prendre RDV CT (Norauto/Dekra/Autosur)",
         "pilier": "Pro & Financier",
         "status": "Pas commencé"
       }
     ]
   },
+  "tasks_w16_by_day_by_pilier": {
+    "Lun": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Mar": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Mer": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Jeu": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Ven": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Sam": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Dim": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    }
+  },
   "trimester_progress": {
     "achievements_total_active": 9,
     "sous_total_active": 14,
-    "total_plan_pages": 1391
+    "sous_total_done": 0,
+    "tasks_total_done": 0,
+    "tasks_total_en_cours": 16,
+    "total_plan_pages": 1391,
+    "t2_percent": 0
   },
-  "time_week": {
-    "total": 168,
-    "buckets": [
-      {
-        "cat": "Sommeil",
-        "hours": 56,
-        "subs": []
-      },
-      {
-        "cat": "AVIV Travail",
-        "hours": 42,
-        "subs": [
-          {
-            "name": "Data work",
-            "hours": 30
-          },
-          {
-            "name": "Meetings",
-            "hours": 8
-          },
-          {
-            "name": "Admin",
-            "hours": 4
-          }
-        ]
-      },
-      {
-        "cat": "Admin / autre",
-        "hours": 23,
-        "subs": []
-      },
-      {
-        "cat": "Famille",
-        "hours": 22,
-        "subs": [
-          {
-            "name": "Couple",
-            "hours": 6
-          },
-          {
-            "name": "Lecture James",
-            "hours": 5
-          },
-          {
-            "name": "Jeux enfants",
-            "hours": 7
-          },
-          {
-            "name": "Cuisine",
-            "hours": 4
-          }
-        ]
-      },
-      {
-        "cat": "Spirituel",
-        "hours": 10,
-        "subs": [
-          {
-            "name": "Réunions",
-            "hours": 3
-          },
-          {
-            "name": "Prédication",
-            "hours": 3
-          },
-          {
-            "name": "Étude perso",
-            "hours": 2
-          },
-          {
-            "name": "Étude Jillian",
-            "hours": 2
-          }
-        ]
-      },
-      {
-        "cat": "Intérieur",
-        "hours": 8,
-        "subs": [
-          {
-            "name": "Sport",
-            "hours": 5
-          },
-          {
-            "name": "Récup",
-            "hours": 3
-          }
-        ]
-      },
-      {
-        "cat": "Création",
-        "hours": 7,
-        "subs": [
-          {
-            "name": "Maths S1",
-            "hours": 3
-          },
-          {
-            "name": "Micrograd",
-            "hours": 4
-          }
-        ]
-      }
-    ]
-  },
+  "time_week": null,
   "historic_weekly_12w": {
     "weeks": [
       "W05",
@@ -164,74 +119,74 @@
     ],
     "series": {
       "Intérieur": [
-        45,
-        52,
-        60,
-        68,
-        72,
-        75,
-        78,
-        80,
-        82,
-        85,
-        82,
-        82
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84
       ],
       "Famille": [
-        65,
-        68,
-        70,
-        72,
-        75,
-        78,
-        80,
-        82,
-        85,
-        85,
-        88,
-        90
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        83
       ],
       "Pro & Financier": [
-        50,
-        55,
-        60,
-        62,
-        65,
-        70,
-        72,
-        75,
-        78,
-        80,
-        82,
-        78
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        71
       ],
       "Création": [
-        30,
-        35,
-        42,
-        48,
-        52,
-        55,
-        58,
-        60,
-        65,
-        68,
-        70,
-        72
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        83
       ],
       "Spirituel": [
-        70,
-        75,
-        75,
-        78,
-        80,
-        82,
-        85,
-        85,
-        88,
-        88,
-        90,
-        82
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        78
       ]
     }
   },
@@ -243,18 +198,18 @@
       "accent": "#2F7D5B",
       "tint_mid": "#7FB09A",
       "tint_light": "#D4E5DB",
-      "progress_avg": 36,
+      "progress_avg": 15,
       "radar": {
-        "actuel": 82,
-        "cible": 85,
-        "gap": 3
+        "actuel": 84,
+        "cible": null,
+        "gap": null
       },
       "achievements_active": [
         {
           "id": "347845e8-e836-812a-ac62-c8d3a52736ca",
           "url": "https://www.notion.so/Atteindre-90-kg-via-body-recomposition-347845e8e836812aac62c8d3a52736ca",
           "name": "Atteindre 90 kg via body recomposition",
-          "progress": 42,
+          "progress": 0,
           "critere": "Poids 90 kg ±1 tenu 4 semaines glissantes, masse maigre préservée (mensurations stables ou +), 2 séances muscu/sem mini en maintenance",
           "cible_unite": "kg : 90",
           "deadline": null,
@@ -701,43 +656,32 @@
         }
       ],
       "habit_completion_12w": [
-        45,
-        52,
-        60,
-        68,
-        72,
-        75,
-        78,
-        80,
-        82,
-        85,
-        82,
-        82
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        84
       ],
-      "time_pilier": {
-        "cat": "Intérieur",
-        "hours": 8,
-        "subs": [
-          {
-            "name": "Sport",
-            "hours": 5
-          },
-          {
-            "name": "Récup",
-            "hours": 3
-          }
-        ]
-      },
+      "time_pilier": null,
       "roadmap": [
         {
+          "id": "347845e8-e836-812a-ac62-c8d3a52736ca",
           "name": "Atteindre 90 kg via body recomposition",
           "start": "2026-04-20",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 42
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-81bf-afd0-d18fd73813a2",
           "name": "Sommeil et récupération solides",
           "start": "2026-04-20",
           "end": null,
@@ -746,6 +690,7 @@
           "progress": 30
         },
         {
+          "id": "347845e8-e836-813f-ab88-ddbc1764ce8f",
           "name": "Santé mentale + équilibre émotionnel",
           "start": "2026-06-01",
           "end": null,
@@ -754,6 +699,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8197-81c0-efa4d25d38e4",
           "name": "Améliorer ma flexibilité et mobilité",
           "start": "2026-06-01",
           "end": "2027-03-01",
@@ -762,6 +708,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8130-8227-f1e09f7c5e38",
           "name": "Hygiène quotidienne stable",
           "start": "2026-09-01",
           "end": null,
@@ -770,11 +717,7 @@
           "progress": 0
         }
       ],
-      "signature_metric": {
-        "label": "Poids actuel",
-        "value": "122,7 kg",
-        "sub": "125 → 122,7 · -2,3 kg"
-      }
+      "signature_metric": null
     },
     "famille": {
       "slug": "famille",
@@ -783,18 +726,18 @@
       "accent": "#C84B4B",
       "tint_mid": "#E08B8B",
       "tint_light": "#F2D0D0",
-      "progress_avg": 52,
+      "progress_avg": 0,
       "radar": {
-        "actuel": 90,
-        "cible": 90,
-        "gap": 0
+        "actuel": 83,
+        "cible": null,
+        "gap": null
       },
       "achievements_active": [
         {
           "id": "347845e8-e836-8123-87f4-e1fab631f989",
           "url": "https://www.notion.so/ducation-James-quilibr-e-3-ans-bilingue-347845e8e836812387f4e1fab631f989",
           "name": "Éducation James équilibrée (3 ans, bilingue)",
-          "progress": 70,
+          "progress": 0,
           "critere": "Lecture quotidienne + Montessori hebdo + sortie père-fils hebdo, validés sur 8 sem",
           "cible_unite": "rituels/sem : 5 lectures + 1 sortie + 1 activité",
           "deadline": null,
@@ -804,7 +747,7 @@
           "id": "347845e8-e836-816c-a27f-dbe7ddde026e",
           "url": "https://www.notion.so/Couple-solide-Mirane-rituels-Gottman-347845e8e836816ca27fdbe7ddde026e",
           "name": "Couple solide Mirane (rituels Gottman)",
-          "progress": 35,
+          "progress": 0,
           "critere": "≥6h/sem investissement couple (6 magic hours Gottman) sur 8 sem",
           "cible_unite": "magic hours/sem : 6",
           "deadline": null,
@@ -961,59 +904,41 @@
         }
       ],
       "habit_completion_12w": [
-        65,
-        68,
-        70,
-        72,
-        75,
-        78,
-        80,
-        82,
-        85,
-        85,
-        88,
-        90
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        83
       ],
-      "time_pilier": {
-        "cat": "Famille",
-        "hours": 22,
-        "subs": [
-          {
-            "name": "Couple",
-            "hours": 6
-          },
-          {
-            "name": "Lecture James",
-            "hours": 5
-          },
-          {
-            "name": "Jeux enfants",
-            "hours": 7
-          },
-          {
-            "name": "Cuisine",
-            "hours": 4
-          }
-        ]
-      },
+      "time_pilier": null,
       "roadmap": [
         {
+          "id": "347845e8-e836-8123-87f4-e1fab631f989",
           "name": "Éducation James équilibrée (3 ans, bilingue)",
           "start": "2026-04-20",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 70
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-816c-a27f-dbe7ddde026e",
           "name": "Couple solide Mirane (rituels Gottman)",
           "start": "2026-04-20",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 35
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-81a8-8502-de32aa4617e8",
           "name": "Éveil Harper (0-2 ans, motricité libre + DME)",
           "start": "2026-05-01",
           "end": null,
@@ -1022,6 +947,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81ca-901d-d4eb97454c46",
           "name": "Liens famille élargie + amitiés",
           "start": "2026-06-01",
           "end": null,
@@ -1030,6 +956,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81f2-8de6-c741c7d1814d",
           "name": "Rituels annuels + voyage famille",
           "start": null,
           "end": null,
@@ -1038,11 +965,7 @@
           "progress": 0
         }
       ],
-      "signature_metric": {
-        "label": "Date-night cette semaine",
-        "value": "Samedi 21 h",
-        "sub": "cinéma + resto quartier"
-      }
+      "signature_metric": null
     },
     "pro_fi": {
       "slug": "pro_fi",
@@ -1051,18 +974,18 @@
       "accent": "#1E4D8C",
       "tint_mid": "#6A92C2",
       "tint_light": "#C9D8E8",
-      "progress_avg": 52,
+      "progress_avg": 0,
       "radar": {
-        "actuel": 78,
-        "cible": 80,
-        "gap": 2
+        "actuel": 71,
+        "cible": null,
+        "gap": null
       },
       "achievements_active": [
         {
           "id": "347845e8-e836-814c-951e-c1f58952b1f3",
           "url": "https://www.notion.so/Budget-familial-ma-tris-347845e8e836814c951ec1f58952b1f3",
           "name": "Budget familial maîtrisé",
-          "progress": 48,
+          "progress": 0,
           "critere": "3 mois consécutifs budget tracké 100% + épargne précaution 6 mois (≈18-25k€) + Livret A/LDDS couple saturés (69 900€) + PEA & AV ouverts (compteur fiscal)",
           "cible_unite": "Mois trackés:24",
           "deadline": null,
@@ -1072,7 +995,7 @@
           "id": "347845e8-e836-81eb-94e4-f520bbaac07e",
           "url": "https://www.notion.so/Admin-patrimoine-jour-347845e8e83681eb94e4f520bbaac07e",
           "name": "Admin & patrimoine à jour",
-          "progress": 55,
+          "progress": 0,
           "critere": "CT valide + assurance + révision + papiers + tableau Notion auto à jour, échéances calendrier programmées",
           "cible_unite": "Échéances en retard:0",
           "deadline": null,
@@ -1379,42 +1302,41 @@
         }
       ],
       "habit_completion_12w": [
-        50,
-        55,
-        60,
-        62,
-        65,
-        70,
-        72,
-        75,
-        78,
-        80,
-        82,
-        78
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        71
       ],
-      "time_pilier": {
-        "cat": "Pro & Financier",
-        "hours": 0,
-        "subs": []
-      },
+      "time_pilier": null,
       "roadmap": [
         {
+          "id": "347845e8-e836-814c-951e-c1f58952b1f3",
           "name": "Budget familial maîtrisé",
           "start": "2026-04-19",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 48
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-81eb-94e4-f520bbaac07e",
           "name": "Admin & patrimoine à jour",
           "start": "2026-04-19",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 55
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-81ac-bba0-e71bffd74efd",
           "name": "Augmentation salaire AVIV 80k€",
           "start": "2026-07-01",
           "end": null,
@@ -1423,6 +1345,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8175-af15-c8b318fb59fe",
           "name": "Transition Research Scientist 90-150k€",
           "start": "2026-09-01",
           "end": null,
@@ -1431,6 +1354,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81b1-85d8-ce57a2cbc224",
           "name": "Passage 4/5 AVIV",
           "start": "2026-10-01",
           "end": null,
@@ -1439,6 +1363,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8109-8c3b-e0e7e6af564f",
           "name": "Apport maison constitué",
           "start": "2027-01-01",
           "end": null,
@@ -1447,6 +1372,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81bc-8d91-c28ce08053fc",
           "name": "Auto-entreprise / revenus secondaires",
           "start": "2027-06-01",
           "end": null,
@@ -1455,11 +1381,7 @@
           "progress": 0
         }
       ],
-      "signature_metric": {
-        "label": "Net worth",
-        "value": "47 200 €",
-        "sub": "+5 000 € vs W05"
-      }
+      "signature_metric": null
     },
     "creation": {
       "slug": "creation",
@@ -1468,18 +1390,18 @@
       "accent": "#6B3FA0",
       "tint_mid": "#A584CA",
       "tint_light": "#DDCEE7",
-      "progress_avg": 25,
+      "progress_avg": 0,
       "radar": {
-        "actuel": 72,
-        "cible": 80,
-        "gap": 8
+        "actuel": 83,
+        "cible": null,
+        "gap": null
       },
       "achievements_active": [
         {
           "id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
           "url": "https://www.notion.so/Re-impl-menter-chaque-mod-le-ML-from-scratch-Linear-MM-DiT-347845e8e83681c68d7dc0de32b142e3",
           "name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
-          "progress": 25,
+          "progress": 0,
           "critere": "Pipeline complet 13 paliers : micrograd → linéaire → MLP MNIST 97% → CNN LeNet 99% → RNN/LSTM → Attention → Transformer → NanoGPT → VAE → DDPM → CLIP → Stable Diffusion → MM-DiT (Flux/SD3) — chaque palier from scratch avec critère factuel atteint",
           "cible_unite": "paliers:13",
           "deadline": null,
@@ -2841,43 +2763,32 @@
         }
       ],
       "habit_completion_12w": [
-        30,
-        35,
-        42,
-        48,
-        52,
-        55,
-        58,
-        60,
-        65,
-        68,
-        70,
-        72
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        83
       ],
-      "time_pilier": {
-        "cat": "Création",
-        "hours": 7,
-        "subs": [
-          {
-            "name": "Maths S1",
-            "hours": 3
-          },
-          {
-            "name": "Micrograd",
-            "hours": 4
-          }
-        ]
-      },
+      "time_pilier": null,
       "roadmap": [
         {
+          "id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
           "name": "Re-implémenter chaque modèle ML from scratch (Linear → MM-DiT)",
           "start": "2026-04-20",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 25
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-8193-90a9-fc1f19acdd7a",
           "name": "100 Days of Deep Learning — maîtrise breadth + pratiq",
           "start": "2026-06-01",
           "end": null,
@@ -2886,6 +2797,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-813f-a228-fae96508a21f",
           "name": "Devenir Research Scientist sans PhD",
           "start": "2026-07-01",
           "end": null,
@@ -2894,6 +2806,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-816c-bfbf-cf59232de576",
           "name": "Blog Break AI Abstraction — livrable transverse",
           "start": "2026-07-01",
           "end": null,
@@ -2902,6 +2815,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-818c-93dd-cf513355bfc8",
           "name": "100 Days of LLMs — fine-tuning, RAG, agents, serving",
           "start": "2026-08-01",
           "end": null,
@@ -2910,6 +2824,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-813f-9c77-cf4ec143007e",
           "name": "365 Days of Math — socle maths 1 an pour Research Scientist",
           "start": "2026-09-01",
           "end": "2027-09-01",
@@ -2918,6 +2833,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8175-9e33-ce31bc235723",
           "name": "Maîtriser iOS / SwiftUI natif",
           "start": "2026-10-01",
           "end": null,
@@ -2926,6 +2842,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81c8-8fcb-f90120dc77f9",
           "name": "Socle Physique pour IA / Graphics",
           "start": "2026-10-01",
           "end": null,
@@ -2934,6 +2851,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81e8-ae71-c5e3b41a886d",
           "name": "100 Days of C++ — maîtriser C++ moderne pour CUDA + perf",
           "start": "2026-10-01",
           "end": "2027-01-15",
@@ -2942,6 +2860,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8126-a48a-dcf26fa45107",
           "name": "Dessin — habitude + paliers Saitama/Luffy/paysages/colorimétrie",
           "start": "2027-01-01",
           "end": null,
@@ -2950,6 +2869,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8138-a744-dc60a3ba2331",
           "name": "Blender — 3D pure pour illustrations blog + motion 3D",
           "start": "2027-01-01",
           "end": null,
@@ -2958,6 +2878,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8185-981b-ddaf2e9ea6d3",
           "name": "Design UX/UI — autonomie visuelle (œil + Figma + système)",
           "start": "2027-01-01",
           "end": null,
@@ -2966,6 +2887,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-819e-af81-e4b0023e52ac",
           "name": "Projets électronique + RC + mécatronique",
           "start": "2027-01-01",
           "end": null,
@@ -2974,6 +2896,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81f9-80f1-f9fb4f02cb95",
           "name": "Manim — produire vidéos pédago IA 2D",
           "start": "2027-01-01",
           "end": null,
@@ -2982,6 +2905,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-8147-bdfb-cc7f37ac280d",
           "name": "100 Days of CUDA — kernels GPU + PyTorch extensions",
           "start": "2027-02-01",
           "end": null,
@@ -2990,11 +2914,7 @@
           "progress": 0
         }
       ],
-      "signature_metric": {
-        "label": "Progression tech",
-        "value": "27,5 %",
-        "sub": "pilier le plus bas · à intensifier fin T2"
-      }
+      "signature_metric": null
     },
     "spirituel": {
       "slug": "spirituel",
@@ -3003,18 +2923,18 @@
       "accent": "#B8860B",
       "tint_mid": "#D8B052",
       "tint_light": "#ECD9A8",
-      "progress_avg": 62,
+      "progress_avg": 0,
       "radar": {
-        "actuel": 82,
-        "cible": 85,
-        "gap": 3
+        "actuel": 78,
+        "cible": null,
+        "gap": null
       },
       "achievements_active": [
         {
           "id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
           "url": "https://www.notion.so/Accompagnement-Jillian-dans-Vivre-pour-toujours-347845e8e836814cb30de9d6b2a924ca",
           "name": "Accompagnement Jillian dans Vivre pour toujours",
-          "progress": 45,
+          "progress": 0,
           "critere": "Livre Vivre pour toujours terminé avec Jillian (14 ans, neveu) + décision documentée: baptême OU transmission propre à un frère adapté",
           "cible_unite": "séances/sem:1",
           "deadline": null,
@@ -3024,7 +2944,7 @@
           "id": "347845e8-e836-8180-b73e-e9389a04f6a6",
           "url": "https://www.notion.so/Pr-dication-r-guli-re-et-progressive-palier-30h-mois-347845e8e8368180b73ee9389a04f6a6",
           "name": "Prédication régulière et progressive (palier 30h/mois)",
-          "progress": 80,
+          "progress": 0,
           "critere": "Atteindre 30h prédication enregistrées sur 1 mois calendaire (équivalent pionnier auxiliaire 1 mois)",
           "cible_unite": "h/mois:30",
           "deadline": "2026-09-30",
@@ -3276,59 +3196,41 @@
         }
       ],
       "habit_completion_12w": [
-        70,
-        75,
-        75,
-        78,
-        80,
-        82,
-        85,
-        85,
-        88,
-        88,
-        90,
-        82
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        78
       ],
-      "time_pilier": {
-        "cat": "Spirituel",
-        "hours": 10,
-        "subs": [
-          {
-            "name": "Réunions",
-            "hours": 3
-          },
-          {
-            "name": "Prédication",
-            "hours": 3
-          },
-          {
-            "name": "Étude perso",
-            "hours": 2
-          },
-          {
-            "name": "Étude Jillian",
-            "hours": 2
-          }
-        ]
-      },
+      "time_pilier": null,
       "roadmap": [
         {
+          "id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
           "name": "Accompagnement Jillian dans Vivre pour toujours",
           "start": "2026-04-20",
           "end": null,
           "active": true,
           "status": "En cours",
-          "progress": 45
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-8180-b73e-e9389a04f6a6",
           "name": "Prédication régulière et progressive (palier 30h/mois)",
           "start": "2026-04-20",
           "end": "2026-09-30",
           "active": true,
           "status": "En cours",
-          "progress": 80
+          "progress": 0
         },
         {
+          "id": "347845e8-e836-818d-be4b-e182b940f2a2",
           "name": "Vie spirituelle quotidienne stable",
           "start": "2026-04-20",
           "end": null,
@@ -3337,6 +3239,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-819c-bdec-eaac5ae5a725",
           "name": "Formation assistant ministériel 2026 validée",
           "start": "2026-05-01",
           "end": "2026-12-31",
@@ -3345,6 +3248,7 @@
           "progress": 0
         },
         {
+          "id": "347845e8-e836-81ad-9739-eee75b1f4806",
           "name": "Aspirations long terme: pionnier aux. permanent + Béthel",
           "start": "2026-10-01",
           "end": null,
@@ -3353,11 +3257,7 @@
           "progress": 0
         }
       ],
-      "signature_metric": {
-        "label": "Prédication avril",
-        "value": "24 h / 30 h",
-        "sub": "80 % objectif mensuel"
-      }
+      "signature_metric": null
     }
   }
 }

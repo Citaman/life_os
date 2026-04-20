@@ -57,10 +57,19 @@
 {{ m.section_header(
     eyebrow="TEMPS HEBDOMADAIRE",
     title="Flux Sankey · " + pilier.name,
-    subtitle=pilier.time_pilier.hours|string + " h hebdo réparties entre sous-activités",
+    subtitle="Allocation temps hebdomadaire par sous-activité",
     accent=pilier.accent
 ) }}
 
+{% if not pilier.time_pilier %}
+
+{{ m.todo_placeholder(
+    title="Flux Sankey — " + pilier.name,
+    reason="Aucune DB Time Tracker n'est branchée. Tu peux commencer par tracker tes heures hebdo (manuellement dans une DB 'Time log' avec Pilier + Activité + Durée), et ce Sankey se remplira automatiquement.",
+    needed_db="DB Time Tracker · Pilier=" + pilier.name,
+    accent=pilier.accent
+) }}
+{% else %}
 <div class="card">
   <div class="pilier-accent-bar" style="background: linear-gradient(90deg, {{ pilier.accent }}, {{ pilier.tint_mid }});"></div>
 
@@ -86,9 +95,11 @@
     {% endfor %}
   </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
+{% if pilier.time_pilier %}
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
 <script>
@@ -100,39 +111,7 @@
   const ACCENT       = {{ pilier.accent | tojson }};
   const TINT_MID     = {{ pilier.tint_mid | tojson }};
   const TINT_LIGHT   = {{ pilier.tint_light | tojson }};
-  const PILIER_SLUG  = {{ pilier.slug | tojson }};
-
-  /* ── L2 hardcoded subdivisions keyed by pilier slug ── */
-  const PILIER_L2 = {
-    "interieur": {
-      "Sport": [
-        { name: "Pecs/triceps", hours: 1.5 },
-        { name: "Jambes",       hours: 1.5 },
-        { name: "Dos",          hours: 1.5 },
-        { name: "Cardio",       hours: 0.5 }
-      ],
-      "Récup": [
-        { name: "Étirements",    hours: 1 },
-        { name: "Foam roller",   hours: 1 },
-        { name: "Sommeil récup", hours: 1 }
-      ]
-    },
-    "pro_fi": {
-      "AVIV Travail": [
-        { name: "Data work", hours: 30 },
-        { name: "Meetings",  hours: 8  },
-        { name: "Admin",     hours: 4  }
-      ]
-    },
-    "spirituel": {
-      "Réunions": [
-        { name: "Mardi soir",     hours: 2 },
-        { name: "Dimanche matin", hours: 1 }
-      ]
-    }
-  };
-
-  /* ── build nodes + links: L0 pilier → L1 subs → (optional) L2 ── */
+  /* ── build nodes + links: L0 pilier → L1 subs ── */
   function buildGraph() {
     const nodes = [];
     const links = [];
@@ -141,23 +120,12 @@
     const rootLabel = PILIER_NAME + " " + PILIER_HOURS + " h";
     nodes.push({ id: 0, name: rootLabel, layer: 0 });
 
-    const l2Map = PILIER_L2[PILIER_SLUG] || {};
     let nodeId = 1;
 
     PILIER_SUBS.forEach(function (sub) {
       const l1Id = nodeId++;
       nodes.push({ id: l1Id, name: sub.name, hours: sub.hours, layer: 1 });
       links.push({ source: 0, target: l1Id, value: sub.hours });
-
-      /* L2 children if this sub has a breakdown */
-      const children = l2Map[sub.name];
-      if (children && children.length > 0) {
-        children.forEach(function (child) {
-          const l2Id = nodeId++;
-          nodes.push({ id: l2Id, name: child.name, hours: child.hours, layer: 2 });
-          links.push({ source: l1Id, target: l2Id, value: child.hours });
-        });
-      }
     });
 
     return { nodes: nodes, links: links };
@@ -305,4 +273,5 @@
   });
 })();
 </script>
+{% endif %}
 {% endblock %}

@@ -214,6 +214,32 @@
 {%- set piliers_order = ['interieur', 'famille', 'pro_fi', 'creation', 'spirituel'] -%}
 {%- set piliers = snap.piliers -%}
 
+{# ── Null-guard: if ANY cible or actuel is null → show TODO placeholder ── #}
+{%- set ns_check = namespace(has_null=false) -%}
+{%- for slug in piliers_order -%}
+  {%- if piliers[slug].radar.cible is none or piliers[slug].radar.actuel is none -%}
+    {%- set ns_check.has_null = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if ns_check.has_null -%}
+<div class="radar-page">
+  {{ m.section_header(
+    eyebrow="ÉQUILIBRE SYSTÉMIQUE",
+    title="Équilibre des 5 piliers",
+    subtitle="Progression actuelle vs objectif cible"
+  ) }}
+  <div class="card">
+    {{ m.todo_placeholder(
+      title="Radar équilibre 5 piliers — à venir",
+      reason="Les valeurs cibles par pilier ne sont pas encore définies dans Notion. Une fois une propriété `Cible %` ajoutée sur les pages piliers ou une DB Objectifs, ce radar se remplira.",
+      needed_db="propriété Cible par pilier",
+      accent="#A855F7"
+    ) }}
+  </div>
+</div>
+{%- else -%}
+
 {#
   Pure Jinja2 radar SVG math.
   5-axis radar, axis 0 starts at top (-90°).
@@ -501,4 +527,5 @@
   </div>
 
 </div>
+{%- endif -%}
 {% endblock %}

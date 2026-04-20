@@ -75,6 +75,16 @@
 </div>
 {%- endmacro -%}
 
+{%- macro todo_placeholder(title, reason, needed_db="", accent="#6B7280") -%}
+<div class="todo-placeholder" style="--todo-accent: {{ accent }};">
+  <div class="todo-badge">TODO</div>
+  <div class="todo-title">{{ title }}</div>
+  {% if reason %}<p class="todo-reason">{{ reason }}</p>{% endif %}
+  {% if needed_db %}<div class="todo-needed">Source manquante · {{ needed_db }}</div>{% endif %}
+  <div class="todo-hint">Rendu transparent tant que la source de données n'est pas disponible. Aucune valeur hardcodée.</div>
+</div>
+{%- endmacro -%}
+
 {%- macro status_pill(status) -%}
 {%- set map = {
   'Atteint': ('#ECFDF5', '#047857'),

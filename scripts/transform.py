@@ -1,7 +1,11 @@
 """
-Transform raw_notion.json into snapshots.json with pre-computed metrics.
+Transform raw_notion.json into snapshots.json with ONLY computed-from-DB metrics.
 
-The snapshots.json is the canonical data consumed by V2 templates (and later V3 React app).
+Principles (V2.1):
+- Zero hardcoded data. Every number comes from Notion DBs.
+- When data is not available yet (no DB, no values), output `null`.
+- Templates must render transparent "TODO" placeholders for null metrics.
+- All numbers must be derivable via sum / count / avg / div on raw_notion.json content.
 
 Usage:
     python scripts/transform.py
@@ -10,9 +14,10 @@ Usage:
 from __future__ import annotations
 
 import json
+import locale
 import os
 import sys
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -36,62 +41,25 @@ PILIERS = [
     {"slug": "spirituel", "name": "Spirituel", "color_key": "yellow", "accent": "#B8860B", "tint_mid": "#D8B052", "tint_light": "#ECD9A8"},
 ]
 
-# Targets for radar (actuel vs cible)
-RADAR_TARGETS = {
-    "Intérieur": {"cible": 85},
-    "Famille": {"cible": 90},
-    "Pro & Financier": {"cible": 80},
-    "Création": {"cible": 80},
-    "Spirituel": {"cible": 85},
-}
 
-# Weekly habit completion (12 semaines W05-W16) — historique, LIVE-TODO Phase B+
-# Hardcoded en V2.0 · dérivé de user observations · à remplacer par DB Snapshots weekly
-HISTORIC_WEEKLY_COMPLETION = {
-    "Intérieur": [45, 52, 60, 68, 72, 75, 78, 80, 82, 85, 82, 82],
-    "Famille":   [65, 68, 70, 72, 75, 78, 80, 82, 85, 85, 88, 90],
-    "Pro & Financier": [50, 55, 60, 62, 65, 70, 72, 75, 78, 80, 82, 78],
-    "Création":  [30, 35, 42, 48, 52, 55, 58, 60, 65, 68, 70, 72],
-    "Spirituel": [70, 75, 75, 78, 80, 82, 85, 85, 88, 88, 90, 82],
-}
+def today_fr(date_str: str) -> str:
+    """Format YYYY-MM-DD as 'vendredi 19 avril 2026' in French."""
+    try:
+        locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
+    except locale.Error:
+        pass
+    try:
+        d = datetime.strptime(date_str, "%Y-%m-%d")
+        return d.strftime("%A %d %B %Y").lower()
+    except ValueError:
+        return date_str
 
-# Time allocation per week (168h) — hardcoded V2 · Phase C DB Time Tracker
-TIME_ALLOCATION = {
-    "total": 168,
-    "buckets": [
-        {"cat": "Sommeil", "hours": 56, "subs": []},
-        {"cat": "AVIV Travail", "hours": 42, "subs": [
-            {"name": "Data work", "hours": 30},
-            {"name": "Meetings", "hours": 8},
-            {"name": "Admin", "hours": 4},
-        ]},
-        {"cat": "Admin / autre", "hours": 23, "subs": []},
-        {"cat": "Famille", "hours": 22, "subs": [
-            {"name": "Couple", "hours": 6},
-            {"name": "Lecture James", "hours": 5},
-            {"name": "Jeux enfants", "hours": 7},
-            {"name": "Cuisine", "hours": 4},
-        ]},
-        {"cat": "Spirituel", "hours": 10, "subs": [
-            {"name": "Réunions", "hours": 3},
-            {"name": "Prédication", "hours": 3},
-            {"name": "Étude perso", "hours": 2},
-            {"name": "Étude Jillian", "hours": 2},
-        ]},
-        {"cat": "Intérieur", "hours": 8, "subs": [
-            {"name": "Sport", "hours": 5},
-            {"name": "Récup", "hours": 3},
-        ]},
-        {"cat": "Création", "hours": 7, "subs": [
-            {"name": "Maths S1", "hours": 3},
-            {"name": "Micrograd", "hours": 4},
-        ]},
-    ],
-}
+
+# ---------- Progress helpers ----------
 
 
 def parse_percent(text: str | None) -> int | None:
-    """Extract a percent value from a Progression actuelle text field (rarely populated in V2)."""
+    """Extract an explicit % from a free-text field. Returns null if absent."""
     if not text:
         return None
     import re
@@ -102,24 +70,12 @@ def parse_percent(text: str | None) -> int | None:
     return None
 
 
-# Progress overrides when Notion Progression actuelle field doesn't contain a %.
-# Sourced from SPEC_V8. Replace by real sous-rollup computation below.
-# Key = achievement name (exact match) or short substring.
-PROGRESS_OVERRIDE = {
-    "Atteindre 90 kg via body recomposition": 42,
-    "Sommeil et récupération solides": 60,
-    "Couple solide Mirane": 35,
-    "Éducation James équilibrée": 70,
-    "Admin & patrimoine à jour": 55,
-    "Budget familial maîtrisé": 48,
-    "Re-implémenter chaque modèle ML from scratch": 25,
-    "Prédication régulière et progressive": 80,
-    "Accompagnement Jillian dans Vivre pour toujours": 45,
-}
-
-
 def rollup_progress_from_sous(achievement_id: str, plan_pages: list[dict[str, Any]]) -> int | None:
-    """Compute achievement progress as % sous-achievements marked done."""
+    """Compute achievement progress as % sous-achievements marked done.
+
+    Returns None if no children (not rollup-able).
+    Returns 0 if children exist but none done — that IS the truth.
+    """
     children = [p for p in plan_pages if p.get("Type") == "Sous-achievement" and achievement_id in (p.get("Parent") or [])]
     if not children:
         return None
@@ -128,23 +84,23 @@ def rollup_progress_from_sous(achievement_id: str, plan_pages: list[dict[str, An
     return round(done / len(children) * 100)
 
 
-def achievement_progress(a: dict[str, Any], plan: list[dict[str, Any]]) -> int:
-    """Priority: explicit % in text > override > sous-rollup > 0."""
+def achievement_progress(a: dict[str, Any], plan: list[dict[str, Any]]) -> int | None:
+    """Priority: explicit % in Progression actuelle text > sous-rollup > null.
+
+    No hardcoded overrides. If neither source yields a value, returns None.
+    """
     pct = parse_percent(a.get("Progression actuelle"))
     if pct is not None:
         return pct
-    name = a.get("Nom", "")
-    for key, val in PROGRESS_OVERRIDE.items():
-        if key.lower() in name.lower():
-            return val
     rollup = rollup_progress_from_sous(a["id"], plan)
-    if rollup is not None:
-        return rollup
-    return 0
+    return rollup  # can be int or None
 
 
-def compute_pilier_progress(plan_pages: list[dict[str, Any]], pilier_name: str) -> int:
-    """Average progression of En cours achievements for a pilier."""
+def compute_pilier_progress(plan_pages: list[dict[str, Any]], pilier_name: str) -> int | None:
+    """Average of En cours achievements progresses for a pilier.
+
+    Returns None if no active achievement OR all have null progress.
+    """
     values: list[int] = []
     for p in plan_pages:
         if p.get("Type") != "Achievement":
@@ -154,31 +110,20 @@ def compute_pilier_progress(plan_pages: list[dict[str, Any]], pilier_name: str) 
         if p.get("Statut") != "En cours":
             continue
         pct = achievement_progress(p, plan_pages)
-        values.append(pct)
+        if pct is not None:
+            values.append(pct)
     if not values:
-        return 0
+        return None
     return round(sum(values) / len(values))
+
+
+# ---------- DB readers ----------
 
 
 def count_by_filter(pages: list[dict[str, Any]], **filters: Any) -> int:
     def match(p: dict[str, Any]) -> bool:
         return all(p.get(k) == v for k, v in filters.items())
-
     return sum(1 for p in pages if match(p))
-
-
-def list_by_filter(pages: list[dict[str, Any]], **filters: Any) -> list[dict[str, Any]]:
-    def match(p: dict[str, Any]) -> bool:
-        for k, v in filters.items():
-            pv = p.get(k)
-            if k == "date_equals":
-                # Expected form: ("date:Date prévue début", "2026-04-19")
-                continue
-            if pv != v:
-                return False
-        return True
-
-    return [p for p in pages if match(p)]
 
 
 def achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[str, Any]]:
@@ -222,12 +167,13 @@ def sous_achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[d
 
 
 def roadmap_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[str, Any]]:
-    """All achievements (active + future) ordered by start date."""
+    """All achievements (active + future) ordered by start date. Excludes Abandonné."""
     out = []
     for p in plan:
         if p.get("Type") == "Achievement" and p.get("Pilier") == pilier_name and p.get("Statut") != "Abandonné":
             out.append(
                 {
+                    "id": p["id"],
                     "name": p.get("Nom"),
                     "start": (p.get("Date prévue début") or {}).get("start"),
                     "end": (p.get("Deadline") or {}).get("start"),
@@ -252,25 +198,87 @@ def habits_of(hab_pages: list[dict[str, Any]], pilier_name: str, week: str) -> l
                     "cible": cible,
                     "days": days,
                     "fait": fait,
-                    "score_pct": round(fait / cible * 100) if cible else 0,
+                    "score_pct": round(fait / cible * 100) if cible else None,
                 }
             )
     return out
 
 
-def signature_metric(pilier_slug: str, plan: list[dict[str, Any]]) -> dict[str, Any]:
-    """Pilier-specific hero KPI #3."""
-    if pilier_slug == "interieur":
-        return {"label": "Poids actuel", "value": "122,7 kg", "sub": "125 → 122,7 · -2,3 kg"}
-    if pilier_slug == "famille":
-        return {"label": "Date-night cette semaine", "value": "Samedi 21 h", "sub": "cinéma + resto quartier"}
-    if pilier_slug == "pro_fi":
-        return {"label": "Net worth", "value": "47 200 €", "sub": "+5 000 € vs W05"}
-    if pilier_slug == "creation":
-        return {"label": "Progression tech", "value": "27,5 %", "sub": "pilier le plus bas · à intensifier fin T2"}
-    if pilier_slug == "spirituel":
-        return {"label": "Prédication avril", "value": "24 h / 30 h", "sub": "80 % objectif mensuel"}
-    return {}
+def historic_weekly_completion(hab_pages: list[dict[str, Any]], pilier_name: str, weeks: list[str]) -> list[int | None]:
+    """For each week in `weeks`, return average habit completion % for the pilier.
+
+    If no habit data for that week → None (not 0).
+    """
+    out: list[int | None] = []
+    for wk in weeks:
+        week_habits = [h for h in hab_pages if h.get("Pilier") == pilier_name and h.get("Semaine") == wk]
+        if not week_habits:
+            out.append(None)
+            continue
+        total_fait = sum(int(h.get("Fait") or 0) for h in week_habits)
+        total_cible = sum(int(h.get("Cible /sem") or 0) for h in week_habits)
+        if total_cible == 0:
+            out.append(None)
+        else:
+            out.append(round(total_fait / total_cible * 100))
+    return out
+
+
+def tasks_today(plan: list[dict[str, Any]], today_str: str) -> list[dict[str, Any]]:
+    out = []
+    for p in plan:
+        if p.get("Type") != "Tâche atomique":
+            continue
+        start = (p.get("Date prévue début") or {}).get("start", "") or ""
+        if start.startswith(today_str):
+            out.append(
+                {
+                    "id": p["id"],
+                    "name": p.get("Nom"),
+                    "pilier": p.get("Pilier"),
+                    "status": p.get("Statut"),
+                }
+            )
+    return out
+
+
+def tasks_completed_per_day_per_pilier_w16(plan: list[dict[str, Any]], weeks_range: tuple[str, str]) -> dict[str, dict[str, int]]:
+    """Build a dict {day (Lun..Dim): {pilier: count}} from real Tâches atomiques with
+    Date prévue début within the W16 date range AND Statut=Complété.
+
+    weeks_range = (start_date_iso, end_date_iso) inclusive.
+    """
+    from datetime import date as date_cls
+
+    start = date_cls.fromisoformat(weeks_range[0])
+    end = date_cls.fromisoformat(weeks_range[1])
+    days_fr = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+    piliers = ["Intérieur", "Famille", "Pro & Financier", "Création", "Spirituel"]
+    out: dict[str, dict[str, int]] = {d: {p: 0 for p in piliers} for d in days_fr}
+
+    for p in plan:
+        if p.get("Type") != "Tâche atomique":
+            continue
+        if p.get("Statut") != "Complété":
+            continue
+        start_raw = (p.get("Date prévue début") or {}).get("start")
+        if not start_raw:
+            continue
+        try:
+            d = date_cls.fromisoformat(start_raw[:10])
+        except ValueError:
+            continue
+        if d < start or d > end:
+            continue
+        day_idx = d.weekday()  # Mon=0
+        day_label = days_fr[day_idx]
+        pilier = p.get("Pilier")
+        if pilier in piliers:
+            out[day_label][pilier] += 1
+    return out
+
+
+# ---------- Main ----------
 
 
 def main() -> None:
@@ -282,6 +290,13 @@ def main() -> None:
 
     print(f"Loaded {len(plan)} plan pages + {len(hab)} habit pages + {len(raw['backlog_vie'])} backlog pages.")
 
+    # Build historic weeks list (12 weeks up to current)
+    try:
+        current_w_num = int(CURRENT_WEEK.lstrip("W"))
+    except ValueError:
+        current_w_num = 16
+    historic_weeks = [f"W{w:02d}" for w in range(max(1, current_w_num - 11), current_w_num + 1)]
+
     piliers_out: dict[str, dict[str, Any]] = {}
     for p in PILIERS:
         name = p["name"]
@@ -290,77 +305,88 @@ def main() -> None:
         habits_week = habits_of(hab, name, CURRENT_WEEK)
         roadmap = roadmap_of(plan, name)
         progress_avg = compute_pilier_progress(plan, name)
-        series = HISTORIC_WEEKLY_COMPLETION.get(name, [0] * 12)
-        time_pilier = next((b for b in TIME_ALLOCATION["buckets"] if b["cat"] == name), {"cat": name, "hours": 0, "subs": []})
+
+        # Historic 12 weeks — computed from real Habitudes DB (will be mostly null at start)
+        hist_series = historic_weekly_completion(hab, name, historic_weeks)
+
         piliers_out[p["slug"]] = {
             **p,
-            "progress_avg": progress_avg,
-            "radar": {"actuel": series[-1], "cible": RADAR_TARGETS[name]["cible"], "gap": RADAR_TARGETS[name]["cible"] - series[-1]},
+            "progress_avg": progress_avg,  # int or null
+            "radar": {
+                "actuel": hist_series[-1] if hist_series else None,
+                "cible": None,  # TODO: pilier target DB/property not yet defined
+                "gap": None,
+            },
             "achievements_active": active,
             "sous_achievements": sous_achs,
             "habits_w16": habits_week,
-            "habit_completion_12w": series,
-            "time_pilier": time_pilier,
+            "habit_completion_12w": hist_series,  # list of int|null
+            "time_pilier": None,  # TODO: DB Time Tracker
             "roadmap": roadmap,
-            "signature_metric": signature_metric(p["slug"], plan),
+            "signature_metric": None,  # TODO: pilier-specific DB (Mesures corps, Comptes, etc.)
         }
 
     # Dashboard-level metrics
     total_plan = len(plan)
     achievements_en_cours = count_by_filter(plan, Type="Achievement", Statut="En cours")
     sous_en_cours = count_by_filter(plan, Type="Sous-achievement", Statut="En cours")
+    sous_done = count_by_filter(plan, Type="Sous-achievement", Statut="Complété") + count_by_filter(plan, Type="Sous-achievement", Statut="Atteint")
+    tasks_en_cours = count_by_filter(plan, Type="Tâche atomique", Statut="En cours")
+    tasks_done = count_by_filter(plan, Type="Tâche atomique", Statut="Complété")
 
     # Today tasks
-    today = CURRENT_DATE
-    tasks_today = [
-        p
-        for p in plan
-        if p.get("Type") == "Tâche atomique"
-        and (p.get("Date prévue début") or {}).get("start", "").startswith(today)
-    ]
-    tasks_today_done = sum(1 for t in tasks_today if t.get("Statut") == "Complété")
+    tlist = tasks_today(plan, CURRENT_DATE)
+    tlist_done = sum(1 for t in tlist if t.get("status") == "Complété")
 
-    # Overall habit score W16 (weighted avg)
+    # Overall habit score current week
     all_habits_w16 = [h for h in hab if h.get("Semaine") == CURRENT_WEEK]
     total_cible = sum(int(h.get("Cible /sem") or 0) for h in all_habits_w16)
     total_fait = sum(int(h.get("Fait") or 0) for h in all_habits_w16)
-    badge_pct = round(total_fait / total_cible * 100) if total_cible else 0
-    badge_status = "VERT" if badge_pct >= 80 else ("JAUNE" if badge_pct >= 50 else "ROUGE")
+    if total_cible == 0:
+        badge_pct = None
+        badge_status = None
+    else:
+        badge_pct = round(total_fait / total_cible * 100)
+        badge_status = "VERT" if badge_pct >= 80 else ("JAUNE" if badge_pct >= 50 else "ROUGE")
+
+    # Stacked tasks W16 per day per pilier (from real completed tasks)
+    # W16 = 2026-04-13 → 2026-04-19 (assumption: current_week mentions W16)
+    stacked_w16 = tasks_completed_per_day_per_pilier_w16(plan, ("2026-04-13", "2026-04-19"))
 
     snapshots = {
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "current_week": CURRENT_WEEK,
         "current_trimester": CURRENT_TRIMESTER,
         "current_date": CURRENT_DATE,
-        "today_fr": "vendredi 19 avril 2026",
+        "today_fr": today_fr(CURRENT_DATE),
         "badge_week": {
-            "status": badge_status,
-            "score": badge_pct,
+            "status": badge_status,  # str or null
+            "score": badge_pct,      # int or null
             "total_fait": total_fait,
             "total_cible": total_cible,
-            "streak_weeks_vert": 3,  # TODO: compute from history
+            "streak_weeks_vert": None,  # TODO: needs history
         },
         "tasks_today": {
-            "done": tasks_today_done,
-            "total": len(tasks_today),
-            "items": [
-                {
-                    "name": t.get("Nom"),
-                    "pilier": t.get("Pilier"),
-                    "status": t.get("Statut"),
-                }
-                for t in tasks_today
-            ],
+            "done": tlist_done,
+            "total": len(tlist),
+            "items": tlist,
         },
+        "tasks_w16_by_day_by_pilier": stacked_w16,
         "trimester_progress": {
             "achievements_total_active": achievements_en_cours,
             "sous_total_active": sous_en_cours,
+            "sous_total_done": sous_done,
+            "tasks_total_done": tasks_done,
+            "tasks_total_en_cours": tasks_en_cours,
             "total_plan_pages": total_plan,
+            # T2 progress % = sous_done / sous_total_active_or_planned
+            # For now: done / (done + en_cours). Null if denominator = 0.
+            "t2_percent": round(sous_done / (sous_done + sous_en_cours) * 100) if (sous_done + sous_en_cours) else None,
         },
-        "time_week": TIME_ALLOCATION,
+        "time_week": None,  # TODO: DB Time Tracker future
         "historic_weekly_12w": {
-            "weeks": [f"W{w:02d}" for w in range(5, 17)],
-            "series": HISTORIC_WEEKLY_COMPLETION,
+            "weeks": historic_weeks,
+            "series": {p["name"]: piliers_out[p["slug"]]["habit_completion_12w"] for p in PILIERS},
         },
         "piliers": piliers_out,
     }
@@ -370,9 +396,10 @@ def main() -> None:
     print(f"Wrote {OUT_PATH}")
     print(f"  · achievements actifs: {achievements_en_cours}")
     print(f"  · sous-achievements actifs: {sous_en_cours}")
-    print(f"  · total Plan d'exécution pages: {total_plan}")
-    print(f"  · tâches aujourd'hui: {tasks_today_done}/{len(tasks_today)}")
-    print(f"  · badge W16: {badge_status} {badge_pct}%")
+    print(f"  · sous-achievements done: {sous_done}")
+    print(f"  · tasks today (DB date={CURRENT_DATE}): {tlist_done}/{len(tlist)}")
+    print(f"  · badge {CURRENT_WEEK}: {badge_status} {badge_pct}%" if badge_pct is not None else f"  · badge {CURRENT_WEEK}: null")
+    print(f"  · historic weeks with habit data: {sum(1 for v in piliers_out['interieur']['habit_completion_12w'] if v is not None)}/12 Intérieur")
 
 
 if __name__ == "__main__":
