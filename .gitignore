@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Env
+.env
+.env.local
+
+# Data (raw fetch can be large, committed at snapshot level only)
+data/raw_notion.json
+
+# Build artifacts
+dist/
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
