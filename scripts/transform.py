@@ -55,6 +55,28 @@ def today_fr(date_str: str) -> str:
         return date_str
 
 
+def safe_number(value: Any) -> float | None:
+    if value in (None, ""):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def fmt_eur(value: float | int | None, decimals: int = 0) -> str:
+    if value is None:
+        return "—"
+    amount = float(value)
+    sign = "+" if amount > 0 else ""
+    rounded = round(amount, decimals)
+    if decimals == 0:
+        number = f"{rounded:,.0f}".replace(",", " ")
+    else:
+        number = f"{rounded:,.{decimals}f}".replace(",", " ").replace(".", ",")
+    return f"{sign}{number} €"
+
+
 # ---------- Progress helpers ----------
 
 
@@ -224,6 +246,132 @@ def historic_weekly_completion(hab_pages: list[dict[str, Any]], pilier_name: str
     return out
 
 
+def month_key_from_page(page: dict[str, Any]) -> str | None:
+    if page.get("Mois clé"):
+        return page.get("Mois clé")
+    period = page.get("Période") or {}
+    start = period.get("start") if isinstance(period, dict) else None
+    if start:
+        return start[:7]
+    title = page.get("Mois") or page.get("Ligne") or page.get("Entrée")
+    if isinstance(title, str) and len(title) >= 7 and title[4] == "-":
+        return title[:7]
+    return None
+
+
+def pick_active_finance_month(finance_monthly: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not finance_monthly:
+        return None
+    active = [m for m in finance_monthly if m.get("Actif")]
+    pool = active or finance_monthly
+
+    def sort_key(page: dict[str, Any]) -> str:
+        period = page.get("Période") or {}
+        start = period.get("start") if isinstance(period, dict) else None
+        return start or page.get("Mois clé") or page.get("Mois") or ""
+
+    return sorted(pool, key=sort_key)[-1]
+
+
+def finance_snapshot(
+    finance_monthly: list[dict[str, Any]],
+    budget_lines: list[dict[str, Any]],
+    journal_pages: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    active_month = pick_active_finance_month(finance_monthly)
+    if not active_month:
+        return None
+
+    month_key = month_key_from_page(active_month)
+    month_title = active_month.get("Mois") or month_key or "Mois actif"
+    month_lines = [l for l in budget_lines if month_key and month_key_from_page(l) == month_key and l.get("Inclure dashboard")]
+    month_journal = [j for j in journal_pages if month_key and month_key_from_page(j) == month_key]
+
+    income_lines = sorted(
+        [l for l in month_lines if l.get("Flux") == "Revenu"],
+        key=lambda item: item.get("Ordre") or 9999,
+    )
+    expense_lines = sorted(
+        [l for l in month_lines if l.get("Flux") == "Dépense"],
+        key=lambda item: item.get("Ordre") or 9999,
+    )
+    relief_lines = sorted(
+        [l for l in month_lines if l.get("Flux") == "Allègement"],
+        key=lambda item: item.get("Ordre") or 9999,
+    )
+
+    def norm_line(item: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "name": item.get("Ligne"),
+            "category": item.get("Catégorie") or "Autre",
+            "amount": safe_number(item.get("Montant")) or 0,
+            "bloc": item.get("Bloc"),
+            "payer": item.get("Payeur"),
+            "notes": item.get("Notes"),
+        }
+
+    incomes = [norm_line(l) for l in income_lines]
+    expenses = [norm_line(l) for l in expense_lines]
+    reliefs = [norm_line(l) for l in relief_lines]
+
+    expense_by_bloc: dict[str, float] = {}
+    expense_by_category: dict[str, float] = {}
+    for item in expenses:
+        expense_by_bloc[item["bloc"] or "Autre"] = expense_by_bloc.get(item["bloc"] or "Autre", 0) + item["amount"]
+        expense_by_category[item["category"]] = expense_by_category.get(item["category"], 0) + item["amount"]
+
+    bloc_breakdown = []
+    for bloc, amount in sorted(expense_by_bloc.items(), key=lambda pair: pair[1], reverse=True):
+        cats = [
+            {"name": e["category"], "amount": e["amount"]}
+            for e in expenses
+            if (e["bloc"] or "Autre") == bloc
+        ]
+        bloc_breakdown.append({"name": bloc, "amount": amount, "categories": cats})
+
+    recent_journal = sorted(
+        [
+            {
+                "title": j.get("Entrée"),
+                "type": j.get("Type"),
+                "date": (j.get("Date") or {}).get("start") if isinstance(j.get("Date"), dict) else None,
+                "summary": j.get("Résumé"),
+            }
+            for j in month_journal
+        ],
+        key=lambda item: item.get("date") or "",
+        reverse=True,
+    )[:5]
+
+    projected_result = safe_number(active_month.get("Résultat prévu"))
+    start_balance = safe_number(active_month.get("Solde début"))
+    estimated_end = safe_number(active_month.get("Fin de mois estimée"))
+
+    return {
+        "month_key": month_key,
+        "month_title": month_title,
+        "status": active_month.get("Statut"),
+        "start_balance": start_balance,
+        "cash_income_total": safe_number(active_month.get("Revenus cash")) or sum(i["amount"] for i in incomes),
+        "caf": safe_number(active_month.get("CAF")),
+        "tickets_restaurant": safe_number(active_month.get("Tickets resto")) or sum(r["amount"] for r in reliefs),
+        "budgeted_expenses": safe_number(active_month.get("Dépenses budgétées")) or sum(e["amount"] for e in expenses),
+        "projected_result": projected_result,
+        "target_end_balance": safe_number(active_month.get("Objectif fin de mois")),
+        "estimated_end_balance": estimated_end,
+        "notes": active_month.get("Notes"),
+        "income_lines": incomes,
+        "expense_lines": expenses,
+        "relief_lines": reliefs,
+        "expense_by_bloc": bloc_breakdown,
+        "expense_by_category": [
+            {"name": name, "amount": amount}
+            for name, amount in sorted(expense_by_category.items(), key=lambda pair: pair[1], reverse=True)
+        ],
+        "journal_recent": recent_journal,
+    }
+
+
 def tasks_today(plan: list[dict[str, Any]], today_str: str) -> list[dict[str, Any]]:
     out = []
     for p in plan:
@@ -287,8 +435,14 @@ def main() -> None:
     raw = json.loads(RAW_PATH.read_text())
     plan = raw["plan_execution"]
     hab = raw["habitudes"]
+    finance_monthly = raw.get("finance_monthly", [])
+    budget_lines = raw.get("budget_lines", [])
+    pro_fi_journal = raw.get("pro_fi_journal", [])
 
-    print(f"Loaded {len(plan)} plan pages + {len(hab)} habit pages + {len(raw['backlog_vie'])} backlog pages.")
+    print(
+        f"Loaded {len(plan)} plan pages + {len(hab)} habit pages + {len(raw['backlog_vie'])} backlog pages "
+        f"+ {len(finance_monthly)} finance months + {len(budget_lines)} budget lines + {len(pro_fi_journal)} journal entries."
+    )
 
     # Build historic weeks list (12 weeks up to current)
     try:
@@ -352,6 +506,7 @@ def main() -> None:
     # Stacked tasks W16 per day per pilier (from real completed tasks)
     # W16 = 2026-04-13 → 2026-04-19 (assumption: current_week mentions W16)
     stacked_w16 = tasks_completed_per_day_per_pilier_w16(plan, ("2026-04-13", "2026-04-19"))
+    finance_current = finance_snapshot(finance_monthly, budget_lines, pro_fi_journal)
 
     snapshots = {
         "generated_at": datetime.utcnow().isoformat() + "Z",
@@ -388,6 +543,7 @@ def main() -> None:
             "weeks": historic_weeks,
             "series": {p["name"]: piliers_out[p["slug"]]["habit_completion_12w"] for p in PILIERS},
         },
+        "finance_current_month": finance_current,
         "piliers": piliers_out,
     }
 
@@ -455,14 +611,20 @@ def main() -> None:
         sig_labels = {
             "interieur": ("POIDS ACTUEL", "DB Mesures corps à brancher"),
             "famille": ("DATE-NIGHT CETTE SEMAINE", "DB Couple à brancher"),
-            "pro_fi": ("NET WORTH", "DB Comptes à brancher"),
+            "pro_fi": ("FIN DE MOIS ESTIMÉE", "DB finance non branchée"),
             "creation": ("PROGRESSION TECH", f"{p['progress_avg']} % · pas de sous complété T2"),
             "spirituel": ("PRÉDICATION AVRIL", "DB Rapports prédication à brancher"),
         }
         label, sub_text = sig_labels.get(p['slug'], ("SIGNATURE", ""))
+        value = "—"
+        if p["slug"] == "pro_fi" and finance_current:
+            value = fmt_eur(finance_current.get("estimated_end_balance"))
+            sub_text = (
+                f"{finance_current['month_title']} · résultat prévu {fmt_eur(finance_current.get('projected_result'))}"
+            )
         kpi_catalog[f"{slug}-signature"] = {
             "eyebrow": label,
-            "value": "—",
+            "value": value,
             "sub": sub_text,
             "accent": p['accent'],
             "accent_light": p['tint_light'],

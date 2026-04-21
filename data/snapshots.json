@@ -1,45 +1,20 @@
 {
-  "generated_at": "2026-04-20T09:11:21.240805Z",
-  "current_week": "W16",
+  "generated_at": "2026-04-21T23:19:03.523834Z",
+  "current_week": "W17",
   "current_trimester": "T2 2026",
-  "current_date": "2026-04-19",
-  "today_fr": "dimanche 19 avril 2026",
+  "current_date": "2026-04-22",
+  "today_fr": "mercredi 22 avril 2026",
   "badge_week": {
-    "status": "VERT",
-    "score": 81,
-    "total_fait": 43,
-    "total_cible": 53,
+    "status": null,
+    "score": null,
+    "total_fait": 0,
+    "total_cible": 0,
     "streak_weeks_vert": null
   },
   "tasks_today": {
     "done": 0,
-    "total": 4,
-    "items": [
-      {
-        "id": "347845e8-e836-8100-b775-f139217f62c0",
-        "name": "Programmer 3 rappels Google Calendar (60/30/15j) échéances auto",
-        "pilier": "Pro & Financier",
-        "status": "Pas commencé"
-      },
-      {
-        "id": "347845e8-e836-819e-9b3e-c6b2b82305c9",
-        "name": "Trancher outil tracker en 1 session 30 min",
-        "pilier": "Pro & Financier",
-        "status": "En cours"
-      },
-      {
-        "id": "347845e8-e836-81c6-bafd-e2bf4b2a8917",
-        "name": "Créer page Notion Auto (champs + scans cloud)",
-        "pilier": "Pro & Financier",
-        "status": "En cours"
-      },
-      {
-        "id": "347845e8-e836-81dc-9d43-ec2f266bdd03",
-        "name": "Prendre RDV CT (Norauto/Dekra/Autosur)",
-        "pilier": "Pro & Financier",
-        "status": "Pas commencé"
-      }
-    ]
+    "total": 0,
+    "items": []
   },
   "tasks_w16_by_day_by_pilier": {
     "Lun": {
@@ -104,7 +79,6 @@
   "time_week": null,
   "historic_weekly_12w": {
     "weeks": [
-      "W05",
       "W06",
       "W07",
       "W08",
@@ -115,7 +89,8 @@
       "W13",
       "W14",
       "W15",
-      "W16"
+      "W16",
+      "W17"
     ],
     "series": {
       "Intérieur": [
@@ -129,8 +104,8 @@
         null,
         null,
         null,
-        null,
-        84
+        68,
+        null
       ],
       "Famille": [
         null,
@@ -143,8 +118,8 @@
         null,
         null,
         null,
-        null,
-        83
+        67,
+        null
       ],
       "Pro & Financier": [
         null,
@@ -157,8 +132,8 @@
         null,
         null,
         null,
-        null,
-        71
+        57,
+        null
       ],
       "Création": [
         null,
@@ -171,8 +146,8 @@
         null,
         null,
         null,
-        null,
-        83
+        67,
+        null
       ],
       "Spirituel": [
         null,
@@ -185,10 +160,316 @@
         null,
         null,
         null,
-        null,
-        78
+        67,
+        null
       ]
     }
+  },
+  "finance_current_month": {
+    "month_key": "2026-05",
+    "month_title": "2026-05 · Mai 2026",
+    "status": "In progress",
+    "start_balance": -1221.87,
+    "cash_income_total": 4455.0,
+    "caf": 705.0,
+    "tickets_restaurant": 200.0,
+    "budgeted_expenses": 3709.0,
+    "projected_result": 746.0,
+    "target_end_balance": 0.0,
+    "estimated_end_balance": -475.87,
+    "notes": "Budget prévisionnel de mai 2026 construit à partir du travail budget + courses + contraintes/pilotable + tickets resto.",
+    "income_lines": [
+      {
+        "name": "Salaire Anthonny",
+        "category": "Salaire",
+        "amount": 3750.0,
+        "bloc": "Foyer",
+        "payer": "Anthonny",
+        "notes": "Revenu cash mensuel retenu pour mai"
+      },
+      {
+        "name": "CAF",
+        "category": "CAF",
+        "amount": 705.0,
+        "bloc": "Foyer",
+        "payer": "Mirane",
+        "notes": "Aide CAF retenue au budget"
+      }
+    ],
+    "expense_lines": [
+      {
+        "name": "Loyer",
+        "category": "Logement",
+        "amount": 1194.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Charge fixe"
+      },
+      {
+        "name": "Crédit auto",
+        "category": "Transport",
+        "amount": 505.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Mensualité véhicule"
+      },
+      {
+        "name": "Assurances",
+        "category": "Assurances",
+        "amount": 458.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Assurances consolidées actuelles"
+      },
+      {
+        "name": "Eau + EDF",
+        "category": "Maison",
+        "amount": 171.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Charges énergie et eau"
+      },
+      {
+        "name": "Téléphone + internet",
+        "category": "Télécoms",
+        "amount": 66.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Télécoms foyer"
+      },
+      {
+        "name": "Transport fixe",
+        "category": "Transport",
+        "amount": 102.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Transport fixe hors carburant"
+      },
+      {
+        "name": "Carburant Renault Austral",
+        "category": "Carburant",
+        "amount": 100.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Budget prudent 1 plein environ"
+      },
+      {
+        "name": "Courses famille",
+        "category": "Alimentation",
+        "amount": 640.0,
+        "bloc": "Pilotable",
+        "payer": "Joint",
+        "notes": "Cash après tickets resto"
+      },
+      {
+        "name": "Santé / pharmacie",
+        "category": "Santé",
+        "amount": 80.0,
+        "bloc": "Pilotable",
+        "payer": "Joint",
+        "notes": "Pharmacie + petits soins"
+      },
+      {
+        "name": "Abonnements",
+        "category": "Abonnements",
+        "amount": 75.0,
+        "bloc": "Pilotable",
+        "payer": "Joint",
+        "notes": "Abonnements actifs retenus"
+      },
+      {
+        "name": "Frais bancaires",
+        "category": "Banque",
+        "amount": 28.0,
+        "bloc": "Contraint",
+        "payer": "Joint",
+        "notes": "Frais bancaires fixes"
+      },
+      {
+        "name": "Salle de sport",
+        "category": "Sport",
+        "amount": 50.0,
+        "bloc": "Personnel Anthonny",
+        "payer": "Anthonny",
+        "notes": "Dépense perso Anthonny"
+      },
+      {
+        "name": "Imprévus enfants / maison",
+        "category": "Imprévus maison",
+        "amount": 120.0,
+        "bloc": "Pilotable",
+        "payer": "Joint",
+        "notes": "Marge sécurité foyer"
+      },
+      {
+        "name": "Imprévus divers",
+        "category": "Imprévus divers",
+        "amount": 120.0,
+        "bloc": "Pilotable",
+        "payer": "Joint",
+        "notes": "Marge sécurité du mois"
+      }
+    ],
+    "relief_lines": [
+      {
+        "name": "Tickets resto",
+        "category": "Alimentation",
+        "amount": 200.0,
+        "bloc": "Pilotable",
+        "payer": "Tickets resto",
+        "notes": "Allègement alimentation, pas un revenu cash"
+      }
+    ],
+    "expense_by_bloc": [
+      {
+        "name": "Contraint",
+        "amount": 2624.0,
+        "categories": [
+          {
+            "name": "Logement",
+            "amount": 1194.0
+          },
+          {
+            "name": "Transport",
+            "amount": 505.0
+          },
+          {
+            "name": "Assurances",
+            "amount": 458.0
+          },
+          {
+            "name": "Maison",
+            "amount": 171.0
+          },
+          {
+            "name": "Télécoms",
+            "amount": 66.0
+          },
+          {
+            "name": "Transport",
+            "amount": 102.0
+          },
+          {
+            "name": "Carburant",
+            "amount": 100.0
+          },
+          {
+            "name": "Banque",
+            "amount": 28.0
+          }
+        ]
+      },
+      {
+        "name": "Pilotable",
+        "amount": 1035.0,
+        "categories": [
+          {
+            "name": "Alimentation",
+            "amount": 640.0
+          },
+          {
+            "name": "Santé",
+            "amount": 80.0
+          },
+          {
+            "name": "Abonnements",
+            "amount": 75.0
+          },
+          {
+            "name": "Imprévus maison",
+            "amount": 120.0
+          },
+          {
+            "name": "Imprévus divers",
+            "amount": 120.0
+          }
+        ]
+      },
+      {
+        "name": "Personnel Anthonny",
+        "amount": 50.0,
+        "categories": [
+          {
+            "name": "Sport",
+            "amount": 50.0
+          }
+        ]
+      }
+    ],
+    "expense_by_category": [
+      {
+        "name": "Logement",
+        "amount": 1194.0
+      },
+      {
+        "name": "Alimentation",
+        "amount": 640.0
+      },
+      {
+        "name": "Transport",
+        "amount": 607.0
+      },
+      {
+        "name": "Assurances",
+        "amount": 458.0
+      },
+      {
+        "name": "Maison",
+        "amount": 171.0
+      },
+      {
+        "name": "Imprévus maison",
+        "amount": 120.0
+      },
+      {
+        "name": "Imprévus divers",
+        "amount": 120.0
+      },
+      {
+        "name": "Carburant",
+        "amount": 100.0
+      },
+      {
+        "name": "Santé",
+        "amount": 80.0
+      },
+      {
+        "name": "Abonnements",
+        "amount": 75.0
+      },
+      {
+        "name": "Télécoms",
+        "amount": 66.0
+      },
+      {
+        "name": "Sport",
+        "amount": 50.0
+      },
+      {
+        "name": "Banque",
+        "amount": 28.0
+      }
+    ],
+    "journal_recent": [
+      {
+        "title": "Mise en place infra dynamique Notion + life_os",
+        "type": "Action",
+        "date": "2026-04-22",
+        "summary": "Création des bases Finance mensuelle, Lignes budget mensuel et Journal Pro & Financier pour rendre le pilier entièrement pilotable et branchable au repo."
+      },
+      {
+        "title": "Comparatif courses et paniers exacts",
+        "type": "Action",
+        "date": "2026-04-21",
+        "summary": "Comparatif Lidl, Leclerc, Carrefour, Costco, ALDI puis paniers exacts produits + prix pour mai."
+      },
+      {
+        "title": "Construction budget mai 2026",
+        "type": "Décision",
+        "date": "2026-04-21",
+        "summary": "Budget de mai construit avec séparation contraintes / pilotable, tickets resto traités comme allègement et objectif de sortie progressive du négatif."
+      }
+    ]
   },
   "piliers": {
     "interieur": {
@@ -200,7 +481,7 @@
       "tint_light": "#D4E5DB",
       "progress_avg": 15,
       "radar": {
-        "actuel": 84,
+        "actuel": null,
         "cible": null,
         "gap": null
       },
@@ -608,53 +889,7 @@
           "deadline": null
         }
       ],
-      "habits_w16": [
-        {
-          "name": "Séance sport",
-          "cible": 5,
-          "days": [
-            true,
-            false,
-            true,
-            true,
-            true,
-            false,
-            false
-          ],
-          "fait": 4,
-          "score_pct": 80
-        },
-        {
-          "name": "Hydratation 2 L",
-          "cible": 7,
-          "days": [
-            true,
-            true,
-            true,
-            false,
-            true,
-            true,
-            true
-          ],
-          "fait": 6,
-          "score_pct": 86
-        },
-        {
-          "name": "Coucher 22 h 30",
-          "cible": 7,
-          "days": [
-            true,
-            true,
-            true,
-            false,
-            true,
-            true,
-            true
-          ],
-          "fait": 6,
-          "score_pct": 86
-        }
-      ],
+      "habits_w16": [],
       "habit_completion_12w": [
         null,
         null,
@@ -666,8 +901,8 @@
         null,
         null,
         null,
-        null,
-        84
+        68,
+        null
       ],
       "time_pilier": null,
       "roadmap": [
@@ -728,7 +963,7 @@
       "tint_light": "#F2D0D0",
       "progress_avg": 0,
       "radar": {
-        "actuel": 83,
+        "actuel": null,
         "cible": null,
         "gap": null
       },
@@ -886,23 +1121,7 @@
           "deadline": null
         }
       ],
-      "habits_w16": [
-        {
-          "name": "Lecture avec James",
-          "cible": 6,
-          "days": [
-            true,
-            true,
-            true,
-            false,
-            true,
-            true,
-            false
-          ],
-          "fait": 5,
-          "score_pct": 83
-        }
-      ],
+      "habits_w16": [],
       "habit_completion_12w": [
         null,
         null,
@@ -914,8 +1133,8 @@
         null,
         null,
         null,
-        null,
-        83
+        67,
+        null
       ],
       "time_pilier": null,
       "roadmap": [
@@ -976,7 +1195,7 @@
       "tint_light": "#C9D8E8",
       "progress_avg": 0,
       "radar": {
-        "actuel": 71,
+        "actuel": null,
         "cible": null,
         "gap": null
       },
@@ -1284,23 +1503,7 @@
           "deadline": null
         }
       ],
-      "habits_w16": [
-        {
-          "name": "Budget 10 min",
-          "cible": 7,
-          "days": [
-            true,
-            true,
-            true,
-            true,
-            true,
-            false,
-            false
-          ],
-          "fait": 5,
-          "score_pct": 71
-        }
-      ],
+      "habits_w16": [],
       "habit_completion_12w": [
         null,
         null,
@@ -1312,8 +1515,8 @@
         null,
         null,
         null,
-        null,
-        71
+        57,
+        null
       ],
       "time_pilier": null,
       "roadmap": [
@@ -1392,7 +1595,7 @@
       "tint_light": "#DDCEE7",
       "progress_avg": 0,
       "radar": {
-        "actuel": 83,
+        "actuel": null,
         "cible": null,
         "gap": null
       },
@@ -2730,38 +2933,7 @@
           "deadline": null
         }
       ],
-      "habits_w16": [
-        {
-          "name": "Maths 30 min",
-          "cible": 6,
-          "days": [
-            true,
-            true,
-            false,
-            false,
-            true,
-            true,
-            true
-          ],
-          "fait": 5,
-          "score_pct": 83
-        },
-        {
-          "name": "Micrograd 30 min",
-          "cible": 6,
-          "days": [
-            true,
-            true,
-            false,
-            true,
-            true,
-            true,
-            false
-          ],
-          "fait": 5,
-          "score_pct": 83
-        }
-      ],
+      "habits_w16": [],
       "habit_completion_12w": [
         null,
         null,
@@ -2773,8 +2945,8 @@
         null,
         null,
         null,
-        null,
-        83
+        67,
+        null
       ],
       "time_pilier": null,
       "roadmap": [
@@ -2925,7 +3097,7 @@
       "tint_light": "#ECD9A8",
       "progress_avg": 0,
       "radar": {
-        "actuel": 78,
+        "actuel": null,
         "cible": null,
         "gap": null
       },
@@ -3163,38 +3335,7 @@
           "deadline": null
         }
       ],
-      "habits_w16": [
-        {
-          "name": "Prédication",
-          "cible": 2,
-          "days": [
-            false,
-            false,
-            false,
-            false,
-            false,
-            true,
-            false
-          ],
-          "fait": 1,
-          "score_pct": 50
-        },
-        {
-          "name": "Étude personnelle",
-          "cible": 7,
-          "days": [
-            true,
-            true,
-            true,
-            true,
-            true,
-            false,
-            true
-          ],
-          "fait": 6,
-          "score_pct": 86
-        }
-      ],
+      "habits_w16": [],
       "habit_completion_12w": [
         null,
         null,
@@ -3206,8 +3347,8 @@
         null,
         null,
         null,
-        null,
-        78
+        67,
+        null
       ],
       "time_pilier": null,
       "roadmap": [
@@ -3263,17 +3404,17 @@
   "kpi_catalog": {
     "dash-tasks-today": {
       "eyebrow": "TÂCHES DU JOUR",
-      "value": "0 / 4",
-      "sub": "complétées · 4 en attente",
+      "value": "0 / 0",
+      "sub": "aucune tâche datée aujourd'hui",
       "accent": "#3B82F6",
       "accent_light": "#DBEAFE"
     },
     "dash-badge-week": {
-      "eyebrow": "BADGE SEMAINE W16",
-      "value": "81 %",
-      "sub": "VERT · 43 / 53 habitudes tenues",
-      "accent": "#10B981",
-      "accent_light": "#D1FAE5"
+      "eyebrow": "BADGE SEMAINE W17",
+      "value": "—",
+      "sub": "aucune habitude saisie",
+      "accent": "#6B7280",
+      "accent_light": "#F3F4F6"
     },
     "dash-trimester-t2": {
       "eyebrow": "TRIMESTRE T2 2026",
@@ -3330,9 +3471,9 @@
       "accent_light": "#D4E5DB"
     },
     "interieur-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "84 %",
-      "sub": "16 / 19 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "—",
+      "sub": "aucune habitude W16",
       "accent": "#2F7D5B",
       "accent_light": "#D4E5DB"
     },
@@ -3351,9 +3492,9 @@
       "accent_light": "#F2D0D0"
     },
     "famille-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "83 %",
-      "sub": "5 / 6 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "—",
+      "sub": "aucune habitude W16",
       "accent": "#C84B4B",
       "accent_light": "#F2D0D0"
     },
@@ -3372,16 +3513,16 @@
       "accent_light": "#C9D8E8"
     },
     "pro-fi-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "71 %",
-      "sub": "5 / 7 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "—",
+      "sub": "aucune habitude W16",
       "accent": "#1E4D8C",
       "accent_light": "#C9D8E8"
     },
     "pro-fi-signature": {
-      "eyebrow": "NET WORTH",
-      "value": "—",
-      "sub": "DB Comptes à brancher",
+      "eyebrow": "FIN DE MOIS ESTIMÉE",
+      "value": "-476 €",
+      "sub": "2026-05 · Mai 2026 · résultat prévu +746 €",
       "accent": "#1E4D8C",
       "accent_light": "#C9D8E8"
     },
@@ -3393,9 +3534,9 @@
       "accent_light": "#DDCEE7"
     },
     "creation-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "83 %",
-      "sub": "10 / 12 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "—",
+      "sub": "aucune habitude W16",
       "accent": "#6B3FA0",
       "accent_light": "#DDCEE7"
     },
@@ -3414,9 +3555,9 @@
       "accent_light": "#ECD9A8"
     },
     "spirituel-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "78 %",
-      "sub": "7 / 9 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "—",
+      "sub": "aucune habitude W16",
       "accent": "#B8860B",
       "accent_light": "#ECD9A8"
     },

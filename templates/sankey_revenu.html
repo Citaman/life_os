@@ -2,10 +2,237 @@
 {% import "_macros.html" as m %}
 {% block title %}Life OS — Sankey Revenu Pro & Financier{% endblock %}
 
+{% block extra_css %}
+.finance-topline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.finance-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.finance-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.finance-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--pro-fi-light);
+  color: var(--pro-fi);
+  font-size: 12px;
+  font-weight: 600;
+}
+.sankey-finance-wrap {
+  min-width: 760px;
+  overflow-x: auto;
+}
+#finance-sankey-svg {
+  display: block;
+  width: 100%;
+  height: 520px;
+}
+.journal-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.journal-item {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #FAFBFC;
+}
+.journal-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.journal-item-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+.journal-item-date {
+  font-size: 12px;
+  color: var(--muted);
+}
+.journal-item-summary {
+  font-size: 13px;
+  color: var(--muted);
+}
+@media (max-width: 768px) {
+  .finance-topline {
+    grid-template-columns: 1fr;
+  }
+}
+{% endblock %}
+
 {% block content %}
-{{ m.section_header(eyebrow="FLUX FINANCIERS", title="Sankey · Répartition du revenu", subtitle="Du revenu brut aux postes de dépenses et épargne · mensuel avril 2026", accent="#1E4D8C") }}
+{{ m.section_header(eyebrow="FLUX FINANCIERS", title="Sankey · Répartition du revenu", subtitle="Revenus cash, blocs de dépenses et atterrissage de fin de mois", accent="#1E4D8C") }}
+
+{% if not snap.finance_current_month %}
+<div class="card">
+  {{ m.todo_placeholder(title="Sankey répartition du revenu — à venir", reason="Aucune ligne active dans Finance mensuelle / Lignes budget mensuel. Dès qu'un mois actif existe, le Sankey se remplit depuis Notion.", needed_db="Finance mensuelle + Lignes budget mensuel", accent="#1E4D8C") }}
+</div>
+{% else %}
+{% set finance = snap.finance_current_month %}
+<div class="finance-topline">
+  {{ m.kpi_card("Mois actif", finance.month_title, finance.status, accent="#1E4D8C", accent_light="#C9D8E8") }}
+  {{ m.kpi_card("Résultat prévu", finance.projected_result | round | int ~ " €" if finance.projected_result is not none else "—", "cash uniquement", accent="#1E4D8C", accent_light="#C9D8E8") }}
+  {{ m.kpi_card("Fin de mois estimée", finance.estimated_end_balance | round | int ~ " €" if finance.estimated_end_balance is not none else "—", "à partir du solde de début", accent="#1E4D8C", accent_light="#C9D8E8") }}
+</div>
 
 <div class="card">
-  {{ m.todo_placeholder(title="Sankey répartition du revenu — à venir", reason="Aucune DB Finances n'est encore branchée sur Notion. Quand tu ajouteras une DB avec les flux revenus/dépenses mensuels (ex: Comptes LCL + Boursorama via script ou saisie manuelle), ce Sankey se remplit automatiquement.", needed_db="DB Finances · revenus + dépenses mensuelles", accent="#1E4D8C") }}
+  <div class="finance-note">
+    Base de calcul : {{ finance.cash_income_total | round | int }} € de revenus cash, {{ finance.budgeted_expenses | round | int }} € de dépenses budgétées, plus {{ finance.tickets_restaurant | round | int }} € de tickets resto suivis à part comme allègement.
+  </div>
+
+  <div class="sankey-finance-wrap">
+    <svg id="finance-sankey-svg" viewBox="0 0 960 520" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="finance-chip-row">
+    {% for line in finance.relief_lines %}
+    <span class="finance-chip">{{ line.name }} · {{ line.amount | round | int }} €</span>
+    {% endfor %}
+    {% if finance.start_balance is not none %}
+    <span class="finance-chip">Solde début · {{ finance.start_balance | round | int }} €</span>
+    {% endif %}
+    {% if finance.target_end_balance is not none %}
+    <span class="finance-chip">Objectif fin de mois · {{ finance.target_end_balance | round | int }} €</span>
+    {% endif %}
+  </div>
 </div>
+
+{% if finance.journal_recent %}
+<div class="card">
+  <div class="section-header" style="margin-bottom: 18px; text-align: left;">
+    <div class="eyebrow" style="--accent:#1E4D8C;">JOURNAL RÉCENT</div>
+    <h2 style="font-size: 24px; margin-bottom: 4px;">Actions et décisions liées au mois</h2>
+  </div>
+  <div class="journal-list">
+    {% for entry in finance.journal_recent %}
+    <div class="journal-item">
+      <div class="journal-item-head">
+        <div class="journal-item-title">{{ entry.title }}</div>
+        <div class="journal-item-date">{{ entry.date or "sans date" }}</div>
+      </div>
+      <div class="journal-item-summary">{{ entry.type }} · {{ entry.summary }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if snap.finance_current_month %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script>
+(function () {
+  const finance = {{ snap.finance_current_month | tojson }};
+  const svgEl = document.getElementById("finance-sankey-svg");
+  if (!svgEl) return;
+
+  const graph = { nodes: [], links: [] };
+  const nodeIndex = new Map();
+  function ensureNode(name, layer, color) {
+    if (!nodeIndex.has(name)) {
+      nodeIndex.set(name, graph.nodes.length);
+      graph.nodes.push({ name, layer, color });
+    }
+    return nodeIndex.get(name);
+  }
+
+  const budgetRoot = ensureNode(finance.month_title, 1, "#6A92C2");
+
+  finance.income_lines.forEach((line) => {
+    const idx = ensureNode(`${line.name} ${Math.round(line.amount)} €`, 0, "#1E4D8C");
+    graph.links.push({ source: idx, target: budgetRoot, value: line.amount });
+  });
+
+  finance.expense_by_bloc.forEach((bloc) => {
+    const blocIdx = ensureNode(`${bloc.name} ${Math.round(bloc.amount)} €`, 2, "#8AA8CD");
+    graph.links.push({ source: budgetRoot, target: blocIdx, value: bloc.amount });
+    bloc.categories.forEach((cat) => {
+      const catIdx = ensureNode(`${cat.name} ${Math.round(cat.amount)} €`, 3, "#C9D8E8");
+      graph.links.push({ source: blocIdx, target: catIdx, value: cat.amount });
+    });
+  });
+
+  if (finance.projected_result !== null && finance.projected_result !== undefined && finance.projected_result > 0) {
+    const landingIdx = ensureNode(`Résultat prévu ${Math.round(finance.projected_result)} €`, 2, finance.projected_result >= 0 ? "#10B981" : "#EF4444");
+    graph.links.push({ source: budgetRoot, target: landingIdx, value: finance.projected_result });
+  }
+
+  const rect = svgEl.getBoundingClientRect();
+  const width = Math.max(rect.width || 960, 760);
+  const height = 520;
+
+  const svg = d3.select(svgEl)
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", `0 0 ${width} ${height}`);
+
+  const sankey = d3.sankey()
+    .nodeWidth(18)
+    .nodePadding(16)
+    .extent([[24, 20], [width - 180, height - 20]]);
+
+  const sankeyGraph = sankey({
+    nodes: graph.nodes.map((d) => Object.assign({}, d)),
+    links: graph.links.map((d) => Object.assign({}, d)),
+  });
+
+  svg.selectAll("*").remove();
+
+  svg.append("g")
+    .attr("fill", "none")
+    .selectAll("path")
+    .data(sankeyGraph.links)
+    .join("path")
+    .attr("d", d3.sankeyLinkHorizontal())
+    .attr("stroke", "#6A92C2")
+    .attr("stroke-width", (d) => Math.max(1, d.width))
+    .attr("stroke-opacity", 0.28)
+    .append("title")
+    .text((d) => `${d.source.name} → ${d.target.name}\n${Math.round(d.value)} €`);
+
+  const nodes = svg.append("g")
+    .selectAll("g")
+    .data(sankeyGraph.nodes)
+    .join("g");
+
+  nodes.append("rect")
+    .attr("x", (d) => d.x0)
+    .attr("y", (d) => d.y0)
+    .attr("height", (d) => Math.max(1, d.y1 - d.y0))
+    .attr("width", (d) => d.x1 - d.x0)
+    .attr("rx", 4)
+    .attr("fill", (d) => d.color || "#1E4D8C");
+
+  nodes.append("text")
+    .attr("x", (d) => d.x1 + 10)
+    .attr("y", (d) => (d.y0 + d.y1) / 2)
+    .attr("dominant-baseline", "middle")
+    .attr("font-family", "Inter, sans-serif")
+    .attr("font-size", 12)
+    .attr("font-weight", 600)
+    .attr("fill", "#1A1A1A")
+    .text((d) => d.name);
+})();
+</script>
+{% endif %}
 {% endblock %}

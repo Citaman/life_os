@@ -1,10 +1,15 @@
 """
-Fetch all 3 Notion databases and save raw pages to data/raw_notion.json.
+Fetch core Notion databases and optional finance databases into data/raw_notion.json.
 
-DBs:
+Core DBs:
 - Plan d'exécution (achievements, sous-achievements, tâches atomiques)
 - Habitudes (weekly tracker)
 - Backlog Vie (master intentions register)
+
+Optional finance DBs:
+- Finance mensuelle
+- Lignes budget mensuel
+- Journal Pro & Financier
 
 Usage:
     python scripts/fetch_notion.py
@@ -30,6 +35,9 @@ if not TOKEN:
 PLAN_DS = os.environ["PLAN_DS"]
 HABITUDES_DS = os.environ["HABITUDES_DS"]
 BACKLOG_DS = os.environ["BACKLOG_DS"]
+FINANCE_MONTHLY_DS = os.environ.get("FINANCE_MONTHLY_DS")
+BUDGET_LINES_DS = os.environ.get("BUDGET_LINES_DS")
+PRO_FI_JOURNAL_DS = os.environ.get("PRO_FI_JOURNAL_DS")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = REPO_ROOT / "data" / "raw_notion.json"
@@ -69,6 +77,9 @@ def extract_prop(props: dict[str, Any], name: str) -> Any:
         return "".join(t.get("plain_text", "") for t in p.get("rich_text", []))
     if kind == "select":
         v = p.get("select")
+        return v.get("name") if v else None
+    if kind == "status":
+        v = p.get("status")
         return v.get("name") if v else None
     if kind == "multi_select":
         return [v["name"] for v in p.get("multi_select", [])]
@@ -124,7 +135,28 @@ def main() -> None:
         "plan_execution": simplify(plan_raw),
         "habitudes": simplify(hab_raw),
         "backlog_vie": simplify(backlog_raw),
+        "finance_monthly": [],
+        "budget_lines": [],
+        "pro_fi_journal": [],
     }
+
+    if FINANCE_MONTHLY_DS:
+        print("Fetching Finance mensuelle...")
+        finance_raw = query_data_source(FINANCE_MONTHLY_DS)
+        bundle["finance_monthly"] = simplify(finance_raw)
+        print(f"Finance mensuelle total: {len(finance_raw)} pages\n")
+
+    if BUDGET_LINES_DS:
+        print("Fetching Lignes budget mensuel...")
+        budget_lines_raw = query_data_source(BUDGET_LINES_DS)
+        bundle["budget_lines"] = simplify(budget_lines_raw)
+        print(f"Lignes budget mensuel total: {len(budget_lines_raw)} pages\n")
+
+    if PRO_FI_JOURNAL_DS:
+        print("Fetching Journal Pro & Financier...")
+        journal_raw = query_data_source(PRO_FI_JOURNAL_DS)
+        bundle["pro_fi_journal"] = simplify(journal_raw)
+        print(f"Journal Pro & Financier total: {len(journal_raw)} pages\n")
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(bundle, indent=2, ensure_ascii=False))

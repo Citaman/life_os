@@ -396,7 +396,7 @@
     {%- set ns.total_fait  = ns.total_fait  + h.fait -%}
     {%- set ns.total_cible = ns.total_cible + h.cible -%}
   {%- endfor -%}
-  {%- set avg_score = (ns.score_sum / pilier.habits_w16|length) | round(0) | int -%}
+  {%- set avg_score = ((ns.score_sum / pilier.habits_w16|length) | round(0) | int) if pilier.habits_w16|length else 0 -%}
 
   {# ── Two-column layout ──────────────────────────────────────────────── #}
   <div class="heatmap-content">

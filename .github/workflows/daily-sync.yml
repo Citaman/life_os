@@ -45,13 +45,26 @@ jobs:
           PLAN_DS: 2c67d9c9-725d-4542-b239-f6df039e6c01
           HABITUDES_DS: a7718a5e-304f-486b-8617-421e5f986aed
           BACKLOG_DS: 7a88c1c8-140c-4536-a1a8-296b518f5094
+          FINANCE_MONTHLY_DS: ab13ce24-a8df-4cc0-baaf-224245ee97c1
+          BUDGET_LINES_DS: b18f28dd-3b24-4aa0-92ff-5e17d14d8ed2
+          PRO_FI_JOURNAL_DS: 17e8dfa9-0029-4a35-9266-fe777163989b
         run: python scripts/fetch_notion.py
 
+      - name: Compute calendar context
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+
+          now = datetime.now(ZoneInfo("Europe/Paris"))
+          quarter = ((now.month - 1) // 3) + 1
+
+          print(f"CURRENT_WEEK=W{now:%V}")
+          print(f"CURRENT_TRIMESTER=T{quarter} {now:%Y}")
+          print(f"CURRENT_DATE={now:%Y-%m-%d}")
+          PY
+
       - name: Transform to snapshots.json
-        env:
-          CURRENT_WEEK: W16
-          CURRENT_TRIMESTER: 'T2 2026'
-          CURRENT_DATE: '2026-04-19'
         run: python scripts/transform.py
 
       - name: Build HTML embeds

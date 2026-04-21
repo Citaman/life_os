@@ -2,15 +2,152 @@
 {% import "_macros.html" as m %}
 {% block title %}Treemap · Depenses mensuelles{% endblock %}
 
+{% block extra_css %}
+.treemap-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+#finance-treemap-svg {
+  display: block;
+  width: 100%;
+  height: 560px;
+}
+.expense-table {
+  margin-top: 20px;
+}
+.expense-table td:last-child,
+.expense-table th:last-child {
+  text-align: right;
+}
+{% endblock %}
+
 {% block content %}
 {{ m.section_header(
     eyebrow="RÉPARTITION DÉPENSES",
-    title="Treemap · 3 200 € nets / mois",
-    subtitle="Visualisation proportionnelle des catégories de dépenses",
+    title="Treemap · Dépenses mensuelles",
+    subtitle="Catégories budgétées du mois actif depuis Notion",
     accent="#1E4D8C"
 ) }}
 
+{% if not snap.finance_current_month %}
 <div class="card">
-  {{ m.todo_placeholder(title="Treemap dépenses mensuelles — à venir", reason="Même source DB Finances nécessaire — voir Sankey revenu. Dès que les catégories de dépenses sont trackées, le treemap se construit depuis leur somme mensuelle.", needed_db="DB Finances · catégorisation dépenses", accent="#1E4D8C") }}
+  {{ m.todo_placeholder(title="Treemap dépenses mensuelles — à venir", reason="Aucune ligne active dans Finance mensuelle / Lignes budget mensuel. Dès qu'un mois actif existe, le treemap se remplit depuis Notion.", needed_db="Finance mensuelle + Lignes budget mensuel", accent="#1E4D8C") }}
 </div>
+{% else %}
+{% set finance = snap.finance_current_month %}
+<div class="card">
+  <div class="treemap-wrap">
+    <svg id="finance-treemap-svg" viewBox="0 0 980 560" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+</div>
+
+<div class="card expense-table">
+  <div class="section-header" style="margin-bottom: 18px; text-align: left;">
+    <div class="eyebrow" style="--accent:#1E4D8C;">DÉTAIL CATÉGORIES</div>
+    <h2 style="font-size: 24px; margin-bottom: 4px;">{{ finance.month_title }} · {{ finance.budgeted_expenses | round | int }} € budgétés</h2>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Catégorie</th>
+        <th>Bloc</th>
+        <th>Montant</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for expense in finance.expense_lines %}
+      <tr>
+        <td>{{ expense.category }}</td>
+        <td>{{ expense.bloc }}</td>
+        <td>{{ expense.amount | round | int }} €</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if snap.finance_current_month %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function () {
+  const finance = {{ snap.finance_current_month | tojson }};
+  const svgEl = document.getElementById("finance-treemap-svg");
+  if (!svgEl) return;
+
+  const root = {
+    name: finance.month_title,
+    children: finance.expense_by_bloc.map((bloc) => ({
+      name: bloc.name,
+      children: bloc.categories.map((cat) => ({
+        name: cat.name,
+        value: cat.amount,
+      })),
+    })),
+  };
+
+  const rect = svgEl.getBoundingClientRect();
+  const width = Math.max(rect.width || 980, 760);
+  const height = 560;
+
+  const svg = d3.select(svgEl)
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", `0 0 ${width} ${height}`);
+
+  svg.selectAll("*").remove();
+
+  const hierarchy = d3.hierarchy(root).sum((d) => d.value || 0).sort((a, b) => (b.value || 0) - (a.value || 0));
+  d3.treemap().size([width, height]).paddingOuter(8).paddingTop(28).paddingInner(4)(hierarchy);
+
+  const color = d3.scaleOrdinal()
+    .domain(root.children.map((d) => d.name))
+    .range(["#1E4D8C", "#4E79A7", "#7BA1C8", "#A8C1DA", "#C9D8E8", "#DCE6F1"]);
+
+  const nodes = svg.selectAll("g")
+    .data(hierarchy.descendants().filter((d) => d.depth > 0))
+    .join("g")
+    .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+
+  nodes.append("rect")
+    .attr("width", (d) => Math.max(0, d.x1 - d.x0))
+    .attr("height", (d) => Math.max(0, d.y1 - d.y0))
+    .attr("rx", 8)
+    .attr("fill", (d) => d.depth === 1 ? color(d.data.name) : color(d.parent.data.name))
+    .attr("fill-opacity", (d) => d.depth === 1 ? 0.9 : 0.74)
+    .attr("stroke", "#FFFFFF")
+    .attr("stroke-width", 2);
+
+  nodes.append("text")
+    .attr("x", 10)
+    .attr("y", 18)
+    .attr("font-family", "Inter, sans-serif")
+    .attr("font-size", (d) => d.depth === 1 ? 13 : 12)
+    .attr("font-weight", (d) => d.depth === 1 ? 800 : 600)
+    .attr("fill", "#FFFFFF")
+    .text((d) => d.data.name)
+    .each(function (d) {
+      const boxWidth = d.x1 - d.x0;
+      if (this.getComputedTextLength() > boxWidth - 20) {
+        d3.select(this).text(d.data.name.slice(0, Math.max(4, Math.floor((boxWidth - 36) / 7))) + "…");
+      }
+    });
+
+  nodes.filter((d) => d.value)
+    .append("text")
+    .attr("x", 10)
+    .attr("y", 38)
+    .attr("font-family", "Inter, sans-serif")
+    .attr("font-size", 12)
+    .attr("font-weight", 600)
+    .attr("fill", "#FFFFFF")
+    .text((d) => `${Math.round(d.value)} €`);
+
+  nodes.append("title")
+    .text((d) => `${d.data.name}\n${Math.round(d.value || 0)} €`);
+})();
+</script>
+{% endif %}
 {% endblock %}
