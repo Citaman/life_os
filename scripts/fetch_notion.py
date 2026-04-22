@@ -38,8 +38,8 @@ BACKLOG_DS = os.environ["BACKLOG_DS"]
 FINANCE_MONTHLY_DS = os.environ.get("FINANCE_MONTHLY_DS")
 BUDGET_LINES_DS = os.environ.get("BUDGET_LINES_DS")
 PRO_FI_JOURNAL_DS = os.environ.get("PRO_FI_JOURNAL_DS")
-TX_ANTHONNY_DS = os.environ.get("TX_ANTHONNY_DS", "97850d4c-fded-47ed-9e08-15031b699023")
-TX_MIRANE_DS = os.environ.get("TX_MIRANE_DS", "6ab9ce1a-fae9-41ff-9d9e-350bbd8d9596")
+TX_ANTHONNY_DS = os.environ.get("TX_ANTHONNY_DS", "b0439790-d16f-40ab-9724-9db3adec398a")
+TX_MIRANE_DS = os.environ.get("TX_MIRANE_DS", "88c44c29-091c-4989-b38b-9b1415eb13ea")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = REPO_ROOT / "data" / "raw_notion.json"

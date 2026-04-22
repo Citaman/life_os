@@ -51,6 +51,8 @@ jobs:
           FINANCE_MONTHLY_DS: ab13ce24-a8df-4cc0-baaf-224245ee97c1
           BUDGET_LINES_DS: b18f28dd-3b24-4aa0-92ff-5e17d14d8ed2
           PRO_FI_JOURNAL_DS: 17e8dfa9-0029-4a35-9266-fe777163989b
+          TX_ANTHONNY_DS: b0439790-d16f-40ab-9724-9db3adec398a
+          TX_MIRANE_DS: 88c44c29-091c-4989-b38b-9b1415eb13ea
         run: python scripts/fetch_notion.py
 
       - name: Compute calendar context

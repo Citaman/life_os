@@ -28,8 +28,8 @@ TOKEN = os.environ.get("NOTION_TOKEN")
 if not TOKEN:
     sys.exit("ERROR: NOTION_TOKEN missing in env.")
 
-ANTHONNY_DS = os.environ.get("TX_ANTHONNY_DS", "97850d4c-fded-47ed-9e08-15031b699023")
-MIRANE_DS = os.environ.get("TX_MIRANE_DS", "6ab9ce1a-fae9-41ff-9d9e-350bbd8d9596")
+ANTHONNY_DS = os.environ.get("TX_ANTHONNY_DS", "b0439790-d16f-40ab-9724-9db3adec398a")
+MIRANE_DS = os.environ.get("TX_MIRANE_DS", "88c44c29-091c-4989-b38b-9b1415eb13ea")
 
 CSV_PATH = Path("/Users/anthonny.olime/Downloads/Data/Financial/processed_2026-04/consolidated_transactions.csv")
 
@@ -93,10 +93,10 @@ def page_payload(data_source_id: str, row: dict[str, str]) -> dict[str, Any]:
             "Date": {"date": {"start": row["date"]}},
             "Mois clé": {"rich_text": text_prop(row["date"][:7])},
             "Montant": {"number": float(row["amount"])},
-            "Direction": {"select": {"name": row["direction"]}},
+            "Direction": {"rich_text": text_prop(row.get("direction", ""))},
             "Marchand": {"rich_text": text_prop(row.get("merchant", ""))},
-            "Catégorie": {"select": {"name": row.get("category", "Uncategorized")}},
-            "Sous-catégorie": {"select": {"name": row.get("subcategory", "Unknown")}},
+            "Catégorie": {"rich_text": text_prop(row.get("category", "Uncategorized"))},
+            "Sous-catégorie": {"rich_text": text_prop(row.get("subcategory", "Unknown"))},
             "Récurrent": {"checkbox": recurring},
             "Interne": {"checkbox": internal},
             "Auto catégorisé": {"checkbox": auto},
