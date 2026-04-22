@@ -1,0 +1,227 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ pilier.name }} — Évolution trimestrielle{% endblock %}
+
+{% block extra_css %}
+.chart-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 340px;
+}
+
+.chart-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+@media (max-width: 768px) {
+  .chart-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+.meta-card {
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+}
+.meta-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.meta-value {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.meta-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.chart-note {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+{% endblock %}
+
+{% block content %}
+{% set weeks = snap.historic_weekly_12w.weeks %}
+{% set values = pilier.habit_completion_12w %}
+{% set ns = namespace(real_points=0, latest=none, latest_week=none, best=none, best_week=none, average=none) %}
+
+{% for value in values %}
+  {% if value is not none %}
+    {% set ns.real_points = ns.real_points + 1 %}
+    {% set ns.latest = value %}
+    {% set ns.latest_week = weeks[loop.index0] if weeks|length > loop.index0 else none %}
+    {% if ns.best is none or value > ns.best %}
+      {% set ns.best = value %}
+      {% set ns.best_week = weeks[loop.index0] if weeks|length > loop.index0 else none %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if ns.real_points > 0 %}
+  {% set avg_values = values | select("ne", none) | list %}
+  {% set ns.average = ((avg_values | sum) / (avg_values | length)) | round(0) | int %}
+{% endif %}
+
+{{ m.section_header(
+  eyebrow=pilier.name,
+  title="Évolution trimestrielle",
+  subtitle="Habit completion hebdomadaire · fenêtre glissante 12 semaines · semaine active " ~ (pilier.habits_week_used or snap.active_habits_week),
+  accent=pilier.accent
+) }}
+
+{% if ns.real_points == 0 %}
+<div class="card">
+  {% call m.todo_placeholder(
+    title="Aucune donnée habitudes exploitable",
+    reason="La série trimestrielle de ce pilier est vide. L'embed reste prêt et se remplira dès qu'une semaine Habitudes sera saisie.",
+    needed_db="DB Habitudes",
+    accent=pilier.accent
+  ) %}
+    <p>Semaine demandée : {{ pilier.habits_week_requested or snap.current_week }}.</p>
+  {% endcall %}
+</div>
+{% else %}
+<div class="card">
+  <div class="chart-canvas-wrapper">
+    <canvas id="areaPilierChart"></canvas>
+  </div>
+  <div class="chart-note">
+    {% if pilier.habits_week_is_fallback %}
+    Affichage basé sur {{ pilier.habits_week_used }} car {{ pilier.habits_week_requested }} ne contient aucune habitude.
+    {% else %}
+    Affichage basé sur la semaine active {{ pilier.habits_week_used }}.
+    {% endif %}
+  </div>
+</div>
+
+<div class="chart-meta">
+  <div class="meta-card">
+    <div class="meta-label">Dernier score</div>
+    <div class="meta-value" style="color: {{ pilier.accent }};">{{ ns.latest }}%</div>
+    <div class="meta-sub">{{ ns.latest_week or pilier.habits_week_used }}</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">Pic trimestriel</div>
+    <div class="meta-value">{{ ns.best }}%</div>
+    <div class="meta-sub">{{ ns.best_week or "—" }}</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">Moyenne 12 semaines</div>
+    <div class="meta-value">{{ ns.average }}%</div>
+    <div class="meta-sub">{{ ns.real_points }} semaine{{ "s" if ns.real_points > 1 else "" }} renseignée{{ "s" if ns.real_points > 1 else "" }}</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Chart === 'undefined') return;
+
+  var canvas = document.getElementById('areaPilierChart');
+  if (!canvas) return;
+
+  var ctx = canvas.getContext('2d');
+  var labels = {{ weeks | tojson }};
+  var data = {{ values | tojson }};
+  var accent = {{ pilier.accent | tojson }};
+
+  function hexToRgba(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16);
+    var g = parseInt(hex.slice(3, 5), 16);
+    var b = parseInt(hex.slice(5, 7), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: {{ pilier.name | tojson }},
+        data: data,
+        borderColor: accent,
+        backgroundColor: hexToRgba(accent, 0.14),
+        fill: true,
+        tension: 0.32,
+        spanGaps: false,
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        pointBackgroundColor: accent,
+        pointBorderColor: '#FFFFFF',
+        pointBorderWidth: 1.5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E7EB',
+          borderWidth: 1,
+          titleColor: '#1A1A1A',
+          bodyColor: '#6B7280',
+          padding: 10,
+          callbacks: {
+            label: function (item) {
+              if (item.parsed.y === null) return ' pas de donnée';
+              return ' ' + item.parsed.y + '%';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            color: '#F3F4F6',
+            drawBorder: false
+          },
+          ticks: {
+            color: '#6B7280',
+            font: { family: 'Inter', size: 11 }
+          },
+          border: { display: false }
+        },
+        y: {
+          min: 0,
+          max: 100,
+          grid: {
+            color: '#F3F4F6',
+            drawBorder: false
+          },
+          ticks: {
+            stepSize: 20,
+            color: '#6B7280',
+            font: { family: 'Inter', size: 11 },
+            callback: function (value) { return value + '%'; }
+          },
+          border: { display: false }
+        }
+      }
+    }
+  });
+});
+</script>
+{% endif %}
+{% endblock %}

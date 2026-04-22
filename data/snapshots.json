@@ -1,14 +1,25 @@
 {
-  "generated_at": "2026-04-22T07:39:40.700198Z",
+  "generated_at": "2026-04-22T08:51:53.789326Z",
   "current_week": "W17",
+  "active_habits_week": "W16",
+  "latest_habits_week": "W16",
+  "habits_week_context": {
+    "requested_week": "W17",
+    "active_week": "W16",
+    "latest_available_week": "W16",
+    "used_fallback": true,
+    "requested_row_count": 0,
+    "active_row_count": 9
+  },
   "current_trimester": "T2 2026",
   "current_date": "2026-04-22",
   "today_fr": "mercredi 22 avril 2026",
   "badge_week": {
-    "status": null,
-    "score": null,
-    "total_fait": 0,
-    "total_cible": 0,
+    "week": "W16",
+    "status": "JAUNE",
+    "score": 66,
+    "total_fait": 35,
+    "total_cible": 53,
     "streak_weeks_vert": null
   },
   "tasks_today": {
@@ -79,6 +90,7 @@
   "time_week": null,
   "historic_weekly_12w": {
     "weeks": [
+      "W05",
       "W06",
       "W07",
       "W08",
@@ -89,8 +101,7 @@
       "W13",
       "W14",
       "W15",
-      "W16",
-      "W17"
+      "W16"
     ],
     "series": {
       "Intérieur": [
@@ -104,8 +115,8 @@
         null,
         null,
         null,
-        68,
-        null
+        null,
+        68
       ],
       "Famille": [
         null,
@@ -118,8 +129,8 @@
         null,
         null,
         null,
-        67,
-        null
+        null,
+        67
       ],
       "Pro & Financier": [
         null,
@@ -132,8 +143,8 @@
         null,
         null,
         null,
-        57,
-        null
+        null,
+        57
       ],
       "Création": [
         null,
@@ -146,8 +157,8 @@
         null,
         null,
         null,
-        67,
-        null
+        null,
+        67
       ],
       "Spirituel": [
         null,
@@ -160,8 +171,8 @@
         null,
         null,
         null,
-        67,
-        null
+        null,
+        67
       ]
     }
   },
@@ -3083,7 +3094,7 @@
       "tint_light": "#D4E5DB",
       "progress_avg": 15,
       "radar": {
-        "actuel": null,
+        "actuel": 68,
         "cible": null,
         "gap": null
       },
@@ -3491,7 +3502,56 @@
           "deadline": null
         }
       ],
-      "habits_w16": [],
+      "habits_week_requested": "W17",
+      "habits_week_used": "W16",
+      "habits_week_is_fallback": true,
+      "habits_w16": [
+        {
+          "name": "Séance sport",
+          "cible": 5,
+          "days": [
+            false,
+            false,
+            true,
+            true,
+            true,
+            false,
+            false
+          ],
+          "fait": 3,
+          "score_pct": 60
+        },
+        {
+          "name": "Hydratation 2 L",
+          "cible": 7,
+          "days": [
+            false,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true
+          ],
+          "fait": 5,
+          "score_pct": 71
+        },
+        {
+          "name": "Coucher 22 h 30",
+          "cible": 7,
+          "days": [
+            false,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true
+          ],
+          "fait": 5,
+          "score_pct": 71
+        }
+      ],
       "habit_completion_12w": [
         null,
         null,
@@ -3503,8 +3563,8 @@
         null,
         null,
         null,
-        68,
-        null
+        null,
+        68
       ],
       "time_pilier": null,
       "roadmap": [
@@ -3565,7 +3625,7 @@
       "tint_light": "#F2D0D0",
       "progress_avg": 0,
       "radar": {
-        "actuel": null,
+        "actuel": 67,
         "cible": null,
         "gap": null
       },
@@ -3723,7 +3783,26 @@
           "deadline": null
         }
       ],
-      "habits_w16": [],
+      "habits_week_requested": "W17",
+      "habits_week_used": "W16",
+      "habits_week_is_fallback": true,
+      "habits_w16": [
+        {
+          "name": "Lecture avec James",
+          "cible": 6,
+          "days": [
+            false,
+            true,
+            true,
+            false,
+            true,
+            true,
+            false
+          ],
+          "fait": 4,
+          "score_pct": 67
+        }
+      ],
       "habit_completion_12w": [
         null,
         null,
@@ -3735,8 +3814,8 @@
         null,
         null,
         null,
-        67,
-        null
+        null,
+        67
       ],
       "time_pilier": null,
       "roadmap": [
@@ -3797,7 +3876,7 @@
       "tint_light": "#C9D8E8",
       "progress_avg": 0,
       "radar": {
-        "actuel": null,
+        "actuel": 57,
         "cible": null,
         "gap": null
       },
@@ -4105,7 +4184,26 @@
           "deadline": null
         }
       ],
-      "habits_w16": [],
+      "habits_week_requested": "W17",
+      "habits_week_used": "W16",
+      "habits_week_is_fallback": true,
+      "habits_w16": [
+        {
+          "name": "Budget 10 min",
+          "cible": 7,
+          "days": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            false,
+            false
+          ],
+          "fait": 4,
+          "score_pct": 57
+        }
+      ],
       "habit_completion_12w": [
         null,
         null,
@@ -4117,8 +4215,8 @@
         null,
         null,
         null,
-        57,
-        null
+        null,
+        57
       ],
       "time_pilier": null,
       "roadmap": [
@@ -4197,7 +4295,7 @@
       "tint_light": "#DDCEE7",
       "progress_avg": 0,
       "radar": {
-        "actuel": null,
+        "actuel": 67,
         "cible": null,
         "gap": null
       },
@@ -5535,7 +5633,41 @@
           "deadline": null
         }
       ],
-      "habits_w16": [],
+      "habits_week_requested": "W17",
+      "habits_week_used": "W16",
+      "habits_week_is_fallback": true,
+      "habits_w16": [
+        {
+          "name": "Maths 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            true,
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "fait": 4,
+          "score_pct": 67
+        },
+        {
+          "name": "Micrograd 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            true,
+            false,
+            true,
+            true,
+            true,
+            false
+          ],
+          "fait": 4,
+          "score_pct": 67
+        }
+      ],
       "habit_completion_12w": [
         null,
         null,
@@ -5547,8 +5679,8 @@
         null,
         null,
         null,
-        67,
-        null
+        null,
+        67
       ],
       "time_pilier": null,
       "roadmap": [
@@ -5699,7 +5831,7 @@
       "tint_light": "#ECD9A8",
       "progress_avg": 0,
       "radar": {
-        "actuel": null,
+        "actuel": 67,
         "cible": null,
         "gap": null
       },
@@ -5937,7 +6069,41 @@
           "deadline": null
         }
       ],
-      "habits_w16": [],
+      "habits_week_requested": "W17",
+      "habits_week_used": "W16",
+      "habits_week_is_fallback": true,
+      "habits_w16": [
+        {
+          "name": "Prédication",
+          "cible": 2,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          "fait": 1,
+          "score_pct": 50
+        },
+        {
+          "name": "Étude personnelle",
+          "cible": 7,
+          "days": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            false,
+            true
+          ],
+          "fait": 5,
+          "score_pct": 71
+        }
+      ],
       "habit_completion_12w": [
         null,
         null,
@@ -5949,8 +6115,8 @@
         null,
         null,
         null,
-        67,
-        null
+        null,
+        67
       ],
       "time_pilier": null,
       "roadmap": [
@@ -6012,11 +6178,11 @@
       "accent_light": "#DBEAFE"
     },
     "dash-badge-week": {
-      "eyebrow": "BADGE SEMAINE W17",
-      "value": "—",
-      "sub": "aucune habitude saisie",
-      "accent": "#6B7280",
-      "accent_light": "#F3F4F6"
+      "eyebrow": "BADGE SEMAINE W16",
+      "value": "66 %",
+      "sub": "JAUNE · 35 / 53 habitudes tenues",
+      "accent": "#F59E0B",
+      "accent_light": "#FEF3C7"
     },
     "dash-trimester-t2": {
       "eyebrow": "TRIMESTRE T2 2026",
@@ -6073,9 +6239,9 @@
       "accent_light": "#D4E5DB"
     },
     "interieur-habits": {
-      "eyebrow": "HABITUDES W17",
-      "value": "—",
-      "sub": "aucune habitude W16",
+      "eyebrow": "HABITUDES W16",
+      "value": "68 %",
+      "sub": "13 / 19 cibles semaine",
       "accent": "#2F7D5B",
       "accent_light": "#D4E5DB"
     },
@@ -6094,9 +6260,9 @@
       "accent_light": "#F2D0D0"
     },
     "famille-habits": {
-      "eyebrow": "HABITUDES W17",
-      "value": "—",
-      "sub": "aucune habitude W16",
+      "eyebrow": "HABITUDES W16",
+      "value": "67 %",
+      "sub": "4 / 6 cibles semaine",
       "accent": "#C84B4B",
       "accent_light": "#F2D0D0"
     },
@@ -6115,9 +6281,9 @@
       "accent_light": "#C9D8E8"
     },
     "pro-fi-habits": {
-      "eyebrow": "HABITUDES W17",
-      "value": "—",
-      "sub": "aucune habitude W16",
+      "eyebrow": "HABITUDES W16",
+      "value": "57 %",
+      "sub": "4 / 7 cibles semaine",
       "accent": "#1E4D8C",
       "accent_light": "#C9D8E8"
     },
@@ -6136,9 +6302,9 @@
       "accent_light": "#DDCEE7"
     },
     "creation-habits": {
-      "eyebrow": "HABITUDES W17",
-      "value": "—",
-      "sub": "aucune habitude W16",
+      "eyebrow": "HABITUDES W16",
+      "value": "67 %",
+      "sub": "8 / 12 cibles semaine",
       "accent": "#6B3FA0",
       "accent_light": "#DDCEE7"
     },
@@ -6157,9 +6323,9 @@
       "accent_light": "#ECD9A8"
     },
     "spirituel-habits": {
-      "eyebrow": "HABITUDES W17",
-      "value": "—",
-      "sub": "aucune habitude W16",
+      "eyebrow": "HABITUDES W16",
+      "value": "67 %",
+      "sub": "6 / 9 cibles semaine",
       "accent": "#B8860B",
       "accent_light": "#ECD9A8"
     },

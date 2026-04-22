@@ -21,6 +21,7 @@ REQUIRED_HTML = [
     "kpi-pro-fi-signature.html",
     "sankey-revenu-profi.html",
     "treemap-depenses-profi.html",
+    "area-pilier-pro-fi.html",
     "treemap-transactions-account-anthonny.html",
     "history-transactions-account-anthonny.html",
     "treemap-transactions-account-mirane.html",
@@ -62,6 +63,21 @@ def main() -> None:
         fail(f"Missing {DIST_PATH}")
 
     snapshots = json.loads(SNAPSHOTS_PATH.read_text())
+    habits_context = snapshots.get("habits_week_context")
+    if not habits_context:
+        fail("habits_week_context missing from snapshots.json")
+    for key in ("requested_week", "active_week", "latest_available_week", "used_fallback", "requested_row_count", "active_row_count"):
+        if key not in habits_context:
+            fail(f"habits_week_context missing key: {key}")
+
+    active_habits_week = snapshots.get("active_habits_week")
+    if not active_habits_week:
+        fail("active_habits_week missing from snapshots.json")
+    if habits_context["active_week"] != active_habits_week:
+        fail("active_habits_week does not match habits_week_context.active_week")
+    if habits_context["used_fallback"] and habits_context["active_week"] != habits_context["latest_available_week"]:
+        fail("Habits fallback should resolve to latest_available_week")
+
     finance = snapshots.get("finance_current_month")
     if not finance:
         fail("finance_current_month missing from snapshots.json")
@@ -111,7 +127,32 @@ def main() -> None:
         if account["latest_month"] not in html:
             fail(f"treemap-transactions-account-{account_slug}.html missing latest month")
 
+    pro_fi = snapshots.get("piliers", {}).get("pro_fi")
+    if not pro_fi:
+        fail("piliers.pro_fi missing from snapshots.json")
+    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_w16", "habit_completion_12w"):
+        if key not in pro_fi:
+            fail(f"piliers.pro_fi missing key: {key}")
+
+    habits_kpi = snapshots.get("kpi_catalog", {}).get("pro-fi-habits")
+    if not habits_kpi:
+        fail("kpi_catalog.pro-fi-habits missing from snapshots.json")
+    if active_habits_week not in str(habits_kpi.get("eyebrow", "")):
+        fail("kpi_catalog.pro-fi-habits eyebrow does not mention active_habits_week")
+
+    area_pilier_html = (DIST_PATH / "area-pilier-pro-fi.html").read_text()
+    if "Pro &amp; Financier" not in area_pilier_html and "Pro & Financier" not in area_pilier_html:
+        fail("area-pilier-pro-fi.html missing Pro & Financier context")
+    if active_habits_week not in area_pilier_html:
+        fail("area-pilier-pro-fi.html missing active habits week label")
+
     print("verify_build.py OK")
+    print(
+        "  habits:",
+        f"requested={habits_context['requested_week']}",
+        f"active={habits_context['active_week']}",
+        f"fallback={habits_context['used_fallback']}",
+    )
     print(
         "  finance:",
         finance["month_title"],

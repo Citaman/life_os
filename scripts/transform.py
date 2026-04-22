@@ -226,6 +226,51 @@ def habits_of(hab_pages: list[dict[str, Any]], pilier_name: str, week: str) -> l
     return out
 
 
+def parse_week_number(week: str | None) -> int | None:
+    if not isinstance(week, str):
+        return None
+    week = week.strip().upper()
+    if not week.startswith("W"):
+        return None
+    try:
+        return int(week[1:])
+    except ValueError:
+        return None
+
+
+def latest_habits_week(hab_pages: list[dict[str, Any]]) -> str | None:
+    weeks = {str(h.get("Semaine")).strip().upper() for h in hab_pages if parse_week_number(h.get("Semaine")) is not None}
+    if not weeks:
+        return None
+    return max(weeks, key=lambda week: parse_week_number(week) or -1)
+
+
+def resolve_habits_week(hab_pages: list[dict[str, Any]], requested_week: str) -> dict[str, Any]:
+    requested = requested_week.strip().upper()
+    latest = latest_habits_week(hab_pages)
+    requested_rows = [h for h in hab_pages if str(h.get("Semaine") or "").strip().upper() == requested]
+    active = requested
+    used_fallback = False
+    if not requested_rows and latest:
+        active = latest
+        used_fallback = latest != requested
+    active_rows = [h for h in hab_pages if str(h.get("Semaine") or "").strip().upper() == active]
+    return {
+        "requested_week": requested,
+        "active_week": active,
+        "latest_available_week": latest,
+        "used_fallback": used_fallback,
+        "requested_row_count": len(requested_rows),
+        "active_row_count": len(active_rows),
+    }
+
+
+def build_historic_weeks(anchor_week: str | None, span: int = 12) -> list[str]:
+    anchor_num = parse_week_number(anchor_week) or 16
+    start_num = max(1, anchor_num - span + 1)
+    return [f"W{week_num:02d}" for week_num in range(start_num, anchor_num + 1)]
+
+
 def historic_weekly_completion(hab_pages: list[dict[str, Any]], pilier_name: str, weeks: list[str]) -> list[int | None]:
     """For each week in `weeks`, return average habit completion % for the pilier.
 
@@ -556,19 +601,16 @@ def main() -> None:
         f"+ {len(transactions_anthonny)} tx Anthonny + {len(transactions_mirane)} tx Mirane."
     )
 
-    # Build historic weeks list (12 weeks up to current)
-    try:
-        current_w_num = int(CURRENT_WEEK.lstrip("W"))
-    except ValueError:
-        current_w_num = 16
-    historic_weeks = [f"W{w:02d}" for w in range(max(1, current_w_num - 11), current_w_num + 1)]
+    habits_week_context = resolve_habits_week(hab, CURRENT_WEEK)
+    active_habits_week = habits_week_context["active_week"]
+    historic_weeks = build_historic_weeks(active_habits_week, span=12)
 
     piliers_out: dict[str, dict[str, Any]] = {}
     for p in PILIERS:
         name = p["name"]
         active = achievements_of(plan, name)
         sous_achs = sous_achievements_of(plan, name)
-        habits_week = habits_of(hab, name, CURRENT_WEEK)
+        habits_week = habits_of(hab, name, active_habits_week)
         roadmap = roadmap_of(plan, name)
         progress_avg = compute_pilier_progress(plan, name)
 
@@ -585,6 +627,9 @@ def main() -> None:
             },
             "achievements_active": active,
             "sous_achievements": sous_achs,
+            "habits_week_requested": habits_week_context["requested_week"],
+            "habits_week_used": active_habits_week,
+            "habits_week_is_fallback": habits_week_context["used_fallback"],
             "habits_w16": habits_week,
             "habit_completion_12w": hist_series,  # list of int|null
             "time_pilier": None,  # TODO: DB Time Tracker
@@ -605,7 +650,7 @@ def main() -> None:
     tlist_done = sum(1 for t in tlist if t.get("status") == "Complété")
 
     # Overall habit score current week
-    all_habits_w16 = [h for h in hab if h.get("Semaine") == CURRENT_WEEK]
+    all_habits_w16 = [h for h in hab if str(h.get("Semaine") or "").strip().upper() == active_habits_week]
     total_cible = sum(int(h.get("Cible /sem") or 0) for h in all_habits_w16)
     total_fait = sum(int(h.get("Fait") or 0) for h in all_habits_w16)
     if total_cible == 0:
@@ -627,10 +672,14 @@ def main() -> None:
     snapshots = {
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "current_week": CURRENT_WEEK,
+        "active_habits_week": active_habits_week,
+        "latest_habits_week": habits_week_context["latest_available_week"],
+        "habits_week_context": habits_week_context,
         "current_trimester": CURRENT_TRIMESTER,
         "current_date": CURRENT_DATE,
         "today_fr": today_fr(CURRENT_DATE),
         "badge_week": {
+            "week": active_habits_week,
             "status": badge_status,  # str or null
             "score": badge_pct,      # int or null
             "total_fait": total_fait,
@@ -675,7 +724,7 @@ def main() -> None:
             "accent_light": "#DBEAFE",
         },
         "dash-badge-week": {
-            "eyebrow": f"BADGE SEMAINE {snapshots['current_week']}",
+            "eyebrow": f"BADGE SEMAINE {snapshots['active_habits_week']}",
             "value": f"{snapshots['badge_week']['score']} %" if snapshots['badge_week']['score'] is not None else "—",
             "sub": f"{snapshots['badge_week']['status']} · {snapshots['badge_week']['total_fait']} / {snapshots['badge_week']['total_cible']} habitudes tenues" if snapshots['badge_week']['status'] else "aucune habitude saisie",
             "accent": "#10B981" if snapshots['badge_week'].get('status') == 'VERT' else "#F59E0B" if snapshots['badge_week'].get('status') == 'JAUNE' else "#EF4444" if snapshots['badge_week'].get('status') == 'ROUGE' else "#6B7280",
@@ -718,9 +767,9 @@ def main() -> None:
             "accent_light": p['tint_light'],
         }
         kpi_catalog[f"{slug}-habits"] = {
-            "eyebrow": f"HABITUDES {snapshots['current_week']}",
+            "eyebrow": f"HABITUDES {p.get('habits_week_used') or snapshots['active_habits_week']}",
             "value": f"{habit_pct} %" if habit_pct is not None else "—",
-            "sub": f"{total_fait} / {total_cible} cibles semaine" if total_cible else "aucune habitude W16",
+            "sub": f"{total_fait} / {total_cible} cibles semaine" if total_cible else f"aucune habitude {p.get('habits_week_used') or snapshots['active_habits_week']}",
             "accent": p['accent'],
             "accent_light": p['tint_light'],
         }
@@ -756,7 +805,16 @@ def main() -> None:
     print(f"  · sous-achievements actifs: {sous_en_cours}")
     print(f"  · sous-achievements done: {sous_done}")
     print(f"  · tasks today (DB date={CURRENT_DATE}): {tlist_done}/{len(tlist)}")
-    print(f"  · badge {CURRENT_WEEK}: {badge_status} {badge_pct}%" if badge_pct is not None else f"  · badge {CURRENT_WEEK}: null")
+    if habits_week_context["used_fallback"]:
+        print(
+            f"  · habits week fallback: {habits_week_context['requested_week']} -> "
+            f"{habits_week_context['active_week']} ({habits_week_context['active_row_count']} rows)"
+        )
+    print(
+        f"  · badge {active_habits_week}: {badge_status} {badge_pct}%"
+        if badge_pct is not None
+        else f"  · badge {active_habits_week}: null"
+    )
     print(f"  · historic weeks with habit data: {sum(1 for v in piliers_out['interieur']['habit_completion_12w'] if v is not None)}/12 Intérieur")
 
 
