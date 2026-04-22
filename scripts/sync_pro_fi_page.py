@@ -39,6 +39,8 @@ def block_text(block: dict[str, Any]) -> str:
     body = block.get(t) or {}
     if isinstance(body, dict) and "rich_text" in body:
         return "".join(r.get("plain_text", "") for r in body["rich_text"])
+    if t == "child_database":
+        return body.get("title", "")
     return ""
 
 
@@ -123,24 +125,29 @@ def find_section_range(blocks: list[dict[str, Any]], heading_text: str) -> tuple
     return start, end
 
 
-def section_matches(blocks: list[dict[str, Any]], heading_text: str, expected_urls: list[str]) -> bool:
+def section_matches(blocks: list[dict[str, Any]], heading_text: str, expected_urls: list[str], expected_intro: str | None = None) -> bool:
     start, end = find_section_range(blocks, heading_text)
     urls = []
+    intro = None
     for block in blocks[start + 1 : end]:
+        if intro is None and block["type"] == "paragraph":
+            intro = block_text(block).strip()
         if block["type"] == "embed":
             url = block.get("embed", {}).get("url")
             if url:
                 urls.append(url)
+    if expected_intro is not None and intro != expected_intro:
+        return False
     return urls == expected_urls
 
 
-def replace_section(heading_text: str, new_children: list[dict[str, Any]], expected_urls: list[str]) -> bool:
+def replace_section(heading_text: str, new_children: list[dict[str, Any]], expected_urls: list[str], expected_intro: str | None = None) -> bool:
     before = top_level_blocks()
     backstage_idx, backstage_block = find_backstage_toggle(before)
     start, end = find_section_range(before, heading_text)
     if start >= backstage_idx:
         raise RuntimeError(f"Refusing to mutate section beyond backstage boundary: {heading_text}")
-    if section_matches(before, heading_text, expected_urls):
+    if section_matches(before, heading_text, expected_urls, expected_intro):
         print(f"  · {heading_text}: already up to date")
         return False
 
@@ -165,6 +172,20 @@ def replace_section(heading_text: str, new_children: list[dict[str, Any]], expec
     return True
 
 
+def cleanup_backstage_placeholder() -> bool:
+    blocks = top_level_blocks()
+    _, backstage = find_backstage_toggle(blocks)
+    children = list_children(backstage["id"])
+    for block in children:
+        if "New database" in block_text(block):
+            delete_block(block["id"])
+            time.sleep(0.25)
+            print("  ✓ Backstage: removed 'New database' placeholder")
+            return True
+    print("  · Backstage: no 'New database' placeholder found")
+    return False
+
+
 def embed_url(slug: str) -> str:
     return f"{BASE_URL}/{slug}.html"
 
@@ -172,6 +193,7 @@ def embed_url(slug: str) -> str:
 SECTION_SPECS: list[dict[str, Any]] = [
     {
         "heading": "Achievements actifs",
+        "intro": "Lecture V8 du pilier: objectifs structurants, paliers associés et tâches reliées de la semaine courante.",
         "expected_urls": [embed_url("achievements-pilier-pro-fi")],
         "children": [
             make_paragraph("Lecture V8 du pilier: objectifs structurants, paliers associés et tâches reliées de la semaine courante."),
@@ -181,6 +203,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Sous-achievements & paliers",
+        "intro": "Jalons consolidés et critères mesurables du pilier, sans passer par la vue base brute.",
         "expected_urls": [embed_url("sous-achievements-pilier-pro-fi")],
         "children": [
             make_paragraph("Jalons consolidés et critères mesurables du pilier, sans passer par la vue base brute."),
@@ -190,6 +213,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Tâches de la semaine",
+        "intro": "Semaine courante: tâches datées restantes du pilier avec vue liste + répartition par jour.",
         "expected_urls": [embed_url("tasks-week-pilier-pro-fi")],
         "children": [
             make_paragraph("Semaine courante: tâches datées restantes du pilier avec vue liste + répartition par jour."),
@@ -199,6 +223,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Habitudes du pilier",
+        "intro": "Régularité du pilier sur 4 semaines avec détail de la semaine active et fallback propre si la semaine courante est incomplète.",
         "expected_urls": [embed_url("heatmap-habits-pro-fi")],
         "children": [
             make_paragraph("Régularité du pilier sur 4 semaines avec détail de la semaine active et fallback propre si la semaine courante est incomplète."),
@@ -208,6 +233,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Évolution trimestre",
+        "intro": "Progression hebdomadaire du pilier sur le trimestre utile, avec projection visible sans ouvrir le repo.",
         "expected_urls": [embed_url("area-pilier-pro-fi")],
         "children": [
             make_paragraph("Progression hebdomadaire du pilier sur le trimestre utile, avec projection visible sans ouvrir le repo."),
@@ -217,6 +243,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Flux de temps pilier",
+        "intro": "Lecture temps hebdomadaire du pilier Pro & Financier, branchée sur la baseline live du repo tant que le time tracker n'est pas encore connecté.",
         "expected_urls": [embed_url("sankey-pilier-pro-fi")],
         "children": [
             make_paragraph("Lecture temps hebdomadaire du pilier Pro & Financier, branchée sur la baseline live du repo tant que le time tracker n'est pas encore connecté."),
@@ -226,6 +253,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Dépendances — Graphe",
+        "intro": "Arbre de dépendances stable entre achievements, sous-achievements et tâches du pilier.",
         "expected_urls": [embed_url("tree-deps-pro-fi")],
         "children": [
             make_paragraph("Arbre de dépendances stable entre achievements, sous-achievements et tâches du pilier."),
@@ -235,6 +263,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Sankey revenu + Treemap dépenses",
+        "intro": "Lecture budgétaire du mois actif: répartition du revenu foyer, puis poids relatif des postes budgétés. Les dépenses réelles par compte restent sur la page dédiée transactions.",
         "expected_urls": [embed_url("sankey-revenu-profi"), embed_url("treemap-depenses-profi")],
         "children": [
             make_paragraph("Lecture budgétaire du mois actif: répartition du revenu foyer, puis poids relatif des postes budgétés. Les dépenses réelles par compte restent sur la page dédiée transactions."),
@@ -246,6 +275,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Roadmap Pro & Financier 2026–2027",
+        "intro": "Roadmap séquencée du pilier avec marqueur Aujourd'hui, sans retomber sur une simple timeline Notion brute.",
         "expected_urls": [embed_url("gantt-pilier-pro-fi")],
         "children": [
             make_paragraph("Roadmap séquencée du pilier avec marqueur Aujourd'hui, sans retomber sur une simple timeline Notion brute."),
@@ -255,6 +285,7 @@ SECTION_SPECS: list[dict[str, Any]] = [
     },
     {
         "heading": "Journal du pilier",
+        "intro": "Entrées récentes du journal rendues en timeline lisible, pendant que la base source reste dans le backstage.",
         "expected_urls": [embed_url("journal-pilier-pro-fi")],
         "children": [
             make_paragraph("Entrées récentes du journal rendues en timeline lisible, pendant que la base source reste dans le backstage."),
@@ -271,7 +302,8 @@ def main() -> None:
     print("→ Sync Pro & Financier")
     changed = 0
     for spec in SECTION_SPECS:
-        changed += int(replace_section(spec["heading"], spec["children"], spec["expected_urls"]))
+        changed += int(replace_section(spec["heading"], spec["children"], spec["expected_urls"], spec.get("intro")))
+    changed += int(cleanup_backstage_placeholder())
     print(f"\nDone. {changed} section(s) changed.")
 
 
