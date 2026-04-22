@@ -21,6 +21,10 @@ REQUIRED_HTML = [
     "kpi-pro-fi-signature.html",
     "sankey-revenu-profi.html",
     "treemap-depenses-profi.html",
+    "treemap-transactions-account-anthonny.html",
+    "history-transactions-account-anthonny.html",
+    "treemap-transactions-account-mirane.html",
+    "history-transactions-account-mirane.html",
 ]
 
 REQUIRED_FINANCE_KEYS = [
@@ -32,6 +36,17 @@ REQUIRED_FINANCE_KEYS = [
     "estimated_end_balance",
     "income_lines",
     "expense_lines",
+]
+
+REQUIRED_TX_KEYS = [
+    "account_name",
+    "transaction_count",
+    "months",
+    "latest_month",
+    "latest_month_totals",
+    "expense_breakdowns_by_month",
+    "monthly_history",
+    "category_history",
 ]
 
 
@@ -65,10 +80,36 @@ def main() -> None:
         if not path.exists():
             fail(f"Missing generated HTML: {path}")
 
+    transactions = snapshots.get("transactions_accounts")
+    if not transactions:
+        fail("transactions_accounts missing from snapshots.json")
+
+    for account_slug in ("anthonny", "mirane"):
+        account = transactions.get(account_slug)
+        if not account:
+            fail(f"transactions_accounts.{account_slug} missing from snapshots.json")
+        for key in REQUIRED_TX_KEYS:
+            if key not in account:
+                fail(f"transactions_accounts.{account_slug} missing key: {key}")
+        if not account["months"]:
+            fail(f"transactions_accounts.{account_slug}.months is empty")
+        if not account["monthly_history"]:
+            fail(f"transactions_accounts.{account_slug}.monthly_history is empty")
+        if not account["expense_breakdowns_by_month"]:
+            fail(f"transactions_accounts.{account_slug}.expense_breakdowns_by_month is empty")
+
     sankey_html = (DIST_PATH / "sankey-revenu-profi.html").read_text()
     month_title = str(finance["month_title"])
     if month_title not in sankey_html:
         fail("sankey-revenu-profi.html does not contain active month title")
+
+    for account_slug in ("anthonny", "mirane"):
+        account = transactions[account_slug]
+        html = (DIST_PATH / f"treemap-transactions-account-{account_slug}.html").read_text()
+        if account["account_name"] not in html:
+            fail(f"treemap-transactions-account-{account_slug}.html missing account name")
+        if account["latest_month"] not in html:
+            fail(f"treemap-transactions-account-{account_slug}.html missing latest month")
 
     print("verify_build.py OK")
     print(
@@ -78,6 +119,15 @@ def main() -> None:
         f"dépenses={finance['budgeted_expenses']}",
         f"résultat={finance['projected_result']}",
     )
+    for account_slug in ("anthonny", "mirane"):
+        account = transactions[account_slug]
+        print(
+            "  transactions:",
+            account["account_name"],
+            f"mois={len(account['months'])}",
+            f"latest={account['latest_month']}",
+            f"rows={account['transaction_count']}",
+        )
 
 
 if __name__ == "__main__":

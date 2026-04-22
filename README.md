@@ -5,19 +5,21 @@ Personal Life OS with Notion as source of truth + GitHub Pages as visualization 
 ## Architecture
 
 ```
-NOTION (6 DBs · édition + source de vérité)
+NOTION (8 DBs · édition + source de vérité)
   ├─ Plan d'exécution  (achievements · sous-achievements · tâches)
   ├─ Habitudes         (9 habitudes W-weekly · checkboxes L-D + formula Fait)
-  └─ Backlog Vie       (registre intentions tous piliers · 6 horizons)
+  ├─ Backlog Vie       (registre intentions tous piliers · 6 horizons)
   ├─ Finance mensuelle (synthèse mensuelle du foyer)
   ├─ Lignes budget mensuel (postes détaillés revenus / dépenses / allègements)
   └─ Journal Pro & Financier (décisions · suivis · blocages)
+  ├─ Transactions Anthonny (transactions consolidées catégorisées)
+  └─ Transactions Mirane   (transactions consolidées catégorisées)
          │
          │  read-only API · token repo secret NOTION_TOKEN
          ▼
 PYTHON 3.12 (GitHub Actions cron horaire + dispatch manuel)
-  ├─ scripts/fetch_notion.py   paginate core DBs + finance DBs → raw.json
-  ├─ scripts/transform.py      raw.json → snapshots.json (métriques piliers + mois finance actif)
+  ├─ scripts/fetch_notion.py   paginate core DBs + finance DBs + transactions → raw.json
+  ├─ scripts/transform.py      raw.json → snapshots.json (métriques piliers + mois finance actif + comptes réels)
   └─ scripts/build_html.py     Jinja2 templates → embeds HTML
          │
          ▼
@@ -34,10 +36,10 @@ NOTION (iframes embed blocks à la place des CHART-TODO)
 | Phase | Status | Scope |
 |---|---|---|
 | **V1 Notion V8.4** | ✅ livré 2026-04-19 | Pages Notion natives avec callouts + vues DB + placeholders |
-| **V2 Phase B** | 🚧 en cours | 15 chart embeds → iframe dans Notion, regen quotidien |
+| **V2 Phase B** | 🚧 en cours | cockpit embeds piliers + finance + transactions par compte |
 | **V3 React app** | 🔮 après V2 | Standalone React dashboard, même pipeline Python |
 
-## Les 15 embeds V2
+## Embeds V2
 
 ### Dashboard (4)
 - `radar.html` — Radar 5 piliers actuel vs cible
@@ -58,6 +60,12 @@ NOTION (iframes embed blocks à la place des CHART-TODO)
 - `skill-tree-creation.html`
 - `book-progression-spirituel.html`
 - `line-predication-spirituel.html`
+
+### Transactions réelles par compte (4)
+- `treemap-transactions-account-anthonny.html`
+- `history-transactions-account-anthonny.html`
+- `treemap-transactions-account-mirane.html`
+- `history-transactions-account-mirane.html`
 
 ## Stack
 
@@ -89,6 +97,9 @@ bash scripts/rebuild_life_os.sh
 # Déclencher le refresh GitHub Pages sans push de code
 bash scripts/trigger_remote_sync.sh --watch
 
+# Réinjecter les embeds de la page transactions si besoin
+python scripts/sync_transactions_page.py
+
 # Serveur local pour tester embeds
 cd dist && python -m http.server 8000
 # → http://localhost:8000/radar.html
@@ -119,13 +130,52 @@ bash scripts/trigger_remote_sync.sh --watch
 
 Les vues `sankey-revenu-profi`, `treemap-depenses-profi` et la KPI signature du pilier `Pro & Financier` lisent automatiquement le mois `Actif`.
 
+## Workflow transactions par compte
+
+La source de vérité des dépenses réelles par compte est maintenant portée par 2 data sources Notion :
+
+- `Transactions Anthonny`
+- `Transactions Mirane`
+
+Chaque ligne contient au minimum :
+
+- `Date`
+- `Montant`
+- `Direction`
+- `Marchand`
+- `Catégorie`
+- `Sous-catégorie`
+- `Interne`
+- `Récurrent`
+- `Source clé`
+
+Le pipeline produit ensuite :
+
+- un treemap par compte avec sélecteur de mois
+- un historique mensuel empilé par catégorie
+- des vues Notion de consultation du mois actuel et de l'historique
+
+Pour recharger un dump consolidé :
+
+1. mettre à jour `consolidated_transactions.csv`
+2. lancer `python scripts/import_transactions_to_notion.py`
+3. lancer `bash scripts/rebuild_life_os.sh`
+4. vérifier localement dans `dist/`
+5. lancer `bash scripts/trigger_remote_sync.sh --watch` si publication immédiate voulue
+
+Si la page Notion `Transactions réelles par compte` doit être rebranchée ou réparée côté embeds :
+
+```bash
+python scripts/sync_transactions_page.py
+```
+
 ## Boucle minimale
 
 La boucle de travail est maintenant :
 
 1. dump / saisir les données dans Notion
 2. lancer `bash scripts/rebuild_life_os.sh`
-3. ouvrir `dist/sankey-revenu-profi.html` ou `dist/treemap-depenses-profi.html`
+3. ouvrir `dist/sankey-revenu-profi.html`, `dist/treemap-depenses-profi.html` ou les pages `dist/*transactions-account*.html`
 4. si c'est bon, lancer `bash scripts/trigger_remote_sync.sh --watch`
 
 Le workflow GitHub tourne aussi automatiquement toutes les heures. Donc même sans action manuelle, les changements Notion remontent vers GitHub Pages.

@@ -372,6 +372,115 @@ def finance_snapshot(
     }
 
 
+def transaction_account_snapshot(pages: list[dict[str, Any]], account_name: str) -> dict[str, Any] | None:
+    if not pages:
+        return None
+
+    transactions = []
+    for page in pages:
+        amount = safe_number(page.get("Montant"))
+        date_prop = page.get("Date") or {}
+        date_value = date_prop.get("start") if isinstance(date_prop, dict) else None
+        month_key = page.get("Mois clé") or (date_value[:7] if date_value else None)
+        if amount is None or not date_value or not month_key:
+            continue
+        transactions.append(
+            {
+                "date": date_value,
+                "month": month_key,
+                "amount": amount,
+                "direction": page.get("Direction"),
+                "merchant": page.get("Marchand") or "Sans marchand",
+                "category": page.get("Catégorie") or "Uncategorized",
+                "subcategory": page.get("Sous-catégorie") or "Unknown",
+                "is_internal": bool(page.get("Interne")),
+                "is_recurring": bool(page.get("Récurrent")),
+                "auto_categorized": bool(page.get("Auto catégorisé")),
+                "label": page.get("Libellé"),
+                "detail": page.get("Détail"),
+                "source_key": page.get("Source clé"),
+            }
+        )
+
+    if not transactions:
+        return None
+
+    transactions.sort(key=lambda item: (item["date"], item["amount"]), reverse=True)
+    months = sorted({item["month"] for item in transactions})
+    latest_month = months[-1]
+    economic = [item for item in transactions if not item["is_internal"]]
+
+    monthly_totals: dict[str, dict[str, float]] = {}
+    monthly_categories: dict[str, dict[str, float]] = {}
+    monthly_category_subcats: dict[str, dict[str, dict[str, float]]] = {}
+
+    for month in months:
+        monthly_totals[month] = {"expense": 0.0, "income": 0.0}
+        monthly_categories[month] = {}
+        monthly_category_subcats[month] = {}
+
+    for item in economic:
+        month = item["month"]
+        category = item["category"]
+        subcategory = item["subcategory"]
+        monthly_category_subcats[month].setdefault(category, {})
+
+        if item["direction"] == "expense" and item["amount"] < 0:
+            amount = abs(item["amount"])
+            monthly_totals[month]["expense"] += amount
+            monthly_categories[month][category] = monthly_categories[month].get(category, 0.0) + amount
+            monthly_category_subcats[month][category][subcategory] = monthly_category_subcats[month][category].get(subcategory, 0.0) + amount
+        elif item["direction"] == "income" and item["amount"] > 0:
+            monthly_totals[month]["income"] += item["amount"]
+
+    expense_breakdowns = {}
+    for month in months:
+        breakdown = []
+        for category, amount in sorted(monthly_categories[month].items(), key=lambda pair: pair[1], reverse=True):
+            subcats = [
+                {"name": name, "amount": sub_amount}
+                for name, sub_amount in sorted(
+                    monthly_category_subcats[month][category].items(), key=lambda pair: pair[1], reverse=True
+                )
+            ]
+            breakdown.append({"name": category, "amount": amount, "subcategories": subcats})
+        expense_breakdowns[month] = breakdown
+
+    monthly_history = []
+    all_category_names: set[str] = set()
+    for month in months:
+        all_category_names.update(monthly_categories[month].keys())
+        monthly_history.append(
+            {
+                "month": month,
+                "expense": round(monthly_totals[month]["expense"], 2),
+                "income": round(monthly_totals[month]["income"], 2),
+                "net": round(monthly_totals[month]["income"] - monthly_totals[month]["expense"], 2),
+            }
+        )
+
+    category_history = []
+    for category in sorted(all_category_names):
+        values = []
+        for month in months:
+            values.append(round(monthly_categories[month].get(category, 0.0), 2))
+        category_history.append({"name": category, "values": values})
+
+    latest_totals = next((item for item in monthly_history if item["month"] == latest_month), None)
+
+    return {
+        "account_name": account_name,
+        "transaction_count": len(transactions),
+        "months": months,
+        "latest_month": latest_month,
+        "latest_month_totals": latest_totals,
+        "expense_breakdowns_by_month": expense_breakdowns,
+        "monthly_history": monthly_history,
+        "category_history": category_history,
+        "recent_transactions": transactions[:20],
+    }
+
+
 def tasks_today(plan: list[dict[str, Any]], today_str: str) -> list[dict[str, Any]]:
     out = []
     for p in plan:
@@ -438,10 +547,13 @@ def main() -> None:
     finance_monthly = raw.get("finance_monthly", [])
     budget_lines = raw.get("budget_lines", [])
     pro_fi_journal = raw.get("pro_fi_journal", [])
+    transactions_anthonny = raw.get("transactions_anthonny", [])
+    transactions_mirane = raw.get("transactions_mirane", [])
 
     print(
         f"Loaded {len(plan)} plan pages + {len(hab)} habit pages + {len(raw['backlog_vie'])} backlog pages "
-        f"+ {len(finance_monthly)} finance months + {len(budget_lines)} budget lines + {len(pro_fi_journal)} journal entries."
+        f"+ {len(finance_monthly)} finance months + {len(budget_lines)} budget lines + {len(pro_fi_journal)} journal entries "
+        f"+ {len(transactions_anthonny)} tx Anthonny + {len(transactions_mirane)} tx Mirane."
     )
 
     # Build historic weeks list (12 weeks up to current)
@@ -507,6 +619,10 @@ def main() -> None:
     # W16 = 2026-04-13 → 2026-04-19 (assumption: current_week mentions W16)
     stacked_w16 = tasks_completed_per_day_per_pilier_w16(plan, ("2026-04-13", "2026-04-19"))
     finance_current = finance_snapshot(finance_monthly, budget_lines, pro_fi_journal)
+    transactions_snapshot = {
+        "anthonny": transaction_account_snapshot(transactions_anthonny, "Anthonny"),
+        "mirane": transaction_account_snapshot(transactions_mirane, "Mirane"),
+    }
 
     snapshots = {
         "generated_at": datetime.utcnow().isoformat() + "Z",
@@ -544,6 +660,7 @@ def main() -> None:
             "series": {p["name"]: piliers_out[p["slug"]]["habit_completion_12w"] for p in PILIERS},
         },
         "finance_current_month": finance_current,
+        "transactions_accounts": transactions_snapshot,
         "piliers": piliers_out,
     }
 

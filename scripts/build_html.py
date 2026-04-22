@@ -1,5 +1,5 @@
 """
-Render all 15 HTML embeds from snapshots.json + Jinja2 templates into dist/.
+Render all Life OS HTML embeds from snapshots.json + Jinja2 templates into dist/.
 
 Usage:
     python scripts/build_html.py
@@ -37,6 +37,8 @@ SIMPLE_PAGES = [
 # Parameterized (template, slug in output, pilier slug to pass in context)
 PILIER_TEMPLATES = ["sankey_pilier.html", "heatmap_habits.html", "tree_deps.html"]
 PILIER_SLUGS = ["interieur", "famille", "pro_fi", "creation", "spirituel"]
+ACCOUNT_TEMPLATES = ["treemap_transactions_account.html", "history_transactions_account.html"]
+ACCOUNT_SLUGS = ["anthonny", "mirane"]
 
 
 def main() -> None:
@@ -87,6 +89,21 @@ def main() -> None:
             pilier = snapshots["piliers"][slug]
             out_name = tmpl_name.replace(".html", f"-{slug}.html").replace("_", "-")
             html = tmpl.render(snap=snapshots, pilier=pilier, pilier_slug=slug)
+            (DIST_DIR / out_name).write_text(html)
+            rendered += 1
+            print(f"  rendered {out_name}")
+
+    # Parameterized account transaction pages
+    for tmpl_name in ACCOUNT_TEMPLATES:
+        try:
+            tmpl = env.get_template(tmpl_name)
+        except Exception as e:  # noqa: BLE001
+            print(f"  skip {tmpl_name} (not yet implemented): {e}")
+            continue
+        for slug in ACCOUNT_SLUGS:
+            account = snapshots.get("transactions_accounts", {}).get(slug)
+            out_name = tmpl_name.replace(".html", f"-{slug}.html").replace("_", "-")
+            html = tmpl.render(snap=snapshots, account=account, account_slug=slug)
             (DIST_DIR / out_name).write_text(html)
             rendered += 1
             print(f"  rendered {out_name}")

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T06:38:44.284946Z",
+  "generated_at": "2026-04-22T07:39:40.700198Z",
   "current_week": "W17",
   "current_trimester": "T2 2026",
   "current_date": "2026-04-22",
@@ -470,6 +470,2608 @@
         "summary": "Budget de mai construit avec séparation contraintes / pilotable, tickets resto traités comme allègement et objectif de sortie progressive du négatif."
       }
     ]
+  },
+  "transactions_accounts": {
+    "anthonny": {
+      "account_name": "Anthonny",
+      "transaction_count": 701,
+      "months": [
+        "2025-10",
+        "2025-11",
+        "2025-12",
+        "2026-01",
+        "2026-02",
+        "2026-03",
+        "2026-04"
+      ],
+      "latest_month": "2026-04",
+      "latest_month_totals": {
+        "month": "2026-04",
+        "expense": 3595.53,
+        "income": 173.68,
+        "net": -3421.85
+      },
+      "expense_breakdowns_by_month": {
+        "2025-10": [
+          {
+            "name": "Shopping",
+            "amount": 615.04,
+            "subcategories": [
+              {
+                "name": "Online",
+                "amount": 314.54
+              },
+              {
+                "name": "BNPL",
+                "amount": 151.32999999999998
+              },
+              {
+                "name": "Retail",
+                "amount": 149.17000000000002
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 388.46000000000004,
+            "subcategories": [
+              {
+                "name": "Groceries",
+                "amount": 145.06
+              },
+              {
+                "name": "Delivery",
+                "amount": 143.94
+              },
+              {
+                "name": "Fast Food",
+                "amount": 53.660000000000004
+              },
+              {
+                "name": "Restaurants",
+                "amount": 23.8
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 22.0
+              }
+            ]
+          },
+          {
+            "name": "Family",
+            "amount": 102.23,
+            "subcategories": [
+              {
+                "name": "Education",
+                "amount": 102.23
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 23.97,
+            "subcategories": [
+              {
+                "name": "Phone",
+                "amount": 15.99
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 7.98
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 7.14,
+            "subcategories": [
+              {
+                "name": "Other",
+                "amount": 7.14
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 4.0,
+            "subcategories": [
+              {
+                "name": "To Others",
+                "amount": 4.0
+              }
+            ]
+          }
+        ],
+        "2025-11": [
+          {
+            "name": "Transport",
+            "amount": 2693.4400000000005,
+            "subcategories": [
+              {
+                "name": "Car Loan (via joint)",
+                "amount": 2569.1400000000003
+              },
+              {
+                "name": "Public Transit",
+                "amount": 94.25
+              },
+              {
+                "name": "Fuel",
+                "amount": 30.05
+              }
+            ]
+          },
+          {
+            "name": "Housing",
+            "amount": 1318.17,
+            "subcategories": [
+              {
+                "name": "Rent",
+                "amount": 1184.92
+              },
+              {
+                "name": "Furniture",
+                "amount": 89.98
+              },
+              {
+                "name": "Utilities",
+                "amount": 43.269999999999996
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 1281.3800000000003,
+            "subcategories": [
+              {
+                "name": "Delivery",
+                "amount": 515.09
+              },
+              {
+                "name": "Groceries",
+                "amount": 343.74999999999994
+              },
+              {
+                "name": "Fast Food",
+                "amount": 172.54999999999998
+              },
+              {
+                "name": "Restaurants",
+                "amount": 154.54
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 95.44999999999999
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 369.49,
+            "subcategories": [
+              {
+                "name": "Online",
+                "amount": 301.22
+              },
+              {
+                "name": "Clothing",
+                "amount": 37.9
+              },
+              {
+                "name": "Electronics",
+                "amount": 30.37
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 324.44,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 206.24999999999997
+              },
+              {
+                "name": "Internet",
+                "amount": 49.99
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 31.010000000000005
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 21.2
+              },
+              {
+                "name": "Phone",
+                "amount": 15.99
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 112.7,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 82.69999999999999
+              },
+              {
+                "name": "Doctor",
+                "amount": 30.0
+              }
+            ]
+          },
+          {
+            "name": "Family",
+            "amount": 76.96,
+            "subcategories": [
+              {
+                "name": "Activities",
+                "amount": 76.96
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 73.0,
+            "subcategories": [
+              {
+                "name": "Events",
+                "amount": 73.0
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 53.870000000000005,
+            "subcategories": [
+              {
+                "name": "Professional",
+                "amount": 46.0
+              },
+              {
+                "name": "Laundry",
+                "amount": 7.87
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 4.0,
+            "subcategories": [
+              {
+                "name": "To Others",
+                "amount": 4.0
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 2.8,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 2.8
+              }
+            ]
+          }
+        ],
+        "2025-12": [
+          {
+            "name": "Transport",
+            "amount": 2335.88,
+            "subcategories": [
+              {
+                "name": "Car Loan (via joint)",
+                "amount": 1692.45
+              },
+              {
+                "name": "Car Service",
+                "amount": 398.76
+              },
+              {
+                "name": "Fuel",
+                "amount": 100.07
+              },
+              {
+                "name": "Public Transit",
+                "amount": 93.8
+              },
+              {
+                "name": "Parking",
+                "amount": 50.800000000000004
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 1105.7900000000002,
+            "subcategories": [
+              {
+                "name": "Groceries",
+                "amount": 383.11999999999995
+              },
+              {
+                "name": "Fast Food",
+                "amount": 282.34000000000003
+              },
+              {
+                "name": "Restaurants",
+                "amount": 178.32
+              },
+              {
+                "name": "Delivery",
+                "amount": 153.41
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 108.60000000000001
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 505.8,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 389.67
+              },
+              {
+                "name": "Internet",
+                "amount": 49.99
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 28.950000000000003
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 21.2
+              },
+              {
+                "name": "Phone",
+                "amount": 15.99
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 418.63,
+            "subcategories": [
+              {
+                "name": "Electronics",
+                "amount": 144.93
+              },
+              {
+                "name": "Online",
+                "amount": 129.92000000000002
+              },
+              {
+                "name": "Clothing",
+                "amount": 98.7
+              },
+              {
+                "name": "Retail",
+                "amount": 45.08
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 130.0,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 130.0
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 92.64,
+            "subcategories": [
+              {
+                "name": "Cinema",
+                "amount": 80.64
+              },
+              {
+                "name": "Events",
+                "amount": 12.0
+              }
+            ]
+          },
+          {
+            "name": "Family",
+            "amount": 82.0,
+            "subcategories": [
+              {
+                "name": "Childcare",
+                "amount": 82.0
+              }
+            ]
+          },
+          {
+            "name": "Housing",
+            "amount": 43.269999999999996,
+            "subcategories": [
+              {
+                "name": "Utilities",
+                "amount": 43.269999999999996
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 40.3,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 31.3
+              },
+              {
+                "name": "Doctor",
+                "amount": 9.0
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 40.0,
+            "subcategories": [
+              {
+                "name": "Cash Withdrawal",
+                "amount": 20.0
+              },
+              {
+                "name": "To Others",
+                "amount": 20.0
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 9.0,
+            "subcategories": [
+              {
+                "name": "Other",
+                "amount": 9.0
+              }
+            ]
+          }
+        ],
+        "2026-01": [
+          {
+            "name": "Food",
+            "amount": 833.0000000000002,
+            "subcategories": [
+              {
+                "name": "Groceries",
+                "amount": 366.12
+              },
+              {
+                "name": "Fast Food",
+                "amount": 247.95
+              },
+              {
+                "name": "Restaurants",
+                "amount": 123.4
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 51.400000000000006
+              },
+              {
+                "name": "Delivery",
+                "amount": 44.13
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 747.9799999999999,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 621.88
+              },
+              {
+                "name": "Internet",
+                "amount": 49.99
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 31.120000000000005
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 29.0
+              },
+              {
+                "name": "Phone",
+                "amount": 15.99
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 206.75,
+            "subcategories": [
+              {
+                "name": "Car Loan (via joint)",
+                "amount": 100.0
+              },
+              {
+                "name": "Fuel",
+                "amount": 85.05
+              },
+              {
+                "name": "Parking",
+                "amount": 12.0
+              },
+              {
+                "name": "Public Transit",
+                "amount": 9.7
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 134.12,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 125.12
+              },
+              {
+                "name": "Doctor",
+                "amount": 9.0
+              }
+            ]
+          },
+          {
+            "name": "Housing",
+            "amount": 126.71,
+            "subcategories": [
+              {
+                "name": "Utilities",
+                "amount": 126.71
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 98.4,
+            "subcategories": [
+              {
+                "name": "Events",
+                "amount": 98.4
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 57.099999999999994,
+            "subcategories": [
+              {
+                "name": "Online",
+                "amount": 49.849999999999994
+              },
+              {
+                "name": "Clothing",
+                "amount": 7.25
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 43.94,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 43.94
+              }
+            ]
+          }
+        ],
+        "2026-02": [
+          {
+            "name": "Food",
+            "amount": 1381.6300000000003,
+            "subcategories": [
+              {
+                "name": "Fast Food",
+                "amount": 417.38
+              },
+              {
+                "name": "Groceries",
+                "amount": 409.33000000000004
+              },
+              {
+                "name": "Delivery",
+                "amount": 311.62
+              },
+              {
+                "name": "Restaurants",
+                "amount": 138.89999999999998
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 104.40000000000002
+              }
+            ]
+          },
+          {
+            "name": "Housing",
+            "amount": 1266.13,
+            "subcategories": [
+              {
+                "name": "Rent",
+                "amount": 1193.94
+              },
+              {
+                "name": "Utilities",
+                "amount": 72.19
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 673.68,
+            "subcategories": [
+              {
+                "name": "Car Loan (via joint)",
+                "amount": 507.48
+              },
+              {
+                "name": "Public Transit",
+                "amount": 92.85
+              },
+              {
+                "name": "Fuel",
+                "amount": 58.0
+              },
+              {
+                "name": "Ride-hailing",
+                "amount": 10.95
+              },
+              {
+                "name": "Parking",
+                "amount": 4.4
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 546.59,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 421.31000000000006
+              },
+              {
+                "name": "Internet",
+                "amount": 49.99
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 38.10000000000001
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 21.2
+              },
+              {
+                "name": "Phone",
+                "amount": 15.99
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 305.0,
+            "subcategories": [
+              {
+                "name": "Wero P2P",
+                "amount": 305.0
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 93.25,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 75.25
+              },
+              {
+                "name": "Doctor",
+                "amount": 18.0
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 86.2,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 86.2
+              }
+            ]
+          },
+          {
+            "name": "Family",
+            "amount": 76.1,
+            "subcategories": [
+              {
+                "name": "Childcare",
+                "amount": 40.0
+              },
+              {
+                "name": "Activities",
+                "amount": 36.1
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 49.0,
+            "subcategories": [
+              {
+                "name": "Sports",
+                "amount": 49.0
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 39.0,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 39.0
+              }
+            ]
+          },
+          {
+            "name": "Taxes",
+            "amount": 8.5,
+            "subcategories": [
+              {
+                "name": "Fines",
+                "amount": 8.5
+              }
+            ]
+          }
+        ],
+        "2026-03": [
+          {
+            "name": "Food",
+            "amount": 1980.6800000000005,
+            "subcategories": [
+              {
+                "name": "Groceries",
+                "amount": 655.9499999999999
+              },
+              {
+                "name": "Fast Food",
+                "amount": 500.36
+              },
+              {
+                "name": "Delivery",
+                "amount": 339.93000000000006
+              },
+              {
+                "name": "Restaurants",
+                "amount": 338.0
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 146.43999999999997
+              }
+            ]
+          },
+          {
+            "name": "Housing",
+            "amount": 1463.25,
+            "subcategories": [
+              {
+                "name": "Rent",
+                "amount": 1193.94
+              },
+              {
+                "name": "Utilities",
+                "amount": 269.31
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 702.8199999999999,
+            "subcategories": [
+              {
+                "name": "Car Loan (via joint)",
+                "amount": 507.62
+              },
+              {
+                "name": "Public Transit",
+                "amount": 101.05
+              },
+              {
+                "name": "Car Service",
+                "amount": 56.35
+              },
+              {
+                "name": "Ride-hailing",
+                "amount": 26.0
+              },
+              {
+                "name": "Parking",
+                "amount": 11.8
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 543.6,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 421.31000000000006
+              },
+              {
+                "name": "Internet",
+                "amount": 49.99
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 35.11000000000001
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 21.2
+              },
+              {
+                "name": "Phone",
+                "amount": 15.99
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 271.85,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 247.02
+              },
+              {
+                "name": "Electronics",
+                "amount": 24.83
+              }
+            ]
+          },
+          {
+            "name": "Family",
+            "amount": 119.78999999999999,
+            "subcategories": [
+              {
+                "name": "Activities",
+                "amount": 119.78999999999999
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 110.0,
+            "subcategories": [
+              {
+                "name": "Cash Withdrawal",
+                "amount": 110.0
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 95.19,
+            "subcategories": [
+              {
+                "name": "Laundry",
+                "amount": 78.59
+              },
+              {
+                "name": "Other",
+                "amount": 8.6
+              },
+              {
+                "name": "Professional",
+                "amount": 8.0
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 89.65,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 79.15
+              },
+              {
+                "name": "Doctor",
+                "amount": 10.5
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 75.6,
+            "subcategories": [
+              {
+                "name": "Sports",
+                "amount": 58.0
+              },
+              {
+                "name": "Cinema",
+                "amount": 17.6
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 24.75,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 24.75
+              }
+            ]
+          }
+        ],
+        "2026-04": [
+          {
+            "name": "Housing",
+            "amount": 1240.8500000000001,
+            "subcategories": [
+              {
+                "name": "Rent",
+                "amount": 1193.94
+              },
+              {
+                "name": "Utilities",
+                "amount": 46.91
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 913.4,
+            "subcategories": [
+              {
+                "name": "Groceries",
+                "amount": 359.92
+              },
+              {
+                "name": "Fast Food",
+                "amount": 211.85
+              },
+              {
+                "name": "Delivery",
+                "amount": 192.24
+              },
+              {
+                "name": "Restaurants",
+                "amount": 97.53999999999999
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 51.85000000000001
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 643.1,
+            "subcategories": [
+              {
+                "name": "Car Loan (via joint)",
+                "amount": 500.0
+              },
+              {
+                "name": "Public Transit",
+                "amount": 103.1
+              },
+              {
+                "name": "Fuel",
+                "amount": 40.0
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 495.53000000000003,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 408.63
+              },
+              {
+                "name": "Internet",
+                "amount": 49.99
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 24.92
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 11.99
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 129.79999999999998,
+            "subcategories": [
+              {
+                "name": "Cinema",
+                "amount": 79.8
+              },
+              {
+                "name": "Sports",
+                "amount": 50.0
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 94.30000000000001,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 65.98
+              },
+              {
+                "name": "Retail",
+                "amount": 28.32
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 46.55,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 37.55
+              },
+              {
+                "name": "Doctor",
+                "amount": 9.0
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 20.0,
+            "subcategories": [
+              {
+                "name": "Cash Withdrawal",
+                "amount": 20.0
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 12.0,
+            "subcategories": [
+              {
+                "name": "Professional",
+                "amount": 12.0
+              }
+            ]
+          }
+        ]
+      },
+      "monthly_history": [
+        {
+          "month": "2025-10",
+          "expense": 1140.84,
+          "income": 3990.96,
+          "net": 2850.12
+        },
+        {
+          "month": "2025-11",
+          "expense": 6310.25,
+          "income": 4268.67,
+          "net": -2041.58
+        },
+        {
+          "month": "2025-12",
+          "expense": 4803.31,
+          "income": 4142.8,
+          "net": -660.51
+        },
+        {
+          "month": "2026-01",
+          "expense": 2248.0,
+          "income": 6843.73,
+          "net": 4595.73
+        },
+        {
+          "month": "2026-02",
+          "expense": 4525.08,
+          "income": 3998.3,
+          "net": -526.78
+        },
+        {
+          "month": "2026-03",
+          "expense": 5477.18,
+          "income": 4200.57,
+          "net": -1276.61
+        },
+        {
+          "month": "2026-04",
+          "expense": 3595.53,
+          "income": 173.68,
+          "net": -3421.85
+        }
+      ],
+      "category_history": [
+        {
+          "name": "Bills",
+          "values": [
+            23.97,
+            324.44,
+            505.8,
+            747.98,
+            546.59,
+            543.6,
+            495.53
+          ]
+        },
+        {
+          "name": "Entertainment",
+          "values": [
+            0.0,
+            73.0,
+            92.64,
+            98.4,
+            49.0,
+            75.6,
+            129.8
+          ]
+        },
+        {
+          "name": "Family",
+          "values": [
+            102.23,
+            76.96,
+            82.0,
+            0.0,
+            76.1,
+            119.79,
+            0.0
+          ]
+        },
+        {
+          "name": "Food",
+          "values": [
+            388.46,
+            1281.38,
+            1105.79,
+            833.0,
+            1381.63,
+            1980.68,
+            913.4
+          ]
+        },
+        {
+          "name": "Health",
+          "values": [
+            0.0,
+            112.7,
+            40.3,
+            134.12,
+            93.25,
+            89.65,
+            46.55
+          ]
+        },
+        {
+          "name": "Housing",
+          "values": [
+            0.0,
+            1318.17,
+            43.27,
+            126.71,
+            1266.13,
+            1463.25,
+            1240.85
+          ]
+        },
+        {
+          "name": "Services",
+          "values": [
+            7.14,
+            53.87,
+            9.0,
+            0.0,
+            0.0,
+            95.19,
+            12.0
+          ]
+        },
+        {
+          "name": "Shopping",
+          "values": [
+            615.04,
+            369.49,
+            418.63,
+            57.1,
+            86.2,
+            271.85,
+            94.3
+          ]
+        },
+        {
+          "name": "Taxes",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            8.5,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "Transfers",
+          "values": [
+            4.0,
+            4.0,
+            40.0,
+            0.0,
+            305.0,
+            110.0,
+            20.0
+          ]
+        },
+        {
+          "name": "Transport",
+          "values": [
+            0.0,
+            2693.44,
+            2335.88,
+            206.75,
+            673.68,
+            702.82,
+            643.1
+          ]
+        },
+        {
+          "name": "Uncategorized",
+          "values": [
+            0.0,
+            2.8,
+            130.0,
+            43.94,
+            39.0,
+            24.75,
+            0.0
+          ]
+        }
+      ],
+      "recent_transactions": [
+        {
+          "date": "2026-04-20",
+          "month": "2026-04",
+          "amount": 12.9,
+          "direction": "income",
+          "merchant": "Tickets resto (Octoplus)",
+          "category": "Income",
+          "subcategory": "Benefits",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "VIR RECU    208668",
+          "detail": "VIR RECU    2086687186S DE: OCTOPLUS REF: RESTO-FLASH090808-3449864-20.04",
+          "source_key": "163c92c85600a74d5977a2a1a4ddf73c2da2c004"
+        },
+        {
+          "date": "2026-04-20",
+          "month": "2026-04",
+          "amount": -1.1,
+          "direction": "expense",
+          "merchant": "Boulangerie",
+          "category": "Food",
+          "subcategory": "Coffee & Bakery",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 19/04",
+          "detail": "CARTE X0949 19/04 SQ *LEVAIN 230611003986333IOPD",
+          "source_key": "23220578cff2e450c42e226553fd6a4002a12765"
+        },
+        {
+          "date": "2026-04-20",
+          "month": "2026-04",
+          "amount": -5.9,
+          "direction": "expense",
+          "merchant": "Kavi",
+          "category": "Food",
+          "subcategory": "Groceries",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 19/04",
+          "detail": "CARTE X0949 19/04 KAVI KND EXOTIQU 101610948241340IOPD",
+          "source_key": "8d52491f7b03e461c05c506a350bb097bb687dfe"
+        },
+        {
+          "date": "2026-04-20",
+          "month": "2026-04",
+          "amount": -12.9,
+          "direction": "expense",
+          "merchant": "Sweet Factory",
+          "category": "Food",
+          "subcategory": "Restaurants",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 19/04",
+          "detail": "CARTE X0949 19/04 SWEET - FACTORY 230611002909186IOPD",
+          "source_key": "49791cdc4eb1e3330ed541caa226d2c6f21da5a1"
+        },
+        {
+          "date": "2026-04-20",
+          "month": "2026-04",
+          "amount": -26.37,
+          "direction": "expense",
+          "merchant": "Uber Eats",
+          "category": "Food",
+          "subcategory": "Delivery",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 17/04",
+          "detail": "CARTE X0949 17/04 UBER   *EATS 26,37 EUR PAYS-BAS COMMERCE ELECTRONIQUE 230610901011415IOPD",
+          "source_key": "9961ea26fe301d083e0e7475c10b77da4a1a5d2b"
+        },
+        {
+          "date": "2026-04-17",
+          "month": "2026-04",
+          "amount": -14.0,
+          "direction": "expense",
+          "merchant": "SG - cotisation carte",
+          "category": "Bills",
+          "subcategory": "Bank Fees",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "OPT INTL INTENSE J",
+          "detail": "OPT INTL INTENSE JEUNE ACTIF",
+          "source_key": "04e299db9e94ab8adb486235579fe7c5b4cf3f9b"
+        },
+        {
+          "date": "2026-04-17",
+          "month": "2026-04",
+          "amount": -17.55,
+          "direction": "expense",
+          "merchant": "McDonald's",
+          "category": "Food",
+          "subcategory": "Fast Food",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 16/04",
+          "detail": "CARTE X0949 16/04 MCDONALDS 113 COMMERCE ELECTRONIQUE 110610701724467IOPD",
+          "source_key": "fca6815b60cb4a647a5adb91dfa4ba76346d772d"
+        },
+        {
+          "date": "2026-04-16",
+          "month": "2026-04",
+          "amount": 43.73,
+          "direction": "income",
+          "merchant": "Tickets resto (Octoplus)",
+          "category": "Income",
+          "subcategory": "Benefits",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "VIR RECU    168625",
+          "detail": "VIR RECU    1686251313S DE: OCTOPLUS REF: RESTO-FLASH090808-3440464-16.04",
+          "source_key": "343521ce803d829b174f80eecfb3a86e6661312f"
+        },
+        {
+          "date": "2026-04-16",
+          "month": "2026-04",
+          "amount": 39.0,
+          "direction": "income",
+          "merchant": "Virement d'Anthonny",
+          "category": "Transfers",
+          "subcategory": "Between Spouses",
+          "is_internal": true,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "VIR RECU 961062984",
+          "detail": "VIR RECU 9610629847963 DE: MR ANTHONNY OLIME",
+          "source_key": "29b7456de75d2e21f055d02a6ed490348ee44da7"
+        },
+        {
+          "date": "2026-04-16",
+          "month": "2026-04",
+          "amount": -18.01,
+          "direction": "expense",
+          "merchant": "Uber Eats",
+          "category": "Food",
+          "subcategory": "Delivery",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 14/04",
+          "detail": "CARTE X0949 14/04 UBER   *EATS 18,01 EUR PAYS-BAS COMMERCE ELECTRONIQUE 230610601147411IOPD",
+          "source_key": "4e1c5f9001a787599cc88abc28caf57991363225"
+        },
+        {
+          "date": "2026-04-16",
+          "month": "2026-04",
+          "amount": -43.73,
+          "direction": "expense",
+          "merchant": "Leclerc",
+          "category": "Food",
+          "subcategory": "Groceries",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 15/04",
+          "detail": "CARTE X0949 15/04 E.LECLERC 110610601021763IOPD",
+          "source_key": "47a2f6dbd61299bef00b0c265f94e481d57aa4e3"
+        },
+        {
+          "date": "2026-04-16",
+          "month": "2026-04",
+          "amount": -50.0,
+          "direction": "expense",
+          "merchant": "Salle de sport",
+          "category": "Entertainment",
+          "subcategory": "Sports",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "PRELEVEMENT EUROPE",
+          "detail": "PRELEVEMENT EUROPEEN 1504994057 DE: FITNESS PARK SUCCURSALES - FP BONNE UIL-SUR-MARNE ID: FR54BON467839",
+          "source_key": "d4d4beb3d16fbaf7f09f95c971528ae278473abe"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": 31.98,
+          "direction": "income",
+          "merchant": "Tickets resto (Octoplus)",
+          "category": "Income",
+          "subcategory": "Benefits",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "VIR RECU    158520",
+          "detail": "VIR RECU    1585208063S DE: OCTOPLUS REF: RESTO-FLASH090808-3438133-15.04",
+          "source_key": "ebb0e07bc74410afb8c7a0fcd3714cde9df313e4"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": -6.0,
+          "direction": "expense",
+          "merchant": "Kavi",
+          "category": "Food",
+          "subcategory": "Groceries",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 14/04",
+          "detail": "CARTE X0949 14/04 KAVI KND EXOTIQU 101610511071990IOPD",
+          "source_key": "8ad9ebbf6fdade5b367aea07d22e3768a2620682"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": -7.1,
+          "direction": "expense",
+          "merchant": "Kavi",
+          "category": "Food",
+          "subcategory": "Groceries",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 14/04",
+          "detail": "CARTE X0949 14/04 KAVI KND EXOTIQU 101610511073330IOPD",
+          "source_key": "465a1c2af91375eb5591a70c5e9a595f06957ee4"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": -9.0,
+          "direction": "expense",
+          "merchant": "Téléconsultation",
+          "category": "Health",
+          "subcategory": "Doctor",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 14/04",
+          "detail": "CARTE X0949 14/04 CDS QARE STMAUR 110610502178145IOPD",
+          "source_key": "35116ec6c37ef6e82635c641b3a46254e4bc4b89"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": -12.45,
+          "direction": "expense",
+          "merchant": "McDonald's",
+          "category": "Food",
+          "subcategory": "Fast Food",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 14/04",
+          "detail": "CARTE X0949 14/04 MC DONALD 110610503530181IOPD",
+          "source_key": "391c26b488d2007471d0a59a3855f360ac98d060"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": -12.5,
+          "direction": "expense",
+          "merchant": "SY Express (workplace lunch)",
+          "category": "Food",
+          "subcategory": "Fast Food",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "CARTE X0949 13/04",
+          "detail": "CARTE X0949 13/04 SC-SY EXPRESS 110610403503510IOPD",
+          "source_key": "fb1baca1c31d5b8785fd0ef216814833b2f7fdb7"
+        },
+        {
+          "date": "2026-04-15",
+          "month": "2026-04",
+          "amount": -31.98,
+          "direction": "expense",
+          "merchant": "Spinach",
+          "category": "Food",
+          "subcategory": "Fast Food",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X0949 14/04",
+          "detail": "CARTE X0949 14/04 SPINACH MFCO 110610503193517IOPD",
+          "source_key": "d007f84d6d0995dbbe42f48fe56ec8df033cf4ac"
+        },
+        {
+          "date": "2026-04-14",
+          "month": "2026-04",
+          "amount": 33.07,
+          "direction": "income",
+          "merchant": "Tickets resto (Octoplus)",
+          "category": "Income",
+          "subcategory": "Benefits",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "VIR RECU    148666",
+          "detail": "VIR RECU    1486665354S DE: OCTOPLUS REF: RESTO-FLASH090808-3430845-13.04",
+          "source_key": "c8530e55ae661fcc97d708f98cf9c01c728416a5"
+        }
+      ]
+    },
+    "mirane": {
+      "account_name": "Mirane",
+      "transaction_count": 205,
+      "months": [
+        "2025-12",
+        "2026-01",
+        "2026-02",
+        "2026-03",
+        "2026-04"
+      ],
+      "latest_month": "2026-04",
+      "latest_month_totals": {
+        "month": "2026-04",
+        "expense": 472.18,
+        "income": 705.4,
+        "net": 233.22
+      },
+      "expense_breakdowns_by_month": {
+        "2025-12": [
+          {
+            "name": "Food",
+            "amount": 357.07,
+            "subcategories": [
+              {
+                "name": "Groceries",
+                "amount": 201.76
+              },
+              {
+                "name": "Fast Food",
+                "amount": 88.63
+              },
+              {
+                "name": "Delivery",
+                "amount": 62.78
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 3.9
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 319.28,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 188.42999999999998
+              },
+              {
+                "name": "Retail",
+                "amount": 82.66
+              },
+              {
+                "name": "Online",
+                "amount": 45.39
+              },
+              {
+                "name": "Electronics",
+                "amount": 2.8
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 194.74,
+            "subcategories": [
+              {
+                "name": "Subscriptions",
+                "amount": 104.86999999999999
+              },
+              {
+                "name": "Software",
+                "amount": 46.0
+              },
+              {
+                "name": "Insurance",
+                "amount": 36.67
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 7.2
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 71.28999999999999,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 71.28999999999999
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 69.0,
+            "subcategories": [
+              {
+                "name": "To Others",
+                "amount": 69.0
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 66.9,
+            "subcategories": [
+              {
+                "name": "Cinema",
+                "amount": 34.4
+              },
+              {
+                "name": "Events",
+                "amount": 32.5
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 26.7,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 17.7
+              },
+              {
+                "name": "Doctor",
+                "amount": 9.0
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 12.0,
+            "subcategories": [
+              {
+                "name": "Public Transit",
+                "amount": 12.0
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 4.67,
+            "subcategories": [
+              {
+                "name": "Other",
+                "amount": 4.67
+              }
+            ]
+          }
+        ],
+        "2026-01": [
+          {
+            "name": "Food",
+            "amount": 241.62,
+            "subcategories": [
+              {
+                "name": "Delivery",
+                "amount": 94.58
+              },
+              {
+                "name": "Fast Food",
+                "amount": 67.0
+              },
+              {
+                "name": "Groceries",
+                "amount": 63.09
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 16.95
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 218.43999999999997,
+            "subcategories": [
+              {
+                "name": "Online",
+                "amount": 150.82
+              },
+              {
+                "name": "Clothing",
+                "amount": 58.019999999999996
+              },
+              {
+                "name": "Electronics",
+                "amount": 9.6
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 175.0,
+            "subcategories": [
+              {
+                "name": "Wero P2P",
+                "amount": 175.0
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 128.59,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 128.59
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 119.78999999999998,
+            "subcategories": [
+              {
+                "name": "Subscriptions",
+                "amount": 68.92
+              },
+              {
+                "name": "Insurance",
+                "amount": 36.67
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 14.2
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 91.89,
+            "subcategories": [
+              {
+                "name": "Public Transit",
+                "amount": 76.15
+              },
+              {
+                "name": "Ride-hailing",
+                "amount": 15.74
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 18.95,
+            "subcategories": [
+              {
+                "name": "Pharmacy",
+                "amount": 18.95
+              }
+            ]
+          }
+        ],
+        "2026-02": [
+          {
+            "name": "Transfers",
+            "amount": 325.0,
+            "subcategories": [
+              {
+                "name": "Wero P2P",
+                "amount": 175.0
+              },
+              {
+                "name": "Cash Withdrawal",
+                "amount": 150.0
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 184.07,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 184.07
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 167.88000000000002,
+            "subcategories": [
+              {
+                "name": "Delivery",
+                "amount": 88.32000000000001
+              },
+              {
+                "name": "Fast Food",
+                "amount": 41.56
+              },
+              {
+                "name": "Groceries",
+                "amount": 38.0
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 98.81999999999998,
+            "subcategories": [
+              {
+                "name": "Insurance",
+                "amount": 36.67
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 32.2
+              },
+              {
+                "name": "Subscriptions",
+                "amount": 29.95
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 48.910000000000004,
+            "subcategories": [
+              {
+                "name": "Ride-hailing",
+                "amount": 46.86
+              },
+              {
+                "name": "Public Transit",
+                "amount": 2.05
+              }
+            ]
+          },
+          {
+            "name": "Uncategorized",
+            "amount": 43.6,
+            "subcategories": [
+              {
+                "name": "Unknown",
+                "amount": 43.6
+              }
+            ]
+          },
+          {
+            "name": "Family",
+            "amount": 41.18,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 41.18
+              }
+            ]
+          },
+          {
+            "name": "Entertainment",
+            "amount": 36.0,
+            "subcategories": [
+              {
+                "name": "Sports",
+                "amount": 36.0
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 12.19,
+            "subcategories": [
+              {
+                "name": "Doctor",
+                "amount": 9.0
+              },
+              {
+                "name": "Pharmacy",
+                "amount": 3.19
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 9.0,
+            "subcategories": [
+              {
+                "name": "Other",
+                "amount": 9.0
+              }
+            ]
+          }
+        ],
+        "2026-03": [
+          {
+            "name": "Shopping",
+            "amount": 439.2,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 301.41
+              },
+              {
+                "name": "Beauty",
+                "amount": 87.77
+              },
+              {
+                "name": "Online",
+                "amount": 40.03
+              },
+              {
+                "name": "Retail",
+                "amount": 9.99
+              }
+            ]
+          },
+          {
+            "name": "Transfers",
+            "amount": 175.0,
+            "subcategories": [
+              {
+                "name": "Wero P2P",
+                "amount": 175.0
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 133.64,
+            "subcategories": [
+              {
+                "name": "Restaurants",
+                "amount": 75.8
+              },
+              {
+                "name": "Delivery",
+                "amount": 36.06
+              },
+              {
+                "name": "Coffee & Bakery",
+                "amount": 14.3
+              },
+              {
+                "name": "Fast Food",
+                "amount": 5.17
+              },
+              {
+                "name": "Groceries",
+                "amount": 2.31
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 114.80999999999997,
+            "subcategories": [
+              {
+                "name": "Subscriptions",
+                "amount": 45.94
+              },
+              {
+                "name": "Insurance",
+                "amount": 36.67
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 32.2
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "amount": 94.3,
+            "subcategories": [
+              {
+                "name": "Doctor",
+                "amount": 94.3
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 7.65,
+            "subcategories": [
+              {
+                "name": "Public Transit",
+                "amount": 7.65
+              }
+            ]
+          },
+          {
+            "name": "Services",
+            "amount": 2.02,
+            "subcategories": [
+              {
+                "name": "Other",
+                "amount": 2.02
+              }
+            ]
+          }
+        ],
+        "2026-04": [
+          {
+            "name": "Transfers",
+            "amount": 175.0,
+            "subcategories": [
+              {
+                "name": "Wero P2P",
+                "amount": 175.0
+              }
+            ]
+          },
+          {
+            "name": "Shopping",
+            "amount": 167.77999999999997,
+            "subcategories": [
+              {
+                "name": "Clothing",
+                "amount": 134.09
+              },
+              {
+                "name": "Online",
+                "amount": 30.2
+              },
+              {
+                "name": "Retail",
+                "amount": 3.49
+              }
+            ]
+          },
+          {
+            "name": "Bills",
+            "amount": 114.59999999999998,
+            "subcategories": [
+              {
+                "name": "Subscriptions",
+                "amount": 45.95
+              },
+              {
+                "name": "Insurance",
+                "amount": 36.63
+              },
+              {
+                "name": "Bank Fees",
+                "amount": 32.019999999999996
+              }
+            ]
+          },
+          {
+            "name": "Transport",
+            "amount": 12.2,
+            "subcategories": [
+              {
+                "name": "Public Transit",
+                "amount": 12.2
+              }
+            ]
+          },
+          {
+            "name": "Food",
+            "amount": 2.6,
+            "subcategories": [
+              {
+                "name": "Coffee & Bakery",
+                "amount": 2.6
+              }
+            ]
+          }
+        ]
+      },
+      "monthly_history": [
+        {
+          "month": "2025-12",
+          "expense": 1121.65,
+          "income": 100.0,
+          "net": -1021.65
+        },
+        {
+          "month": "2026-01",
+          "expense": 994.28,
+          "income": 968.67,
+          "net": -25.61
+        },
+        {
+          "month": "2026-02",
+          "expense": 966.65,
+          "income": 710.27,
+          "net": -256.38
+        },
+        {
+          "month": "2026-03",
+          "expense": 966.62,
+          "income": 711.7,
+          "net": -254.92
+        },
+        {
+          "month": "2026-04",
+          "expense": 472.18,
+          "income": 705.4,
+          "net": 233.22
+        }
+      ],
+      "category_history": [
+        {
+          "name": "Bills",
+          "values": [
+            194.74,
+            119.79,
+            98.82,
+            114.81,
+            114.6
+          ]
+        },
+        {
+          "name": "Entertainment",
+          "values": [
+            66.9,
+            0.0,
+            36.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "Family",
+          "values": [
+            0.0,
+            0.0,
+            41.18,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "Food",
+          "values": [
+            357.07,
+            241.62,
+            167.88,
+            133.64,
+            2.6
+          ]
+        },
+        {
+          "name": "Health",
+          "values": [
+            26.7,
+            18.95,
+            12.19,
+            94.3,
+            0.0
+          ]
+        },
+        {
+          "name": "Services",
+          "values": [
+            4.67,
+            0.0,
+            9.0,
+            2.02,
+            0.0
+          ]
+        },
+        {
+          "name": "Shopping",
+          "values": [
+            319.28,
+            218.44,
+            184.07,
+            439.2,
+            167.78
+          ]
+        },
+        {
+          "name": "Transfers",
+          "values": [
+            69.0,
+            175.0,
+            325.0,
+            175.0,
+            175.0
+          ]
+        },
+        {
+          "name": "Transport",
+          "values": [
+            12.0,
+            91.89,
+            48.91,
+            7.65,
+            12.2
+          ]
+        },
+        {
+          "name": "Uncategorized",
+          "values": [
+            71.29,
+            128.59,
+            43.6,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "recent_transactions": [
+        {
+          "date": "2026-04-14",
+          "month": "2026-04",
+          "amount": -6.1,
+          "direction": "expense",
+          "merchant": "Transdev",
+          "category": "Transport",
+          "subcategory": "Public Transit",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 13/04",
+          "detail": "CARTE X2852 13/04 TRANSDEV COTEAUX 110610403463110IOPD",
+          "source_key": "01feb1708abeb95ceb00f25ac8ab53ea2404c310"
+        },
+        {
+          "date": "2026-04-13",
+          "month": "2026-04",
+          "amount": -39.0,
+          "direction": "expense",
+          "merchant": "Kiabi",
+          "category": "Shopping",
+          "subcategory": "Clothing",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 11/04",
+          "detail": "CARTE X2852 11/04 KIABI PSC 101610155188210IOPD",
+          "source_key": "025bebcc83adc469d0ac0dfef75ad754a56b6ef7"
+        },
+        {
+          "date": "2026-04-10",
+          "month": "2026-04",
+          "amount": -25.0,
+          "direction": "expense",
+          "merchant": "Frais d'incidents",
+          "category": "Bills",
+          "subcategory": "Bank Fees",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "FRAIS D'INCIDENTS",
+          "detail": "FRAIS D'INCIDENTS SOUS PLAFOND DETAIL DANS LE RELEVE N°003 DU 22/02/2026 AU 21/03/2026",
+          "source_key": "e14f8678997383c6b5ab8fc50236024344056c67"
+        },
+        {
+          "date": "2026-04-10",
+          "month": "2026-04",
+          "amount": -30.0,
+          "direction": "expense",
+          "merchant": "MAIF Vie",
+          "category": "Bills",
+          "subcategory": "Insurance",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "PRELEVEMENT EUROPE",
+          "detail": "PRELEVEMENT EUROPEEN 0929511112 DE: MAIF VIE ID: FR64ZZZ236411 REF: PARNASC505532353110153392",
+          "source_key": "0a8ff66e39ccd37f9d16f979690dbea1a5483ccd"
+        },
+        {
+          "date": "2026-04-09",
+          "month": "2026-04",
+          "amount": -6.1,
+          "direction": "expense",
+          "merchant": "Transdev",
+          "category": "Transport",
+          "subcategory": "Public Transit",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 08/04",
+          "detail": "CARTE X2852 08/04 TRANSDEV COTEAUX 110609903974352IOPD",
+          "source_key": "026fa8265d9c91478417cb169cca450ddb3f0b36"
+        },
+        {
+          "date": "2026-04-09",
+          "month": "2026-04",
+          "amount": -69.1,
+          "direction": "expense",
+          "merchant": "Primark",
+          "category": "Shopping",
+          "subcategory": "Clothing",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 08/04",
+          "detail": "CARTE X2852 08/04 PRIMARK CRETEIL 230609903566578IOPD",
+          "source_key": "a5d2c47197c5ff8d2d434232b61c4030d4712f53"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -2.6,
+          "direction": "expense",
+          "merchant": "Boulangerie",
+          "category": "Food",
+          "subcategory": "Coffee & Bakery",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 SQ *LEVAIN 230609804187309IOPD",
+          "source_key": "b3330dea70d959043e2c851d1e16ec35d0f81223"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -2.99,
+          "direction": "expense",
+          "merchant": "Apple Services (iCloud/Music/App Store)",
+          "category": "Bills",
+          "subcategory": "Subscriptions",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 APPLE COMMERCE ELECTRONIQUE 110609801926894IOPD",
+          "source_key": "dc89b4c4773c72da2003fcf25c1bd11fbf0e45d7"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -3.49,
+          "direction": "expense",
+          "merchant": "Gifi",
+          "category": "Shopping",
+          "subcategory": "Retail",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 GIFI BONNEUIL 110609803543484IOPD",
+          "source_key": "e8e65fbf207ef8368e32494099abc55a485521b9"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -3.99,
+          "direction": "expense",
+          "merchant": "Apple Services (iCloud/Music/App Store)",
+          "category": "Bills",
+          "subcategory": "Subscriptions",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 APPLE COMMERCE ELECTRONIQUE 110609801649722IOPD",
+          "source_key": "e005dd122bfc1a0d195c8cd044bb965db5e5060d"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -5.99,
+          "direction": "expense",
+          "merchant": "Apple Services (iCloud/Music/App Store)",
+          "category": "Bills",
+          "subcategory": "Subscriptions",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 APPLE COMMERCE ELECTRONIQUE 110609801651910IOPD",
+          "source_key": "c06177b2f4c661c46037ec4190347bb3a6aa4408"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -15.99,
+          "direction": "expense",
+          "merchant": "Apple Services (iCloud/Music/App Store)",
+          "category": "Bills",
+          "subcategory": "Subscriptions",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 APPLE COMMERCE ELECTRONIQUE 110609801759660IOPD",
+          "source_key": "29fa6bdde1bc2d3541d36cbb9746c16f6656a30c"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -16.99,
+          "direction": "expense",
+          "merchant": "Apple Services (iCloud/Music/App Store)",
+          "category": "Bills",
+          "subcategory": "Subscriptions",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 APPLE.COM/BILL 16,99 EUR IRLANDE COMMERCE ELECTRONIQUE 230609800895133IOPD",
+          "source_key": "a149364cc23b5199b86826a059aa5548fa2b4aa3"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -25.99,
+          "direction": "expense",
+          "merchant": "Vetir",
+          "category": "Shopping",
+          "subcategory": "Clothing",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 VETIR 110609804856284IOPD",
+          "source_key": "890ea11807923188c379506b278d652887aa8ef8"
+        },
+        {
+          "date": "2026-04-08",
+          "month": "2026-04",
+          "amount": -30.2,
+          "direction": "expense",
+          "merchant": "Shein / Temu",
+          "category": "Shopping",
+          "subcategory": "Online",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 07/04",
+          "detail": "CARTE X2852 07/04 Temu 30,20 EUR IRLANDE COMMERCE ELECTRONIQUE 230609801084975IOPD",
+          "source_key": "4e7bc3155cf5bc2ed5243fb1e42cd6e070e86e06"
+        },
+        {
+          "date": "2026-04-07",
+          "month": "2026-04",
+          "amount": 705.4,
+          "direction": "income",
+          "merchant": "CAF",
+          "category": "Income",
+          "subcategory": "Benefits",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "VIR RECU    028870",
+          "detail": "VIR RECU    0288706542S DE: CAF DU VAL DE MARNE MOTIF: 7854575ZOLIME       032026ME REF: 43975802V16",
+          "source_key": "68cb76fcbe61ff00b8e67607b40f14efd49b5b84"
+        },
+        {
+          "date": "2026-04-07",
+          "month": "2026-04",
+          "amount": -175.0,
+          "direction": "expense",
+          "merchant": "Virement Wero",
+          "category": "Transfers",
+          "subcategory": "Wero P2P",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "000001 VIR INSTANT",
+          "detail": "000001 VIR INSTANTANE EMIS WERO POUR: JEAN JACQUES S IBAN: XXXXXXXXXXXXXXXXXXXXXXX2030 DATE: 07/04/2026 10:34",
+          "source_key": "7e0a787d7ff4ec15d696986bdd41a3033ff9ef2e"
+        },
+        {
+          "date": "2026-04-02",
+          "month": "2026-04",
+          "amount": -6.63,
+          "direction": "expense",
+          "merchant": "MAIF Vie",
+          "category": "Bills",
+          "subcategory": "Insurance",
+          "is_internal": false,
+          "is_recurring": true,
+          "auto_categorized": true,
+          "label": "PRELEVEMENT EUROPE",
+          "detail": "PRELEVEMENT EUROPEEN 9002689740 DE: MAIF VIE ID: FR64ZZZ236411 REF: PARNASG307909350951225468",
+          "source_key": "de37c0cb8ded57c3d239fb0dcfde3fec8739f618"
+        },
+        {
+          "date": "2026-04-02",
+          "month": "2026-04",
+          "amount": -7.02,
+          "direction": "expense",
+          "merchant": "Agios / intérêts débiteurs",
+          "category": "Bills",
+          "subcategory": "Bank Fees",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "INTERETS DEBITEURS",
+          "detail": "INTERETS DEBITEURS  01.01/31.03 CALCULES AU TAUX DE 21,14% TEG/AN=23,540% TEG/JOUR=0,0579% NOMBRE JOURS DEBITEURS :  67",
+          "source_key": "c795297bb04f51713f13cb0c8c66771287bfc51d"
+        },
+        {
+          "date": "2026-03-24",
+          "month": "2026-03",
+          "amount": -10.87,
+          "direction": "expense",
+          "merchant": "Uber Eats",
+          "category": "Food",
+          "subcategory": "Delivery",
+          "is_internal": false,
+          "is_recurring": false,
+          "auto_categorized": true,
+          "label": "CARTE X2852 22/03",
+          "detail": "CARTE X2852 22/03 UBER   *EATS 10,87 EUR PAYS-BAS COMMERCE ELECTRONIQUE 230608300983260IOPD",
+          "source_key": "d3432602ad6bed6b700474a9c24f88299a0c7699"
+        }
+      ]
+    }
   },
   "piliers": {
     "interieur": {

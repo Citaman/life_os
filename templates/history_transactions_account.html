@@ -1,0 +1,148 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Historique dépenses · {{ account.account_name if account else account_slug }}{% endblock %}
+
+{% block extra_css %}
+.history-head {
+  margin-bottom: 26px;
+}
+.history-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 20px;
+}
+.mini-table td:last-child,
+.mini-table th:last-child {
+  text-align: right;
+}
+.panel-note {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 14px;
+}
+@media (max-width: 900px) {
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+}
+{% endblock %}
+
+{% block content %}
+{% if not account %}
+  {{ m.todo_placeholder(title="Historique transactions — à venir", reason="Aucune donnée importée pour ce compte.", needed_db="Transactions bancaires consolidées", accent="#1E4D8C") }}
+{% else %}
+  <div class="history-head">
+    {{ m.section_header(eyebrow="TRANSACTIONS RÉELLES", title="Historique des dépenses", subtitle="Compte " ~ account.account_name ~ " · évolution mensuelle et répartition des catégories dans le temps.", accent="#1E4D8C") }}
+  </div>
+
+  <div class="history-grid">
+    <div class="card">
+      <canvas id="history-chart" height="360"></canvas>
+      <div class="panel-note">Barres empilées = dépenses par catégorie et par mois. Ligne = net mensuel du compte, hors transferts internes.</div>
+    </div>
+    <div class="card">
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th>Catégorie</th>
+            <th>Total période</th>
+          </tr>
+        </thead>
+        <tbody id="totals-body"></tbody>
+      </table>
+      <div class="panel-note">Période disponible : {{ account.months[0] }} → {{ account.months[-1] }} · {{ account.transaction_count }} transactions importées.</div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if account %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+  const account = {{ account | tojson }};
+  const labels = account.months;
+  const palette = ["#1E4D8C", "#3E6FB1", "#5C8CCC", "#7EABDD", "#9AC2EA", "#C4DBF4", "#D9E7F8", "#F3F7FC"];
+
+  const datasets = account.category_history
+    .map((item, index) => ({
+      label: item.name,
+      data: item.values,
+      backgroundColor: palette[index % palette.length],
+      borderWidth: 0,
+      stack: "expenses",
+    }))
+    .filter((item) => item.data.some((value) => value > 0));
+
+  datasets.push({
+    type: "line",
+    label: "Net mensuel",
+    data: account.monthly_history.map((item) => item.net),
+    borderColor: "#111827",
+    backgroundColor: "#111827",
+    tension: 0.28,
+    yAxisID: "y1",
+    pointRadius: 3,
+    pointHoverRadius: 4,
+  });
+
+  new Chart(document.getElementById("history-chart"), {
+    type: "bar",
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { position: "bottom" },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const value = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(ctx.parsed.y || 0);
+              return `${ctx.dataset.label}: ${value}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false },
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: {
+            callback: (value) => `${value}€`,
+          }
+        },
+        y1: {
+          position: "right",
+          beginAtZero: true,
+          grid: { drawOnChartArea: false },
+          ticks: {
+            callback: (value) => `${value}€`,
+          }
+        }
+      }
+    }
+  });
+
+  const totals = account.category_history
+    .map((item) => ({
+      name: item.name,
+      total: item.values.reduce((sum, value) => sum + value, 0),
+    }))
+    .filter((item) => item.total > 0)
+    .sort((a, b) => b.total - a.total);
+
+  const tbody = document.getElementById("totals-body");
+  const currency = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+  totals.forEach((item) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${item.name}</td><td>${currency.format(item.total)}</td>`;
+    tbody.appendChild(tr);
+  });
+</script>
+{% endif %}
+{% endblock %}

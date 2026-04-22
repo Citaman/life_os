@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-{{ m.section_header(eyebrow="LIFE OS", title="Embeds · V2 Phase B", subtitle="27 HTMLs iframés dans les pages Notion · data live générée via Python cron quotidien depuis les 3 DBs.") }}
+{{ m.section_header(eyebrow="LIFE OS", title="Embeds · V2 Phase B", subtitle="31 HTMLs iframés dans les pages Notion · data live générée via Python cron quotidien depuis les DBs coeur et transactions.") }}
 
 <div class="group">
   <h4>Dashboard</h4>
@@ -60,6 +60,24 @@
     <a class="tile" href="skill-tree-creation.html" style="border-left: 3px solid {{ snap.piliers.creation.accent }};"><h3>Skill Tree · Création</h3><p>Maths → ML → LLM / C++ → CUDA</p></a>
     <a class="tile" href="book-progression-spirituel.html" style="border-left: 3px solid {{ snap.piliers.spirituel.accent }};"><h3>Progression livre · Spirituel</h3><p>Vivre pour toujours · 31 chap.</p></a>
     <a class="tile" href="line-predication-spirituel.html" style="border-left: 3px solid {{ snap.piliers.spirituel.accent }};"><h3>Tendance prédication · Spirituel</h3><p>6 derniers mois</p></a>
+  </div>
+</div>
+
+<div class="group">
+  <h4>Transactions réelles par compte</h4>
+  <div class="grid-3">
+    <a class="tile" href="treemap-transactions-account-anthonny.html" style="border-left: 3px solid {{ snap.piliers.pro_fi.accent }};">
+      <h3>Treemap dépenses · Anthonny</h3><p>Mois sélectionnable · catégories et sous-catégories</p>
+    </a>
+    <a class="tile" href="history-transactions-account-anthonny.html" style="border-left: 3px solid {{ snap.piliers.pro_fi.accent }};">
+      <h3>Historique dépenses · Anthonny</h3><p>Barres empilées par mois + net</p>
+    </a>
+    <a class="tile" href="treemap-transactions-account-mirane.html" style="border-left: 3px solid {{ snap.piliers.pro_fi.accent }};">
+      <h3>Treemap dépenses · Mirane</h3><p>Mois sélectionnable · catégories et sous-catégories</p>
+    </a>
+    <a class="tile" href="history-transactions-account-mirane.html" style="border-left: 3px solid {{ snap.piliers.pro_fi.accent }};">
+      <h3>Historique dépenses · Mirane</h3><p>Barres empilées par mois + net</p>
+    </a>
   </div>
 </div>
 {% endblock %}

@@ -1,0 +1,260 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Treemap dépenses · {{ account.account_name if account else account_slug }}{% endblock %}
+
+{% block extra_css %}
+.hero {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.hero h1 {
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+}
+.hero p {
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 16px;
+}
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.toolbar label {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+.toolbar select {
+  margin-left: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+  font: inherit;
+}
+.treemap-shell {
+  background: linear-gradient(180deg, rgba(30,77,140,0.04), rgba(30,77,140,0.01));
+  border-radius: 28px;
+  padding: 20px;
+}
+.treemap-card {
+  background: white;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  padding: 26px;
+}
+.card-head h2 {
+  font-size: clamp(28px, 3vw, 46px);
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+.card-head p {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+#tx-treemap {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.meta {
+  background: #F8FAFC;
+  border: 1px solid #E5E7EB;
+  border-radius: 18px;
+  padding: 18px;
+}
+.meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.meta-value {
+  font-size: clamp(24px, 2.4vw, 36px);
+  font-weight: 800;
+  color: var(--pro-fi);
+  letter-spacing: -0.03em;
+}
+.legend-note {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+@media (max-width: 768px) {
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+{% endblock %}
+
+{% block content %}
+{% if not account %}
+  {{ m.todo_placeholder(title="Treemap transactions — à venir", reason="Aucune donnée de transactions importée pour ce compte.", needed_db="Transactions bancaires consolidées", accent="#1E4D8C") }}
+{% else %}
+  <div class="hero">
+    <h1>Treemap des dépenses</h1>
+    <p>Compte {{ account.account_name }} · visualisation proportionnelle des catégories et sous-catégories du mois sélectionné.</p>
+  </div>
+
+  <div class="treemap-shell">
+    <div class="treemap-card">
+      <div class="toolbar">
+        <div>
+          <label for="month-select">Mois</label>
+          <select id="month-select"></select>
+        </div>
+        <div class="legend-note">Taille = montant dépensé réel sur le compte, hors mouvements internes entre vous deux.</div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta">
+          <div class="meta-label">Dépenses du mois</div>
+          <div class="meta-value" id="meta-expense">—</div>
+        </div>
+        <div class="meta">
+          <div class="meta-label">Revenus du mois</div>
+          <div class="meta-value" id="meta-income">—</div>
+        </div>
+        <div class="meta">
+          <div class="meta-label">Net du mois</div>
+          <div class="meta-value" id="meta-net">—</div>
+        </div>
+      </div>
+
+      <div class="card-head">
+        <h2 id="card-title">Dépenses mensuelles par catégorie</h2>
+        <p id="card-subtitle">Survolez chaque tuile pour voir le montant réel et la sous-catégorie.</p>
+      </div>
+
+      <svg id="tx-treemap" viewBox="0 0 1120 640" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if account %}
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+  const account = {{ account | tojson }};
+  const monthSelect = document.getElementById("month-select");
+  const metaExpense = document.getElementById("meta-expense");
+  const metaIncome = document.getElementById("meta-income");
+  const metaNet = document.getElementById("meta-net");
+  const titleEl = document.getElementById("card-title");
+  const subtitleEl = document.getElementById("card-subtitle");
+  const svg = d3.select("#tx-treemap");
+  const width = 1120;
+  const height = 640;
+  const currency = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+
+  function colorScale(amount, max) {
+    const ratio = max ? amount / max : 0;
+    return d3.interpolateRgb("#B9D7F5", "#234A8B")(Math.min(1, 0.22 + ratio * 0.78));
+  }
+
+  account.months.forEach((month) => {
+    const option = document.createElement("option");
+    option.value = month;
+    option.textContent = month;
+    monthSelect.appendChild(option);
+  });
+  monthSelect.value = account.latest_month;
+
+  function historyFor(month) {
+    return account.monthly_history.find((item) => item.month === month) || { expense: 0, income: 0, net: 0 };
+  }
+
+  function render(month) {
+    const breakdown = account.expense_breakdowns_by_month[month] || [];
+    const totals = historyFor(month);
+    metaExpense.textContent = currency.format(totals.expense || 0);
+    metaIncome.textContent = currency.format(totals.income || 0);
+    metaNet.textContent = currency.format(totals.net || 0);
+    titleEl.textContent = `Dépenses mensuelles par catégorie · ${account.account_name}`;
+    subtitleEl.textContent = `Données ${month} · taille = montant relatif sur le compte ${account.account_name}.`;
+
+    svg.selectAll("*").remove();
+    const root = d3.hierarchy({
+      name: "Dépenses",
+      children: breakdown.map((category) => ({
+        name: category.name,
+        children: (category.subcategories || []).map((sub) => ({
+          name: sub.name,
+          value: sub.amount,
+          category: category.name,
+        })),
+      })),
+    }).sum((d) => d.value || 0);
+
+    d3.treemap().size([width, height]).paddingOuter(10).paddingTop(34).paddingInner(4)(root);
+    const leaves = root.leaves();
+    const maxValue = d3.max(leaves, (d) => d.value || 0) || 0;
+    const group = svg.append("g");
+
+    group.selectAll("g.tile")
+      .data(leaves)
+      .join("g")
+      .attr("class", "tile")
+      .attr("transform", (d) => `translate(${d.x0},${d.y0})`)
+      .each(function(d) {
+        const g = d3.select(this);
+        const w = Math.max(0, d.x1 - d.x0);
+        const h = Math.max(0, d.y1 - d.y0);
+        g.append("rect")
+          .attr("rx", 14)
+          .attr("ry", 14)
+          .attr("width", w)
+          .attr("height", h)
+          .attr("fill", colorScale(d.value || 0, maxValue))
+          .attr("stroke", "#FFFFFF")
+          .attr("stroke-width", 2);
+        g.append("title")
+          .text(`${d.data.category} → ${d.data.name}\n${currency.format(d.value || 0)}`);
+        g.append("text")
+          .attr("x", 14)
+          .attr("y", 28)
+          .attr("fill", "#FFFFFF")
+          .attr("font-size", Math.max(13, Math.min(32, w / 10)))
+          .attr("font-weight", 700)
+          .text(d.data.category);
+        g.append("text")
+          .attr("x", 14)
+          .attr("y", 56)
+          .attr("fill", "rgba(255,255,255,0.94)")
+          .attr("font-size", Math.max(12, Math.min(24, w / 15)))
+          .attr("font-weight", 600)
+          .text(d.data.name);
+        g.append("text")
+          .attr("x", 14)
+          .attr("y", 84)
+          .attr("fill", "#FFFFFF")
+          .attr("font-size", Math.max(16, Math.min(34, w / 9)))
+          .attr("font-weight", 800)
+          .text(currency.format(d.value || 0));
+      });
+  }
+
+  monthSelect.addEventListener("change", (event) => render(event.target.value));
+  render(account.latest_month);
+</script>
+{% endif %}
+{% endblock %}

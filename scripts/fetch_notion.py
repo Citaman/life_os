@@ -38,6 +38,8 @@ BACKLOG_DS = os.environ["BACKLOG_DS"]
 FINANCE_MONTHLY_DS = os.environ.get("FINANCE_MONTHLY_DS")
 BUDGET_LINES_DS = os.environ.get("BUDGET_LINES_DS")
 PRO_FI_JOURNAL_DS = os.environ.get("PRO_FI_JOURNAL_DS")
+TX_ANTHONNY_DS = os.environ.get("TX_ANTHONNY_DS", "97850d4c-fded-47ed-9e08-15031b699023")
+TX_MIRANE_DS = os.environ.get("TX_MIRANE_DS", "6ab9ce1a-fae9-41ff-9d9e-350bbd8d9596")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = REPO_ROOT / "data" / "raw_notion.json"
@@ -138,6 +140,8 @@ def main() -> None:
         "finance_monthly": [],
         "budget_lines": [],
         "pro_fi_journal": [],
+        "transactions_anthonny": [],
+        "transactions_mirane": [],
     }
 
     if FINANCE_MONTHLY_DS:
@@ -157,6 +161,18 @@ def main() -> None:
         journal_raw = query_data_source(PRO_FI_JOURNAL_DS)
         bundle["pro_fi_journal"] = simplify(journal_raw)
         print(f"Journal Pro & Financier total: {len(journal_raw)} pages\n")
+
+    if TX_ANTHONNY_DS:
+        print("Fetching Transactions Anthonny...")
+        tx_anthonny_raw = query_data_source(TX_ANTHONNY_DS)
+        bundle["transactions_anthonny"] = simplify(tx_anthonny_raw)
+        print(f"Transactions Anthonny total: {len(tx_anthonny_raw)} pages\n")
+
+    if TX_MIRANE_DS:
+        print("Fetching Transactions Mirane...")
+        tx_mirane_raw = query_data_source(TX_MIRANE_DS)
+        bundle["transactions_mirane"] = simplify(tx_mirane_raw)
+        print(f"Transactions Mirane total: {len(tx_mirane_raw)} pages\n")
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(bundle, indent=2, ensure_ascii=False))
