@@ -15,7 +15,7 @@ NOTION (6 DBs · édition + source de vérité)
          │
          │  read-only API · token repo secret NOTION_TOKEN
          ▼
-PYTHON 3.12 (GitHub Actions cron 5h UTC = 6-7h Paris)
+PYTHON 3.12 (GitHub Actions cron horaire + dispatch manuel)
   ├─ scripts/fetch_notion.py   paginate core DBs + finance DBs → raw.json
   ├─ scripts/transform.py      raw.json → snapshots.json (métriques piliers + mois finance actif)
   └─ scripts/build_html.py     Jinja2 templates → embeds HTML
@@ -86,6 +86,9 @@ python scripts/build_html.py
 # Raccourci
 bash scripts/rebuild_life_os.sh
 
+# Déclencher le refresh GitHub Pages sans push de code
+bash scripts/trigger_remote_sync.sh --watch
+
 # Serveur local pour tester embeds
 cd dist && python -m http.server 8000
 # → http://localhost:8000/radar.html
@@ -106,15 +109,26 @@ Règle simple pour ajouter un nouveau mois :
 3. cocher `Actif` sur le mois à afficher dans le dashboard
 4. créer les lignes correspondantes dans `Lignes budget mensuel` avec le même `Mois clé`
 5. ajouter si besoin des entrées dans `Journal Pro & Financier`
-6. relancer le pipeline
+6. relancer localement `bash scripts/rebuild_life_os.sh` pour vérifier
+7. si tu veux rafraîchir GitHub Pages tout de suite, lancer `bash scripts/trigger_remote_sync.sh --watch`
 
 ```bash
-python scripts/fetch_notion.py
-python scripts/transform.py
-python scripts/build_html.py
+bash scripts/rebuild_life_os.sh
+bash scripts/trigger_remote_sync.sh --watch
 ```
 
 Les vues `sankey-revenu-profi`, `treemap-depenses-profi` et la KPI signature du pilier `Pro & Financier` lisent automatiquement le mois `Actif`.
+
+## Boucle minimale
+
+La boucle de travail est maintenant :
+
+1. dump / saisir les données dans Notion
+2. lancer `bash scripts/rebuild_life_os.sh`
+3. ouvrir `dist/sankey-revenu-profi.html` ou `dist/treemap-depenses-profi.html`
+4. si c'est bon, lancer `bash scripts/trigger_remote_sync.sh --watch`
+
+Le workflow GitHub tourne aussi automatiquement toutes les heures. Donc même sans action manuelle, les changements Notion remontent vers GitHub Pages.
 
 ## URL déployée
 

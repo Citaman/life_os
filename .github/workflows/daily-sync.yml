@@ -2,8 +2,8 @@ name: Daily Notion sync
 
 on:
   schedule:
-    # 5h UTC = 6h Paris (winter) / 7h Paris (summer). Runs every day.
-    - cron: '0 5 * * *'
+    # Pull latest Notion data every hour so the embeds update without a code push.
+    - cron: '17 * * * *'
   workflow_dispatch:
     # Manual trigger from GitHub UI for on-demand refresh.
   push:
@@ -69,6 +69,9 @@ jobs:
 
       - name: Build HTML embeds
         run: python scripts/build_html.py
+
+      - name: Verify generated artifacts
+        run: python scripts/verify_build.py
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
