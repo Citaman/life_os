@@ -22,6 +22,9 @@ REQUIRED_HTML = [
     "sankey-revenu-profi.html",
     "treemap-depenses-profi.html",
     "area-pilier-pro-fi.html",
+    "gantt-pilier-pro-fi.html",
+    "tasks-week-pilier-pro-fi.html",
+    "journal-pilier-pro-fi.html",
     "treemap-transactions-account-anthonny.html",
     "history-transactions-account-anthonny.html",
     "treemap-transactions-account-mirane.html",
@@ -130,9 +133,13 @@ def main() -> None:
     pro_fi = snapshots.get("piliers", {}).get("pro_fi")
     if not pro_fi:
         fail("piliers.pro_fi missing from snapshots.json")
-    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_w16", "habit_completion_12w"):
+    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_w16", "habit_completion_12w", "roadmap", "journal_recent"):
         if key not in pro_fi:
             fail(f"piliers.pro_fi missing key: {key}")
+    if not pro_fi.get("time_pilier"):
+        fail("piliers.pro_fi.time_pilier missing from snapshots.json")
+    if not pro_fi.get("roadmap"):
+        fail("piliers.pro_fi.roadmap missing from snapshots.json")
 
     habits_kpi = snapshots.get("kpi_catalog", {}).get("pro-fi-habits")
     if not habits_kpi:
@@ -145,6 +152,26 @@ def main() -> None:
         fail("area-pilier-pro-fi.html missing Pro & Financier context")
     if active_habits_week not in area_pilier_html:
         fail("area-pilier-pro-fi.html missing active habits week label")
+
+    tasks_html = (DIST_PATH / "tasks-week-pilier-pro-fi.html").read_text()
+    if "charge planifiée restante" not in tasks_html:
+        fail("tasks-week-pilier-pro-fi.html missing planning subtitle")
+    if "Pro &amp; Financier" not in tasks_html and "Pro & Financier" not in tasks_html:
+        fail("tasks-week-pilier-pro-fi.html missing pilier name")
+
+    gantt_html = (DIST_PATH / "gantt-pilier-pro-fi.html").read_text()
+    if "Budget familial maîtrisé" not in gantt_html:
+        fail("gantt-pilier-pro-fi.html missing roadmap content")
+    if "Aujourd'hui" not in gantt_html:
+        fail("gantt-pilier-pro-fi.html missing today marker")
+
+    journal_html = (DIST_PATH / "journal-pilier-pro-fi.html").read_text()
+    if "Journal Pro &amp; Financier" not in journal_html and "Journal Pro & Financier" not in journal_html:
+        fail("journal-pilier-pro-fi.html missing title")
+    if "Construction budget mai 2026" not in journal_html:
+        fail("journal-pilier-pro-fi.html missing recent journal entry")
+    if not pro_fi.get("journal_recent"):
+        fail("piliers.pro_fi.journal_recent missing from snapshots.json")
 
     print("verify_build.py OK")
     print(

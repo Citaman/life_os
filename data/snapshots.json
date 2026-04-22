@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T08:51:53.789326Z",
+  "generated_at": "2026-04-22T09:14:38.986109Z",
   "current_week": "W17",
   "active_habits_week": "W16",
   "latest_habits_week": "W16",
@@ -76,6 +76,61 @@
       "Pro & Financier": 0,
       "Création": 0,
       "Spirituel": 0
+    }
+  },
+  "tasks_active_week": {
+    "week_start": "2026-04-20",
+    "week_end": "2026-04-26",
+    "counts": {
+      "Lun": {
+        "Intérieur": 2,
+        "Famille": 0,
+        "Pro & Financier": 0,
+        "Création": 1,
+        "Spirituel": 21
+      },
+      "Mar": {
+        "Intérieur": 2,
+        "Famille": 0,
+        "Pro & Financier": 0,
+        "Création": 0,
+        "Spirituel": 0
+      },
+      "Mer": {
+        "Intérieur": 0,
+        "Famille": 0,
+        "Pro & Financier": 0,
+        "Création": 0,
+        "Spirituel": 0
+      },
+      "Jeu": {
+        "Intérieur": 0,
+        "Famille": 0,
+        "Pro & Financier": 0,
+        "Création": 0,
+        "Spirituel": 0
+      },
+      "Ven": {
+        "Intérieur": 0,
+        "Famille": 0,
+        "Pro & Financier": 0,
+        "Création": 0,
+        "Spirituel": 0
+      },
+      "Sam": {
+        "Intérieur": 4,
+        "Famille": 3,
+        "Pro & Financier": 0,
+        "Création": 5,
+        "Spirituel": 1
+      },
+      "Dim": {
+        "Intérieur": 5,
+        "Famille": 9,
+        "Pro & Financier": 4,
+        "Création": 0,
+        "Spirituel": 0
+      }
     }
   },
   "trimester_progress": {
@@ -466,22 +521,66 @@
         "title": "Mise en place infra dynamique Notion + life_os",
         "type": "Action",
         "date": "2026-04-22",
-        "summary": "Création des bases Finance mensuelle, Lignes budget mensuel et Journal Pro & Financier pour rendre le pilier entièrement pilotable et branchable au repo."
+        "summary": "Création des bases Finance mensuelle, Lignes budget mensuel et Journal Pro & Financier pour rendre le pilier entièrement pilotable et branchable au repo.",
+        "tags": [
+          "budget",
+          "admin"
+        ]
       },
       {
         "title": "Comparatif courses et paniers exacts",
         "type": "Action",
         "date": "2026-04-21",
-        "summary": "Comparatif Lidl, Leclerc, Carrefour, Costco, ALDI puis paniers exacts produits + prix pour mai."
+        "summary": "Comparatif Lidl, Leclerc, Carrefour, Costco, ALDI puis paniers exacts produits + prix pour mai.",
+        "tags": [
+          "courses",
+          "budget"
+        ]
       },
       {
         "title": "Construction budget mai 2026",
         "type": "Décision",
         "date": "2026-04-21",
-        "summary": "Budget de mai construit avec séparation contraintes / pilotable, tickets resto traités comme allègement et objectif de sortie progressive du négatif."
+        "summary": "Budget de mai construit avec séparation contraintes / pilotable, tickets resto traités comme allègement et objectif de sortie progressive du négatif.",
+        "tags": [
+          "budget",
+          "admin"
+        ]
       }
     ]
   },
+  "pro_fi_journal_recent": [
+    {
+      "title": "Mise en place infra dynamique Notion + life_os",
+      "type": "Action",
+      "date": "2026-04-22",
+      "summary": "Création des bases Finance mensuelle, Lignes budget mensuel et Journal Pro & Financier pour rendre le pilier entièrement pilotable et branchable au repo.",
+      "tags": [
+        "budget",
+        "admin"
+      ]
+    },
+    {
+      "title": "Comparatif courses et paniers exacts",
+      "type": "Action",
+      "date": "2026-04-21",
+      "summary": "Comparatif Lidl, Leclerc, Carrefour, Costco, ALDI puis paniers exacts produits + prix pour mai.",
+      "tags": [
+        "courses",
+        "budget"
+      ]
+    },
+    {
+      "title": "Construction budget mai 2026",
+      "type": "Décision",
+      "date": "2026-04-21",
+      "summary": "Budget de mai construit avec séparation contraintes / pilotable, tickets resto traités comme allègement et objectif de sortie progressive du négatif.",
+      "tags": [
+        "budget",
+        "admin"
+      ]
+    }
+  ],
   "transactions_accounts": {
     "anthonny": {
       "account_name": "Anthonny",
@@ -3566,7 +3665,20 @@
         null,
         68
       ],
-      "time_pilier": null,
+      "time_pilier": {
+        "hours": 8,
+        "source": "baseline_spec_v8",
+        "subs": [
+          {
+            "name": "Sport",
+            "hours": 5
+          },
+          {
+            "name": "Récup",
+            "hours": 3
+          }
+        ]
+      },
       "roadmap": [
         {
           "id": "347845e8-e836-812a-ac62-c8d3a52736ca",
@@ -3614,6 +3726,7 @@
           "progress": 0
         }
       ],
+      "journal_recent": [],
       "signature_metric": null
     },
     "famille": {
@@ -3817,7 +3930,28 @@
         null,
         67
       ],
-      "time_pilier": null,
+      "time_pilier": {
+        "hours": 22,
+        "source": "baseline_spec_v8",
+        "subs": [
+          {
+            "name": "Couple",
+            "hours": 6
+          },
+          {
+            "name": "Lecture James",
+            "hours": 5
+          },
+          {
+            "name": "Jeux enfants",
+            "hours": 7
+          },
+          {
+            "name": "Cuisine",
+            "hours": 4
+          }
+        ]
+      },
       "roadmap": [
         {
           "id": "347845e8-e836-8123-87f4-e1fab631f989",
@@ -3865,6 +3999,7 @@
           "progress": 0
         }
       ],
+      "journal_recent": [],
       "signature_metric": null
     },
     "pro_fi": {
@@ -4218,7 +4353,24 @@
         null,
         57
       ],
-      "time_pilier": null,
+      "time_pilier": {
+        "hours": 42,
+        "source": "baseline_spec_v8",
+        "subs": [
+          {
+            "name": "Data work",
+            "hours": 30
+          },
+          {
+            "name": "Meetings",
+            "hours": 8
+          },
+          {
+            "name": "Admin",
+            "hours": 4
+          }
+        ]
+      },
       "roadmap": [
         {
           "id": "347845e8-e836-814c-951e-c1f58952b1f3",
@@ -4282,6 +4434,38 @@
           "active": false,
           "status": "Pas commencé",
           "progress": 0
+        }
+      ],
+      "journal_recent": [
+        {
+          "title": "Mise en place infra dynamique Notion + life_os",
+          "type": "Action",
+          "date": "2026-04-22",
+          "summary": "Création des bases Finance mensuelle, Lignes budget mensuel et Journal Pro & Financier pour rendre le pilier entièrement pilotable et branchable au repo.",
+          "tags": [
+            "budget",
+            "admin"
+          ]
+        },
+        {
+          "title": "Comparatif courses et paniers exacts",
+          "type": "Action",
+          "date": "2026-04-21",
+          "summary": "Comparatif Lidl, Leclerc, Carrefour, Costco, ALDI puis paniers exacts produits + prix pour mai.",
+          "tags": [
+            "courses",
+            "budget"
+          ]
+        },
+        {
+          "title": "Construction budget mai 2026",
+          "type": "Décision",
+          "date": "2026-04-21",
+          "summary": "Budget de mai construit avec séparation contraintes / pilotable, tickets resto traités comme allègement et objectif de sortie progressive du négatif.",
+          "tags": [
+            "budget",
+            "admin"
+          ]
         }
       ],
       "signature_metric": null
@@ -5682,7 +5866,20 @@
         null,
         67
       ],
-      "time_pilier": null,
+      "time_pilier": {
+        "hours": 7,
+        "source": "baseline_spec_v8",
+        "subs": [
+          {
+            "name": "Maths S1",
+            "hours": 3
+          },
+          {
+            "name": "Micrograd",
+            "hours": 4
+          }
+        ]
+      },
       "roadmap": [
         {
           "id": "347845e8-e836-81c6-8d7d-c0de32b142e3",
@@ -5820,6 +6017,7 @@
           "progress": 0
         }
       ],
+      "journal_recent": [],
       "signature_metric": null
     },
     "spirituel": {
@@ -6118,7 +6316,28 @@
         null,
         67
       ],
-      "time_pilier": null,
+      "time_pilier": {
+        "hours": 10,
+        "source": "baseline_spec_v8",
+        "subs": [
+          {
+            "name": "Réunions",
+            "hours": 3
+          },
+          {
+            "name": "Prédication",
+            "hours": 3
+          },
+          {
+            "name": "Étude perso",
+            "hours": 2
+          },
+          {
+            "name": "Étude Jillian",
+            "hours": 2
+          }
+        ]
+      },
       "roadmap": [
         {
           "id": "347845e8-e836-814c-b30d-e9d6b2a924ca",
@@ -6166,6 +6385,7 @@
           "progress": 0
         }
       ],
+      "journal_recent": [],
       "signature_metric": null
     }
   },

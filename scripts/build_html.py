@@ -35,7 +35,7 @@ SIMPLE_PAGES = [
 ]
 
 # Parameterized (template, slug in output, pilier slug to pass in context)
-PILIER_TEMPLATES = ["sankey_pilier.html", "heatmap_habits.html", "tree_deps.html", "area_pilier.html"]
+PILIER_TEMPLATES = ["sankey_pilier.html", "heatmap_habits.html", "tree_deps.html", "area_pilier.html", "gantt_pilier.html", "tasks_week_pilier.html", "journal_pilier.html"]
 PILIER_SLUGS = ["interieur", "famille", "pro_fi", "creation", "spirituel"]
 ACCOUNT_TEMPLATES = ["treemap_transactions_account.html", "history_transactions_account.html"]
 ACCOUNT_SLUGS = ["anthonny", "mirane"]

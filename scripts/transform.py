@@ -41,6 +41,54 @@ PILIERS = [
     {"slug": "spirituel", "name": "Spirituel", "color_key": "yellow", "accent": "#B8860B", "tint_mid": "#D8B052", "tint_light": "#ECD9A8"},
 ]
 
+TIME_BASELINES = {
+    "Intérieur": {
+        "hours": 8,
+        "source": "baseline_spec_v8",
+        "subs": [
+            {"name": "Sport", "hours": 5},
+            {"name": "Récup", "hours": 3},
+        ],
+    },
+    "Famille": {
+        "hours": 22,
+        "source": "baseline_spec_v8",
+        "subs": [
+            {"name": "Couple", "hours": 6},
+            {"name": "Lecture James", "hours": 5},
+            {"name": "Jeux enfants", "hours": 7},
+            {"name": "Cuisine", "hours": 4},
+        ],
+    },
+    "Pro & Financier": {
+        "hours": 42,
+        "source": "baseline_spec_v8",
+        "subs": [
+            {"name": "Data work", "hours": 30},
+            {"name": "Meetings", "hours": 8},
+            {"name": "Admin", "hours": 4},
+        ],
+    },
+    "Création": {
+        "hours": 7,
+        "source": "baseline_spec_v8",
+        "subs": [
+            {"name": "Maths S1", "hours": 3},
+            {"name": "Micrograd", "hours": 4},
+        ],
+    },
+    "Spirituel": {
+        "hours": 10,
+        "source": "baseline_spec_v8",
+        "subs": [
+            {"name": "Réunions", "hours": 3},
+            {"name": "Prédication", "hours": 3},
+            {"name": "Étude perso", "hours": 2},
+            {"name": "Étude Jillian", "hours": 2},
+        ],
+    },
+}
+
 
 def today_fr(date_str: str) -> str:
     """Format YYYY-MM-DD as 'vendredi 19 avril 2026' in French."""
@@ -381,12 +429,13 @@ def finance_snapshot(
                 "type": j.get("Type"),
                 "date": (j.get("Date") or {}).get("start") if isinstance(j.get("Date"), dict) else None,
                 "summary": j.get("Résumé"),
+                "tags": j.get("Tags") or [],
             }
             for j in month_journal
         ],
         key=lambda item: item.get("date") or "",
         reverse=True,
-    )[:5]
+    )[:4]
 
     projected_result = safe_number(active_month.get("Résultat prévu"))
     start_balance = safe_number(active_month.get("Solde début"))
@@ -415,6 +464,21 @@ def finance_snapshot(
         ],
         "journal_recent": recent_journal,
     }
+
+
+def journal_entries_snapshot(journal_pages: list[dict[str, Any]], limit: int = 4) -> list[dict[str, Any]]:
+    entries = []
+    for j in journal_pages:
+        entries.append(
+            {
+                "title": j.get("Entrée"),
+                "type": j.get("Type"),
+                "date": (j.get("Date") or {}).get("start") if isinstance(j.get("Date"), dict) else None,
+                "summary": j.get("Résumé"),
+                "tags": j.get("Tags") or [],
+            }
+        )
+    return sorted(entries, key=lambda item: item.get("date") or "", reverse=True)[:limit]
 
 
 def transaction_account_snapshot(pages: list[dict[str, Any]], account_name: str) -> dict[str, Any] | None:
@@ -580,6 +644,47 @@ def tasks_completed_per_day_per_pilier_w16(plan: list[dict[str, Any]], weeks_ran
     return out
 
 
+def scheduled_tasks_per_day_per_pilier(plan: list[dict[str, Any]], today_str: str) -> dict[str, Any]:
+    """Current calendar week load from task planned start dates.
+
+    Counts task atomiques scheduled in the Monday→Sunday week containing `today_str`,
+    excluding completed or abandoned tasks.
+    """
+    from datetime import date as date_cls, timedelta
+
+    current = date_cls.fromisoformat(today_str)
+    week_start = current - timedelta(days=current.weekday())
+    week_end = week_start + timedelta(days=6)
+    days_fr = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+    piliers = ["Intérieur", "Famille", "Pro & Financier", "Création", "Spirituel"]
+    counts: dict[str, dict[str, int]] = {d: {p: 0 for p in piliers} for d in days_fr}
+
+    for p in plan:
+        if p.get("Type") != "Tâche atomique":
+            continue
+        if p.get("Statut") in {"Complété", "Abandonné"}:
+            continue
+        start_raw = (p.get("Date prévue début") or {}).get("start")
+        if not start_raw:
+            continue
+        try:
+            d = date_cls.fromisoformat(start_raw[:10])
+        except ValueError:
+            continue
+        if d < week_start or d > week_end:
+            continue
+        day_label = days_fr[d.weekday()]
+        pilier = p.get("Pilier")
+        if pilier in piliers:
+            counts[day_label][pilier] += 1
+
+    return {
+        "week_start": week_start.isoformat(),
+        "week_end": week_end.isoformat(),
+        "counts": counts,
+    }
+
+
 # ---------- Main ----------
 
 
@@ -604,6 +709,7 @@ def main() -> None:
     habits_week_context = resolve_habits_week(hab, CURRENT_WEEK)
     active_habits_week = habits_week_context["active_week"]
     historic_weeks = build_historic_weeks(active_habits_week, span=12)
+    pro_fi_journal_recent = journal_entries_snapshot(pro_fi_journal, limit=4)
 
     piliers_out: dict[str, dict[str, Any]] = {}
     for p in PILIERS:
@@ -632,8 +738,10 @@ def main() -> None:
             "habits_week_is_fallback": habits_week_context["used_fallback"],
             "habits_w16": habits_week,
             "habit_completion_12w": hist_series,  # list of int|null
-            "time_pilier": None,  # TODO: DB Time Tracker
+            # Baseline spec until a real Time Tracker DB is connected.
+            "time_pilier": TIME_BASELINES.get(name),
             "roadmap": roadmap,
+            "journal_recent": pro_fi_journal_recent if p["slug"] == "pro_fi" else [],
             "signature_metric": None,  # TODO: pilier-specific DB (Mesures corps, Comptes, etc.)
         }
 
@@ -663,6 +771,7 @@ def main() -> None:
     # Stacked tasks W16 per day per pilier (from real completed tasks)
     # W16 = 2026-04-13 → 2026-04-19 (assumption: current_week mentions W16)
     stacked_w16 = tasks_completed_per_day_per_pilier_w16(plan, ("2026-04-13", "2026-04-19"))
+    tasks_active_week = scheduled_tasks_per_day_per_pilier(plan, CURRENT_DATE)
     finance_current = finance_snapshot(finance_monthly, budget_lines, pro_fi_journal)
     transactions_snapshot = {
         "anthonny": transaction_account_snapshot(transactions_anthonny, "Anthonny"),
@@ -692,6 +801,7 @@ def main() -> None:
             "items": tlist,
         },
         "tasks_w16_by_day_by_pilier": stacked_w16,
+        "tasks_active_week": tasks_active_week,
         "trimester_progress": {
             "achievements_total_active": achievements_en_cours,
             "sous_total_active": sous_en_cours,
@@ -709,6 +819,7 @@ def main() -> None:
             "series": {p["name"]: piliers_out[p["slug"]]["habit_completion_12w"] for p in PILIERS},
         },
         "finance_current_month": finance_current,
+        "pro_fi_journal_recent": pro_fi_journal_recent,
         "transactions_accounts": transactions_snapshot,
         "piliers": piliers_out,
     }

@@ -1,0 +1,150 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ pilier.name }} — Tâches semaine{% endblock %}
+
+{% block extra_css %}
+.tasks-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.25fr;
+  gap: 20px;
+}
+@media (max-width: 860px) {
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.metric-stack {
+  display: grid;
+  gap: 14px;
+}
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.metric-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--text);
+}
+.metric-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.day-list {
+  display: grid;
+  gap: 12px;
+}
+.day-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+.day-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+.day-bar {
+  position: relative;
+  height: 12px;
+  background: #EEF2F7;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.day-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fill-width, 0%);
+  background: linear-gradient(90deg, var(--fill-color), var(--fill-color-light));
+  border-radius: 999px;
+}
+.day-value {
+  min-width: 36px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.quiet-note {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+{% endblock %}
+
+{% block content %}
+{% set pilier_db_name = pilier.name %}
+{% set week = snap.tasks_active_week or {} %}
+{% set day_labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"] %}
+{% set ns = namespace(total=0, max_value=0, best_day="—") %}
+{% for day in day_labels %}
+  {% set value = week.get("counts", {}).get(day, {}).get(pilier_db_name, 0) %}
+  {% set ns.total = ns.total + value %}
+  {% if value > ns.max_value %}
+    {% set ns.max_value = value %}
+    {% set ns.best_day = day %}
+  {% endif %}
+{% endfor %}
+
+{{ m.section_header(
+  eyebrow="EXÉCUTION HEBDO",
+  title="Tâches semaine · " + pilier.name,
+  subtitle="Semaine " + (week.get("week_start", "—")) + " → " + (week.get("week_end", "—")) + " · charge planifiée restante",
+  accent=pilier.accent
+) }}
+
+<div class="tasks-grid">
+  <div class="metric-stack">
+    <div class="metric-card">
+      <div class="metric-label">Tâches planifiées</div>
+      <div class="metric-value" style="color: {{ pilier.accent }};">{{ ns.total }}</div>
+      <div class="metric-sub">Total semaine courante pour {{ pilier.name }}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Jour le plus dense</div>
+      <div class="metric-value">{{ ns.best_day }}</div>
+      <div class="metric-sub">{{ ns.max_value }} tâche{{ "s" if ns.max_value != 1 else "" }} prévue{{ "s" if ns.max_value != 1 else "" }}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Cadence projet</div>
+      <div class="metric-value">{{ pilier.achievements_active | length }}</div>
+      <div class="metric-sub">{{ pilier.sous_achievements | length }} sous-achievements suivis</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="day-list">
+      {% for day in day_labels %}
+        {% set value = week.get("counts", {}).get(day, {}).get(pilier_db_name, 0) %}
+        {% set width_pct = ((value / ns.max_value) * 100) if ns.max_value else 0 %}
+        <div class="day-row">
+          <div class="day-label">{{ day }}</div>
+          <div class="day-bar">
+            <div
+              class="day-bar-fill"
+              style="--fill-width: {{ width_pct }}%; --fill-color: {{ pilier.accent }}; --fill-color-light: {{ pilier.tint_mid }};"
+            ></div>
+          </div>
+          <div class="day-value">{{ value }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="quiet-note">
+      Vue volontairement list-free à droite. Elle met en avant la charge datée de la semaine courante, séparée de la vue liste Notion.
+    </div>
+  </div>
+</div>
+{% endblock %}

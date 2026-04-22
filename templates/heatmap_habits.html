@@ -318,9 +318,25 @@
 {% endblock %}
 
 {% block content %}
-{# ── Today's position in W16 (L=0 … D=6). today_fr = "vendredi" → index 4 #}
-{# current_date is always a Friday in this snapshot → days 5,6 = à venir    #}
-{%- set today_idx = 4 -%}{# vendredi = index 4 in L M M J V S D #}
+{# ── Resolve current weekday dynamically from snap.today_fr/current_date ───── #}
+{%- set today_lower = (snap.today_fr or "") | lower -%}
+{%- if "lundi" in today_lower -%}
+  {%- set today_idx = 0 -%}
+{%- elif "mardi" in today_lower -%}
+  {%- set today_idx = 1 -%}
+{%- elif "mercredi" in today_lower -%}
+  {%- set today_idx = 2 -%}
+{%- elif "jeudi" in today_lower -%}
+  {%- set today_idx = 3 -%}
+{%- elif "vendredi" in today_lower -%}
+  {%- set today_idx = 4 -%}
+{%- elif "samedi" in today_lower -%}
+  {%- set today_idx = 5 -%}
+{%- elif "dimanche" in today_lower -%}
+  {%- set today_idx = 6 -%}
+{%- else -%}
+  {%- set today_idx = 6 -%}
+{%- endif -%}
 
 {# ── Section header ──────────────────────────────────────────────────────── #}
 {{ m.section_header(

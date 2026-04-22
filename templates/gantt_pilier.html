@@ -1,0 +1,224 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ pilier.name }} — Gantt{% endblock %}
+
+{% block extra_css %}
+.gantt-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 768px) {
+  .gantt-summary {
+    grid-template-columns: 1fr;
+  }
+}
+.summary-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.summary-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.summary-value {
+  font-size: 26px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--text);
+}
+.summary-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.gantt-card {
+  overflow-x: auto;
+}
+.gantt-note {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+{% endblock %}
+
+{% block content %}
+{% set roadmap = pilier.roadmap | default([]) %}
+{% set ns = namespace(active_count=0, min_date=none, max_date=none) %}
+{% for item in roadmap %}
+  {% if item.active %}
+    {% set ns.active_count = ns.active_count + 1 %}
+  {% endif %}
+  {% if item.start and (ns.min_date is none or item.start < ns.min_date) %}
+    {% set ns.min_date = item.start %}
+  {% endif %}
+  {% if item.start and (ns.max_date is none or item.start > ns.max_date) %}
+    {% set ns.max_date = item.start %}
+  {% endif %}
+  {% if item.end and (ns.min_date is none or item.end < ns.min_date) %}
+    {% set ns.min_date = item.end %}
+  {% endif %}
+  {% if item.end and (ns.max_date is none or item.end > ns.max_date) %}
+    {% set ns.max_date = item.end %}
+  {% endif %}
+{% endfor %}
+
+{{ m.section_header(
+  eyebrow="ROADMAP",
+  title="Gantt · " + pilier.name,
+  subtitle="Timeline des achievements du pilier avec repère date du jour",
+  accent=pilier.accent
+) }}
+
+{% if not roadmap %}
+{{ m.todo_placeholder(
+  title="Roadmap vide",
+  reason="Aucun achievement n'est encore exposé pour ce pilier.",
+  needed_db="Plan d'exécution · Pilier=" + pilier.name,
+  accent=pilier.accent
+) }}
+{% else %}
+<div class="gantt-summary">
+  <div class="summary-item">
+    <div class="summary-label">Achievements</div>
+    <div class="summary-value" style="color: {{ pilier.accent }};">{{ roadmap | length }}</div>
+    <div class="summary-sub">{{ ns.active_count }} actif{{ "s" if ns.active_count > 1 else "" }}</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-label">Fenêtre</div>
+    <div class="summary-value">{{ ns.min_date or "—" }}</div>
+    <div class="summary-sub">jusqu'à {{ ns.max_date or "—" }}</div>
+  </div>
+  <div class="summary-item">
+    <div class="summary-label">Repère Aujourd'hui</div>
+    <div class="summary-value">{{ snap.current_date }}</div>
+    <div class="summary-sub">marqueur Aujourd'hui affiché dans le graphe</div>
+  </div>
+</div>
+
+<div class="card gantt-card">
+  <svg
+    id="ganttPilierSvg"
+    width="100%"
+    height="{{ 120 + (roadmap | length * 58) }}"
+    viewBox="0 0 940 {{ 120 + (roadmap | length * 58) }}"
+    xmlns="http://www.w3.org/2000/svg"
+    style="display:block; min-width:760px;"
+  ></svg>
+  <div class="gantt-note">
+    Repères roadmap :
+    {% for item in roadmap[:3] %}
+      <strong>{{ item.name }}</strong>{% if not loop.last %} · {% endif %}
+    {% endfor %}
+    <br>
+    Les items sans date de fin restent visibles grâce à une fenêtre de 45 jours. Le trait pointillé marque Aujourd'hui · {{ snap.current_date }}.
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var svg = document.getElementById('ganttPilierSvg');
+  if (!svg) return;
+
+  var roadmap = {{ roadmap | tojson }};
+  var accent = {{ pilier.accent | tojson }};
+  var tintMid = {{ pilier.tint_mid | tojson }};
+  var tintLight = {{ pilier.tint_light | tojson }};
+  var currentDate = {{ snap.current_date | tojson }};
+
+  function toDate(value) {
+    return value ? new Date(value + 'T00:00:00') : null;
+  }
+  function addDays(date, days) {
+    var copy = new Date(date.getTime());
+    copy.setDate(copy.getDate() + days);
+    return copy;
+  }
+  function fmtDate(date) {
+    return date.toISOString().slice(0, 10);
+  }
+  function esc(text) {
+    return String(text || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  var parsed = roadmap.map(function (item) {
+    var start = toDate(item.start) || toDate(currentDate);
+    var end = toDate(item.end) || addDays(start, 45);
+    if (end < start) end = start;
+    return Object.assign({}, item, { _start: start, _end: end });
+  });
+
+  var minDate = parsed.reduce(function (min, item) { return item._start < min ? item._start : min; }, parsed[0]._start);
+  var maxDate = parsed.reduce(function (max, item) { return item._end > max ? item._end : max; }, parsed[0]._end);
+  minDate = addDays(minDate, -7);
+  maxDate = addDays(maxDate, 7);
+
+  var width = 940;
+  var left = 255;
+  var right = 36;
+  var top = 34;
+  var rowHeight = 58;
+  var barHeight = 16;
+  var chartWidth = width - left - right;
+  var totalRange = Math.max(1, maxDate - minDate);
+  var current = toDate(currentDate);
+
+  function xFor(date) {
+    return left + ((date - minDate) / totalRange) * chartWidth;
+  }
+
+  var ticks = [];
+  var cursor = new Date(minDate.getTime());
+  cursor.setDate(1);
+  while (cursor <= maxDate) {
+    ticks.push(new Date(cursor.getTime()));
+    cursor.setMonth(cursor.getMonth() + 1);
+  }
+
+  var parts = [];
+  var totalHeight = 120 + roadmap.length * rowHeight;
+  parts.push('<rect x="0" y="0" width="' + width + '" height="' + totalHeight + '" fill="white" rx="16"/>');
+
+  ticks.forEach(function (tick) {
+    var x = xFor(tick);
+    parts.push('<line x1="' + x + '" y1="' + top + '" x2="' + x + '" y2="' + (top + roadmap.length * rowHeight) + '" stroke="#E5E7EB" stroke-width="1"/>');
+    parts.push('<text x="' + x + '" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#6B7280">' + esc(fmtDate(tick).slice(0, 7)) + '</text>');
+  });
+
+  var currentX = xFor(current);
+  parts.push('<line x1="' + currentX + '" y1="' + top + '" x2="' + currentX + '" y2="' + (top + roadmap.length * rowHeight) + '" stroke="' + accent + '" stroke-width="2" stroke-dasharray="5 4"/>');
+  parts.push('<text x="' + currentX + '" y="' + (top + roadmap.length * rowHeight + 18) + '" text-anchor="middle" font-size="11" font-weight="700" fill="' + accent + '">' + esc(currentDate) + '</text>');
+
+  parsed.forEach(function (item, index) {
+    var y = top + index * rowHeight + 10;
+    var x = xFor(item._start);
+    var xEnd = xFor(item._end);
+    var barWidth = Math.max(8, xEnd - x);
+    var fill = item.active ? accent : tintMid;
+    var opacity = item.active ? 1 : 0.52;
+    var labelY = y + 5;
+    var progress = item.progress === null || item.progress === undefined ? '—' : item.progress + '%';
+    var status = item.status || (item.active ? 'En cours' : 'Planifié');
+
+    parts.push('<text x="20" y="' + labelY + '" font-size="12" font-weight="700" fill="#1A1A1A">' + esc(item.name || 'Sans titre') + '</text>');
+    parts.push('<text x="20" y="' + (labelY + 16) + '" font-size="11" fill="#6B7280">' + esc(status + ' · ' + progress) + '</text>');
+    parts.push('<rect x="' + x + '" y="' + y + '" width="' + barWidth + '" height="' + barHeight + '" rx="8" fill="' + fill + '" fill-opacity="' + opacity + '"/>');
+    parts.push('<rect x="' + x + '" y="' + (y + 24) + '" width="' + chartWidth + '" height="1" fill="' + tintLight + '" fill-opacity="0.55"/>');
+  });
+
+  svg.innerHTML = parts.join('');
+});
+</script>
+{% endif %}
+{% endblock %}

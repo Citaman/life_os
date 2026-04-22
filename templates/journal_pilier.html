@@ -1,0 +1,136 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Journal {{ pilier.name }}{% endblock %}
+
+{% block extra_css %}
+.journal-axis {
+  position: relative;
+  height: 34px;
+  margin-bottom: 18px;
+}
+.journal-axis-line {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, {{ pilier.tint_light }}, {{ pilier.accent }});
+  border-radius: 999px;
+}
+.journal-dots {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.journal-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.journal-dot-bullet {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: {{ pilier.accent }};
+  border: 3px solid {{ pilier.tint_light }};
+}
+.journal-dot-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.journal-list {
+  display: grid;
+  gap: 14px;
+}
+.journal-entry {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  background: #FFFFFF;
+}
+.journal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.journal-date-pill,
+.journal-type-pill,
+.journal-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.journal-date-pill { background: {{ pilier.tint_light }}; color: {{ pilier.accent }}; }
+.journal-type-pill { background: #EFF6FF; color: #1E40AF; }
+.journal-tag-pill { background: #F3F4F6; color: #4B5563; }
+.journal-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.journal-summary {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+{% endblock %}
+
+{% block content %}
+{{ m.section_header(
+    eyebrow="RÉFLEXIONS & NOTES",
+    title="Journal " + pilier.name,
+    subtitle="Entrées récentes et décisions visibles sans ouvrir la base brute",
+    accent=pilier.accent
+) }}
+
+{% set entries = pilier.journal_recent or [] %}
+{% if not entries %}
+{{ m.todo_placeholder(
+    title="Journal " + pilier.name + " — aucune entrée récente",
+    reason="Le journal riche n'est branché en live que pour les piliers déjà connectés.",
+    needed_db="Journal du pilier",
+    accent=pilier.accent
+) }}
+{% else %}
+<div class="card">
+  <div class="journal-axis">
+    <div class="journal-axis-line"></div>
+    <div class="journal-dots">
+      {% for entry in entries %}
+      <div class="journal-dot">
+        <div class="journal-dot-bullet"></div>
+        <div class="journal-dot-label">{{ (entry.date or "")[:10] }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="journal-list">
+    {% for entry in entries %}
+    <div class="journal-entry">
+      <div class="journal-meta">
+        <span class="journal-date-pill">{{ (entry.date or "")[:10] }}</span>
+        {% if entry.type %}<span class="journal-type-pill">{{ entry.type }}</span>{% endif %}
+        {% for tag in entry.tags[:3] %}
+        <span class="journal-tag-pill">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      <div class="journal-title">{{ entry.title }}</div>
+      {% if entry.summary %}<div class="journal-summary">{{ entry.summary }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
