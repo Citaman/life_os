@@ -5,7 +5,7 @@
 {% block extra_css %}
 .tasks-grid {
   display: grid;
-  grid-template-columns: 0.95fr 1.25fr;
+  grid-template-columns: 1.15fr 0.85fr;
   gap: 20px;
 }
 @media (max-width: 860px) {
@@ -13,8 +13,56 @@
     grid-template-columns: 1fr;
   }
 }
-.metric-stack {
+.tasks-card {
   display: grid;
+  gap: 12px;
+}
+.task-row {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #FFFFFF;
+}
+.task-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid {{ pilier.accent }};
+  background: rgba(255,255,255,0.9);
+}
+.task-copy {
+  min-width: 0;
+}
+.task-title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text);
+}
+.task-parent {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.task-day-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #F3F4F6;
+  color: #4B5563;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 .metric-card {
@@ -102,30 +150,41 @@
 {{ m.section_header(
   eyebrow="EXÉCUTION HEBDO",
   title="Tâches semaine · " + pilier.name,
-  subtitle="Semaine " + (week.get("week_start", "—")) + " → " + (week.get("week_end", "—")) + " · charge planifiée restante",
+  subtitle="Semaine " + (week.get("week_start", "—")) + " → " + (week.get("week_end", "—")) + " · liste pilotable + répartition par jour",
   accent=pilier.accent
 ) }}
 
 <div class="tasks-grid">
-  <div class="metric-stack">
-    <div class="metric-card">
-      <div class="metric-label">Tâches planifiées</div>
-      <div class="metric-value" style="color: {{ pilier.accent }};">{{ ns.total }}</div>
-      <div class="metric-sub">Total semaine courante pour {{ pilier.name }}</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Jour le plus dense</div>
-      <div class="metric-value">{{ ns.best_day }}</div>
-      <div class="metric-sub">{{ ns.max_value }} tâche{{ "s" if ns.max_value != 1 else "" }} prévue{{ "s" if ns.max_value != 1 else "" }}</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Cadence projet</div>
-      <div class="metric-value">{{ pilier.achievements_active | length }}</div>
-      <div class="metric-sub">{{ pilier.sous_achievements | length }} sous-achievements suivis</div>
-    </div>
+  <div class="card tasks-card">
+    {% if pilier.tasks_week_items %}
+      {% for task in pilier.tasks_week_items[:7] %}
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-copy">
+          <div class="task-title">{{ task.name }}</div>
+          <div class="task-parent">{{ task.parent_name or "Sans parent" }}</div>
+        </div>
+        <div class="task-day-pill">{{ task.day }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="quiet-note">Aucune tâche non complétée datée cette semaine pour {{ pilier.name }}.</div>
+    {% endif %}
   </div>
 
   <div class="card">
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">Tâches planifiées</div>
+        <div class="metric-value" style="color: {{ pilier.accent }};">{{ ns.total }}</div>
+        <div class="metric-sub">Total semaine courante pour {{ pilier.name }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Jour le plus dense</div>
+        <div class="metric-value">{{ ns.best_day }}</div>
+        <div class="metric-sub">{{ ns.max_value }} tâche{{ "s" if ns.max_value != 1 else "" }} prévue{{ "s" if ns.max_value != 1 else "" }}</div>
+      </div>
+    </div>
     <div class="day-list">
       {% for day in day_labels %}
         {% set value = week.get("counts", {}).get(day, {}).get(pilier_db_name, 0) %}
@@ -143,7 +202,7 @@
       {% endfor %}
     </div>
     <div class="quiet-note">
-      Vue volontairement list-free à droite. Elle met en avant la charge datée de la semaine courante, séparée de la vue liste Notion.
+      Total semaine : {{ ns.total }} tâche{{ "s" if ns.total != 1 else "" }} · max / jour : {{ ns.max_value }}. La liste de gauche est alimentée par les tâches datées restantes du pilier.
     </div>
   </div>
 </div>

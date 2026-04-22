@@ -19,6 +19,8 @@ DIST_PATH = REPO_ROOT / "dist"
 REQUIRED_HTML = [
     "index.html",
     "kpi-pro-fi-signature.html",
+    "achievements-pilier-pro-fi.html",
+    "sous-achievements-pilier-pro-fi.html",
     "sankey-revenu-profi.html",
     "treemap-depenses-profi.html",
     "area-pilier-pro-fi.html",
@@ -133,7 +135,7 @@ def main() -> None:
     pro_fi = snapshots.get("piliers", {}).get("pro_fi")
     if not pro_fi:
         fail("piliers.pro_fi missing from snapshots.json")
-    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_w16", "habit_completion_12w", "roadmap", "journal_recent"):
+    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_w16", "habit_completion_12w", "roadmap", "journal_recent", "tasks_week_items", "achievements_active", "sous_achievements"):
         if key not in pro_fi:
             fail(f"piliers.pro_fi missing key: {key}")
     if not pro_fi.get("time_pilier"):
@@ -153,11 +155,25 @@ def main() -> None:
     if active_habits_week not in area_pilier_html:
         fail("area-pilier-pro-fi.html missing active habits week label")
 
+    achievements_html = (DIST_PATH / "achievements-pilier-pro-fi.html").read_text()
+    if "Achievements actifs" not in achievements_html:
+        fail("achievements-pilier-pro-fi.html missing title")
+    if "Budget familial maîtrisé" not in achievements_html:
+        fail("achievements-pilier-pro-fi.html missing achievement content")
+
+    sous_html = (DIST_PATH / "sous-achievements-pilier-pro-fi.html").read_text()
+    if "Sous-achievements &amp; paliers" not in sous_html and "Sous-achievements & paliers" not in sous_html:
+        fail("sous-achievements-pilier-pro-fi.html missing title")
+    if "Choisir + installer outil tracker budget" not in sous_html:
+        fail("sous-achievements-pilier-pro-fi.html missing sub-achievement content")
+
     tasks_html = (DIST_PATH / "tasks-week-pilier-pro-fi.html").read_text()
-    if "charge planifiée restante" not in tasks_html:
+    if "liste pilotable + répartition par jour" not in tasks_html:
         fail("tasks-week-pilier-pro-fi.html missing planning subtitle")
     if "Pro &amp; Financier" not in tasks_html and "Pro & Financier" not in tasks_html:
         fail("tasks-week-pilier-pro-fi.html missing pilier name")
+    if "Connecter tous les comptes bancaires" not in tasks_html:
+        fail("tasks-week-pilier-pro-fi.html missing planned task list")
 
     gantt_html = (DIST_PATH / "gantt-pilier-pro-fi.html").read_text()
     if "Budget familial maîtrisé" not in gantt_html:

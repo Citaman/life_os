@@ -1,0 +1,209 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ pilier.name }} — Achievements{% endblock %}
+
+{% block extra_css %}
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+@media (max-width: 920px) {
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.achievement-card {
+  display: grid;
+  gap: 18px;
+}
+.achievement-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+.achievement-name {
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.achievement-meta {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #F3F4F6;
+  color: #4B5563;
+}
+.criteria-card {
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, {{ pilier.tint_light }} 0%, rgba(255,255,255,0.96) 100%);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.criteria-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: {{ pilier.accent }};
+  margin-bottom: 8px;
+}
+.criteria-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+}
+.achievement-columns {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+}
+@media (max-width: 640px) {
+  .achievement-columns {
+    grid-template-columns: 1fr;
+  }
+}
+.sub-list {
+  display: grid;
+  gap: 10px;
+}
+.sub-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: #F9FAFB;
+  border: 1px solid var(--border);
+}
+.sub-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.sub-progress {
+  font-size: 11px;
+  font-weight: 700;
+  color: {{ pilier.accent }};
+}
+.task-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.task-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #EFF6FF;
+  color: #1E3A8A;
+}
+.task-day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: {{ pilier.accent }};
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.empty-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+{% endblock %}
+
+{% block content %}
+{{ m.section_header(
+  eyebrow="EN COURS",
+  title="Achievements actifs",
+  subtitle="Lecture V8 des objectifs structurants du pilier, avec paliers et tâches reliées sur la semaine courante",
+  accent=pilier.accent
+) }}
+
+{% if not pilier.achievements_active %}
+{{ m.todo_placeholder(
+  title="Aucun achievement actif",
+  reason="Le pilier ne renvoie pas encore d'achievement actif dans Plan d'exécution.",
+  needed_db="Plan d'exécution · Achievement · Pilier=" + pilier.name,
+  accent=pilier.accent
+) }}
+{% else %}
+<div class="achievements-grid">
+  {% for achievement in pilier.achievements_active[:2] %}
+  <div class="card achievement-card">
+    <div class="achievement-top">
+      <div>
+        <div class="achievement-name">{{ achievement.name }}</div>
+        <div class="achievement-meta">
+          {% if achievement.start %}<span class="meta-pill">Démarré {{ achievement.start }}</span>{% endif %}
+          {% if achievement.deadline %}<span class="meta-pill">Deadline {{ achievement.deadline }}</span>{% endif %}
+          {% if achievement.cible_unite %}<span class="meta-pill">{{ achievement.cible_unite }}</span>{% endif %}
+        </div>
+      </div>
+      {{ m.progress_ring(achievement.progress or 0, size=112, stroke=10, color=pilier.accent, label="progression") }}
+    </div>
+
+    <div class="criteria-card">
+      <div class="criteria-label">Critère de succès</div>
+      <div class="criteria-text">{{ achievement.critere or "Critère non documenté dans Plan d'exécution." }}</div>
+    </div>
+
+    <div class="achievement-columns">
+      <div>
+        <div class="criteria-label">Sous-achievements</div>
+        <div class="sub-list">
+          {% for sous in achievement.sous_preview %}
+          <div class="sub-row">
+            <div class="sub-name">{{ sous.name }}</div>
+            {% if sous.progress is not none %}<div class="sub-progress">{{ sous.progress }}%</div>{% endif %}
+            {{ m.status_pill(sous.status) }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div>
+        <div class="criteria-label">Tâches liées cette semaine</div>
+        {% if achievement.linked_tasks_week %}
+        <div class="task-pills">
+          {% for task in achievement.linked_tasks_week %}
+          <div class="task-pill">
+            <span class="task-day">{{ task.day }}</span>
+            <span>{{ task.name }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-note">
+          Aucune tâche non complétée planifiée cette semaine sur cet achievement ou ses sous-achievements.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

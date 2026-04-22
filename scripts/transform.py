@@ -198,11 +198,30 @@ def count_by_filter(pages: list[dict[str, Any]], **filters: Any) -> int:
 
 def achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[str, Any]]:
     out = []
+    id_to_name = {p["id"]: p.get("Nom") for p in plan}
     for p in plan:
         if p.get("Type") == "Achievement" and p.get("Pilier") == pilier_name and p.get("Statut") == "En cours":
+            achievement_id = p["id"]
+            child_sous = []
+            child_sous_ids: set[str] = set()
+            for child in plan:
+                if child.get("Type") != "Sous-achievement":
+                    continue
+                parents = child.get("Parent") or []
+                if achievement_id not in parents:
+                    continue
+                child_sous_ids.add(child["id"])
+                child_sous.append(
+                    {
+                        "id": child["id"],
+                        "name": child.get("Nom"),
+                        "status": child.get("Statut"),
+                        "progress": parse_percent(child.get("Progression actuelle")),
+                    }
+                )
             out.append(
                 {
-                    "id": p["id"],
+                    "id": achievement_id,
                     "url": p["url"],
                     "name": p.get("Nom"),
                     "progress": achievement_progress(p, plan),
@@ -210,6 +229,17 @@ def achievements_of(plan: list[dict[str, Any]], pilier_name: str) -> list[dict[s
                     "cible_unite": p.get("Unité + Cible"),
                     "deadline": (p.get("Deadline") or {}).get("start"),
                     "start": (p.get("Date prévue début") or {}).get("start"),
+                    "sous_preview": sorted(
+                        child_sous,
+                        key=lambda item: (
+                            {"Complété": 0, "Atteint": 0, "En cours": 1, "Pas commencé": 2, "Planifié": 2}.get(
+                                item.get("status"), 3
+                            ),
+                            item.get("name") or "",
+                        ),
+                    )[:5],
+                    "linked_parent_ids": [achievement_id, *sorted(child_sous_ids)],
+                    "linked_parent_names": [id_to_name.get(pid) for pid in [achievement_id, *sorted(child_sous_ids)] if id_to_name.get(pid)],
                 }
             )
     return sorted(out, key=lambda a: a.get("start") or "")
@@ -685,6 +715,52 @@ def scheduled_tasks_per_day_per_pilier(plan: list[dict[str, Any]], today_str: st
     }
 
 
+def scheduled_tasks_for_pilier(plan: list[dict[str, Any]], today_str: str, pilier_name: str) -> list[dict[str, Any]]:
+    """Detailed scheduled tasks for the current Monday→Sunday week for one pilier."""
+    from datetime import date as date_cls, timedelta
+
+    current = date_cls.fromisoformat(today_str)
+    week_start = current - timedelta(days=current.weekday())
+    week_end = week_start + timedelta(days=6)
+    days_fr = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+    id_to_page = {p["id"]: p for p in plan}
+    out = []
+
+    for p in plan:
+        if p.get("Type") != "Tâche atomique":
+            continue
+        if p.get("Pilier") != pilier_name:
+            continue
+        if p.get("Statut") in {"Complété", "Abandonné"}:
+            continue
+        start_raw = (p.get("Date prévue début") or {}).get("start")
+        if not start_raw:
+            continue
+        try:
+            d = date_cls.fromisoformat(start_raw[:10])
+        except ValueError:
+            continue
+        if d < week_start or d > week_end:
+            continue
+        parents = p.get("Parent") or []
+        parent_id = parents[0] if parents else None
+        parent_page = id_to_page.get(parent_id) if parent_id else None
+        out.append(
+            {
+                "id": p["id"],
+                "name": p.get("Nom"),
+                "status": p.get("Statut"),
+                "date": d.isoformat(),
+                "day": days_fr[d.weekday()],
+                "parent_id": parent_id,
+                "parent_name": parent_page.get("Nom") if parent_page else None,
+                "parent_type": parent_page.get("Type") if parent_page else None,
+            }
+        )
+
+    return sorted(out, key=lambda item: (item.get("date") or "", item.get("name") or ""))
+
+
 # ---------- Main ----------
 
 
@@ -719,6 +795,22 @@ def main() -> None:
         habits_week = habits_of(hab, name, active_habits_week)
         roadmap = roadmap_of(plan, name)
         progress_avg = compute_pilier_progress(plan, name)
+        tasks_week_items = scheduled_tasks_for_pilier(plan, CURRENT_DATE, name)
+
+        tasks_by_parent: dict[str, list[dict[str, Any]]] = {}
+        for task in tasks_week_items:
+            parent_id = task.get("parent_id")
+            if parent_id:
+                tasks_by_parent.setdefault(parent_id, []).append(task)
+
+        enriched_active = []
+        for achievement in active:
+            linked_tasks = []
+            for parent_id in achievement.get("linked_parent_ids", []):
+                linked_tasks.extend(tasks_by_parent.get(parent_id, []))
+            linked_tasks = sorted(linked_tasks, key=lambda item: (item.get("date") or "", item.get("name") or ""))
+            enriched = {**achievement, "linked_tasks_week": linked_tasks[:5]}
+            enriched_active.append(enriched)
 
         # Historic 12 weeks — computed from real Habitudes DB (will be mostly null at start)
         hist_series = historic_weekly_completion(hab, name, historic_weeks)
@@ -731,13 +823,14 @@ def main() -> None:
                 "cible": None,  # TODO: pilier target DB/property not yet defined
                 "gap": None,
             },
-            "achievements_active": active,
+            "achievements_active": enriched_active,
             "sous_achievements": sous_achs,
             "habits_week_requested": habits_week_context["requested_week"],
             "habits_week_used": active_habits_week,
             "habits_week_is_fallback": habits_week_context["used_fallback"],
             "habits_w16": habits_week,
             "habit_completion_12w": hist_series,  # list of int|null
+            "tasks_week_items": tasks_week_items,
             # Baseline spec until a real Time Tracker DB is connected.
             "time_pilier": TIME_BASELINES.get(name),
             "roadmap": roadmap,
