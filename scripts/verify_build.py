@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import sys
+from html import escape
 from pathlib import Path
 
 
@@ -172,8 +173,19 @@ def main() -> None:
         fail("tasks-week-pilier-pro-fi.html missing planning subtitle")
     if "Pro &amp; Financier" not in tasks_html and "Pro & Financier" not in tasks_html:
         fail("tasks-week-pilier-pro-fi.html missing pilier name")
-    if "Connecter tous les comptes bancaires" not in tasks_html:
-        fail("tasks-week-pilier-pro-fi.html missing planned task list")
+    pro_fi_week_tasks = pro_fi.get("tasks_week_items", [])
+    if pro_fi_week_tasks:
+        expected_task = str(pro_fi_week_tasks[0].get("name") or "")
+        expected_variants = {
+            expected_task,
+            escape(expected_task),
+            escape(expected_task, quote=False),
+            expected_task.replace("'", "&#39;"),
+        }
+        if expected_task and not any(variant in tasks_html for variant in expected_variants):
+            fail(f"tasks-week-pilier-pro-fi.html missing current planned task: {expected_task}")
+    elif "Aucune tâche non complétée datée cette semaine" not in tasks_html:
+        fail("tasks-week-pilier-pro-fi.html missing empty-week state")
 
     gantt_html = (DIST_PATH / "gantt-pilier-pro-fi.html").read_text()
     if "Budget familial maîtrisé" not in gantt_html:
