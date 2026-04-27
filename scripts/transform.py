@@ -17,9 +17,10 @@ import json
 import locale
 import os
 import sys
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 
@@ -29,9 +30,42 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RAW_PATH = REPO_ROOT / "data" / "raw_notion.json"
 OUT_PATH = REPO_ROOT / "data" / "snapshots.json"
 
-CURRENT_WEEK = os.environ.get("CURRENT_WEEK", "W16")
-CURRENT_TRIMESTER = os.environ.get("CURRENT_TRIMESTER", "T2 2026")
-CURRENT_DATE = os.environ.get("CURRENT_DATE", "2026-04-19")
+APP_TZ = ZoneInfo("Europe/Paris")
+
+
+def env_value(name: str) -> str | None:
+    value = os.environ.get(name)
+    if value is None:
+        return None
+    value = value.strip()
+    return value or None
+
+
+def paris_today() -> date:
+    return datetime.now(APP_TZ).date()
+
+
+def parse_context_date(value: str | None) -> date:
+    if value is None:
+        return paris_today()
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        sys.exit(f"ERROR: CURRENT_DATE must use YYYY-MM-DD format, got {value!r}.")
+
+
+def week_label_for(day: date) -> str:
+    return f"W{day.isocalendar().week:02d}"
+
+
+def trimester_label_for(day: date) -> str:
+    return f"T{((day.month - 1) // 3) + 1} {day.year}"
+
+
+CURRENT_DATE_OBJ = parse_context_date(env_value("CURRENT_DATE"))
+CURRENT_DATE = env_value("CURRENT_DATE") or CURRENT_DATE_OBJ.isoformat()
+CURRENT_WEEK = (env_value("CURRENT_WEEK") or week_label_for(CURRENT_DATE_OBJ)).upper()
+CURRENT_TRIMESTER = env_value("CURRENT_TRIMESTER") or trimester_label_for(CURRENT_DATE_OBJ)
 
 PILIERS = [
     {"slug": "interieur", "name": "Intérieur", "color_key": "green", "accent": "#2F7D5B", "tint_mid": "#7FB09A", "tint_light": "#D4E5DB"},
@@ -344,7 +378,7 @@ def resolve_habits_week(hab_pages: list[dict[str, Any]], requested_week: str) ->
 
 
 def build_historic_weeks(anchor_week: str | None, span: int = 12) -> list[str]:
-    anchor_num = parse_week_number(anchor_week) or 16
+    anchor_num = parse_week_number(anchor_week) or CURRENT_DATE_OBJ.isocalendar().week
     start_num = max(1, anchor_num - span + 1)
     return [f"W{week_num:02d}" for week_num in range(start_num, anchor_num + 1)]
 
@@ -638,16 +672,22 @@ def tasks_today(plan: list[dict[str, Any]], today_str: str) -> list[dict[str, An
     return out
 
 
-def tasks_completed_per_day_per_pilier_w16(plan: list[dict[str, Any]], weeks_range: tuple[str, str]) -> dict[str, dict[str, int]]:
+def week_range_for_date(today_str: str) -> tuple[str, str]:
+    current = date.fromisoformat(today_str)
+    week_start = current - timedelta(days=current.weekday())
+    week_end = week_start + timedelta(days=6)
+    return week_start.isoformat(), week_end.isoformat()
+
+
+def tasks_completed_per_day_per_pilier(plan: list[dict[str, Any]], week_range: tuple[str, str]) -> dict[str, dict[str, int]]:
     """Build a dict {day (Lun..Dim): {pilier: count}} from real Tâches atomiques with
-    Date prévue début within the W16 date range AND Statut=Complété.
+    Date prévue début within the selected week range AND Statut=Complété.
 
-    weeks_range = (start_date_iso, end_date_iso) inclusive.
+    week_range = (start_date_iso, end_date_iso) inclusive.
     """
-    from datetime import date as date_cls
 
-    start = date_cls.fromisoformat(weeks_range[0])
-    end = date_cls.fromisoformat(weeks_range[1])
+    start = date.fromisoformat(week_range[0])
+    end = date.fromisoformat(week_range[1])
     days_fr = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
     piliers = ["Intérieur", "Famille", "Pro & Financier", "Création", "Spirituel"]
     out: dict[str, dict[str, int]] = {d: {p: 0 for p in piliers} for d in days_fr}
@@ -661,7 +701,7 @@ def tasks_completed_per_day_per_pilier_w16(plan: list[dict[str, Any]], weeks_ran
         if not start_raw:
             continue
         try:
-            d = date_cls.fromisoformat(start_raw[:10])
+            d = date.fromisoformat(start_raw[:10])
         except ValueError:
             continue
         if d < start or d > end:
@@ -680,9 +720,7 @@ def scheduled_tasks_per_day_per_pilier(plan: list[dict[str, Any]], today_str: st
     Counts task atomiques scheduled in the Monday→Sunday week containing `today_str`,
     excluding completed or abandoned tasks.
     """
-    from datetime import date as date_cls, timedelta
-
-    current = date_cls.fromisoformat(today_str)
+    current = date.fromisoformat(today_str)
     week_start = current - timedelta(days=current.weekday())
     week_end = week_start + timedelta(days=6)
     days_fr = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
@@ -698,7 +736,7 @@ def scheduled_tasks_per_day_per_pilier(plan: list[dict[str, Any]], today_str: st
         if not start_raw:
             continue
         try:
-            d = date_cls.fromisoformat(start_raw[:10])
+            d = date.fromisoformat(start_raw[:10])
         except ValueError:
             continue
         if d < week_start or d > week_end:
@@ -717,9 +755,8 @@ def scheduled_tasks_per_day_per_pilier(plan: list[dict[str, Any]], today_str: st
 
 def scheduled_tasks_for_pilier(plan: list[dict[str, Any]], today_str: str, pilier_name: str) -> list[dict[str, Any]]:
     """Detailed scheduled tasks for the current Monday→Sunday week for one pilier."""
-    from datetime import date as date_cls, timedelta
 
-    current = date_cls.fromisoformat(today_str)
+    current = date.fromisoformat(today_str)
     week_start = current - timedelta(days=current.weekday())
     week_end = week_start + timedelta(days=6)
     days_fr = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
@@ -737,7 +774,7 @@ def scheduled_tasks_for_pilier(plan: list[dict[str, Any]], today_str: str, pilie
         if not start_raw:
             continue
         try:
-            d = date_cls.fromisoformat(start_raw[:10])
+            d = date.fromisoformat(start_raw[:10])
         except ValueError:
             continue
         if d < week_start or d > week_end:
@@ -828,7 +865,9 @@ def main() -> None:
             "habits_week_requested": habits_week_context["requested_week"],
             "habits_week_used": active_habits_week,
             "habits_week_is_fallback": habits_week_context["used_fallback"],
-            "habits_w16": habits_week,
+            "habits_active_week": habits_week,
+            "habits_week": habits_week,
+            "habits_w16": habits_week,  # Legacy template key; use habits_active_week for new code.
             "habit_completion_12w": hist_series,  # list of int|null
             "tasks_week_items": tasks_week_items,
             # Baseline spec until a real Time Tracker DB is connected.
@@ -851,9 +890,9 @@ def main() -> None:
     tlist_done = sum(1 for t in tlist if t.get("status") == "Complété")
 
     # Overall habit score current week
-    all_habits_w16 = [h for h in hab if str(h.get("Semaine") or "").strip().upper() == active_habits_week]
-    total_cible = sum(int(h.get("Cible /sem") or 0) for h in all_habits_w16)
-    total_fait = sum(int(h.get("Fait") or 0) for h in all_habits_w16)
+    all_habits_active_week = [h for h in hab if str(h.get("Semaine") or "").strip().upper() == active_habits_week]
+    total_cible = sum(int(h.get("Cible /sem") or 0) for h in all_habits_active_week)
+    total_fait = sum(int(h.get("Fait") or 0) for h in all_habits_active_week)
     if total_cible == 0:
         badge_pct = None
         badge_status = None
@@ -861,9 +900,9 @@ def main() -> None:
         badge_pct = round(total_fait / total_cible * 100)
         badge_status = "VERT" if badge_pct >= 80 else ("JAUNE" if badge_pct >= 50 else "ROUGE")
 
-    # Stacked tasks W16 per day per pilier (from real completed tasks)
-    # W16 = 2026-04-13 → 2026-04-19 (assumption: current_week mentions W16)
-    stacked_w16 = tasks_completed_per_day_per_pilier_w16(plan, ("2026-04-13", "2026-04-19"))
+    # Stacked completed tasks for the Monday→Sunday week containing CURRENT_DATE.
+    current_week_range = week_range_for_date(CURRENT_DATE)
+    stacked_completed_week = tasks_completed_per_day_per_pilier(plan, current_week_range)
     tasks_active_week = scheduled_tasks_per_day_per_pilier(plan, CURRENT_DATE)
     finance_current = finance_snapshot(finance_monthly, budget_lines, pro_fi_journal)
     transactions_snapshot = {
@@ -879,6 +918,10 @@ def main() -> None:
         "habits_week_context": habits_week_context,
         "current_trimester": CURRENT_TRIMESTER,
         "current_date": CURRENT_DATE,
+        "current_week_range": {
+            "week_start": current_week_range[0],
+            "week_end": current_week_range[1],
+        },
         "today_fr": today_fr(CURRENT_DATE),
         "badge_week": {
             "week": active_habits_week,
@@ -886,14 +929,15 @@ def main() -> None:
             "score": badge_pct,      # int or null
             "total_fait": total_fait,
             "total_cible": total_cible,
-            "streak_weeks_vert": None,  # TODO: needs history
+            "streak_weeks_vert": None,  # Future metric once enough weekly history exists.
         },
         "tasks_today": {
             "done": tlist_done,
             "total": len(tlist),
             "items": tlist,
         },
-        "tasks_w16_by_day_by_pilier": stacked_w16,
+        "tasks_completed_week_by_day_by_pilier": stacked_completed_week,
+        "tasks_w16_by_day_by_pilier": stacked_completed_week,  # Backward-compatible alias.
         "tasks_active_week": tasks_active_week,
         "trimester_progress": {
             "achievements_total_active": achievements_en_cours,
@@ -906,7 +950,7 @@ def main() -> None:
             # For now: done / (done + en_cours). Null if denominator = 0.
             "t2_percent": round(sous_done / (sous_done + sous_en_cours) * 100) if (sous_done + sous_en_cours) else None,
         },
-        "time_week": None,  # TODO: DB Time Tracker future
+        "time_week": None,  # Future DB Time Tracker metric.
         "historic_weekly_12w": {
             "weeks": historic_weeks,
             "series": {p["name"]: piliers_out[p["slug"]]["habit_completion_12w"] for p in PILIERS},
@@ -958,7 +1002,7 @@ def main() -> None:
     # Per pilier — 3 KPIs × 5 piliers = 15
     for p in snapshots['piliers'].values():
         slug = p['slug'].replace('_', '-')
-        habits = p.get('habits_w16', [])
+        habits = p.get('habits_active_week') or p.get('habits_w16', [])
         total_fait = sum(h.get('fait', 0) for h in habits)
         total_cible = sum(h.get('cible', 0) for h in habits)
         habit_pct = round(total_fait / total_cible * 100) if total_cible else None
@@ -979,11 +1023,11 @@ def main() -> None:
         }
         # Signature metric — all null for V2
         sig_labels = {
-            "interieur": ("POIDS ACTUEL", "DB Mesures corps à brancher"),
-            "famille": ("DATE-NIGHT CETTE SEMAINE", "DB Couple à brancher"),
+            "interieur": ("INTÉRIEUR", "Suivi par tâches, habitudes et roadmap"),
+            "famille": ("FAMILLE", "Suivi par tâches, habitudes et roadmap"),
             "pro_fi": ("FIN DE MOIS ESTIMÉE", "DB finance non branchée"),
             "creation": ("PROGRESSION TECH", f"{p['progress_avg']} % · pas de sous complété T2"),
-            "spirituel": ("PRÉDICATION AVRIL", "DB Rapports prédication à brancher"),
+            "spirituel": ("SPIRITUEL", "Suivi par tâches, habitudes et roadmap"),
         }
         label, sub_text = sig_labels.get(p['slug'], ("SIGNATURE", ""))
         value = "—"

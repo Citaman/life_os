@@ -8,11 +8,13 @@ Goals:
 - idempotent enough for reruns
 
 Usage:
+    python scripts/sync_pro_fi_page.py --dry-run
     python scripts/sync_pro_fi_page.py
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 import time
@@ -23,15 +25,24 @@ from notion_client import Client
 
 load_dotenv()
 
-TOKEN = os.environ.get("NOTION_TOKEN")
-if not TOKEN:
-    sys.exit("ERROR: NOTION_TOKEN missing in env.")
+DEFAULT_BASE_URL = "https://citaman.github.io/life_os"
+
+
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        sys.exit(f"ERROR: {name} missing in env. Refusing to use a hardcoded Notion fallback.")
+    return value
+
+
+TOKEN = require_env("NOTION_TOKEN")
 
 client = Client(auth=TOKEN)
 
-BASE_URL = "https://citaman.github.io/life_os"
-PAGE_ID = os.environ.get("PAGE_PRO_FI", "348845e8-e836-81b0-aaf7-e3b81b92416c")
+BASE_URL = (os.environ.get("LIFE_OS_BASE_URL") or os.environ.get("BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
+PAGE_ID = require_env("PAGE_PRO_FI")
 BACKSTAGE_LABEL = "Backstage · pilotage opérationnel"
+DRY_RUN = False
 
 
 def block_text(block: dict[str, Any]) -> str:
@@ -87,22 +98,35 @@ def make_embed(url: str, caption: str | None = None) -> dict[str, Any]:
 
 
 def insert_after(parent_id: str, after_block_id: str, children: list[dict[str, Any]]) -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN append {len(children)} block(s) after {after_block_id[:8]}")
+        return
     client.blocks.children.append(block_id=parent_id, after=after_block_id, children=children)
 
 
 def delete_block(block_id: str) -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN delete block {block_id[:8]}")
+        return
     client.blocks.delete(block_id=block_id)
 
 
 def top_level_blocks() -> list[dict[str, Any]]:
-    return list_children(PAGE_ID)
+    try:
+        return list_children(PAGE_ID)
+    except Exception as e:  # noqa: BLE001
+        raise RuntimeError(f"Could not read PAGE_PRO_FI ({PAGE_ID[:8]}...). Check PAGE_PRO_FI and Notion access: {e}") from e
 
 
 def find_backstage_toggle(blocks: list[dict[str, Any]]) -> tuple[int, dict[str, Any]]:
     for idx, block in enumerate(blocks):
         if block["type"] in {"toggle", "callout"} and BACKSTAGE_LABEL in block_text(block):
             return idx, block
-    raise RuntimeError("Backstage toggle not found; aborting to avoid mutating end of page blindly.")
+    available = [block_text(block).strip() for block in blocks if block["type"] in {"toggle", "callout"} and block_text(block).strip()]
+    raise RuntimeError(
+        f"Backstage toggle '{BACKSTAGE_LABEL}' not found on PAGE_PRO_FI ({PAGE_ID[:8]}...). "
+        f"Refusing to mutate page. Visible toggle/callout labels: {available or 'none'}"
+    )
 
 
 def find_section_range(blocks: list[dict[str, Any]], heading_text: str) -> tuple[int, int]:
@@ -112,7 +136,11 @@ def find_section_range(blocks: list[dict[str, Any]], heading_text: str) -> tuple
             start = idx
             break
     if start is None:
-        raise RuntimeError(f"Heading not found: {heading_text}")
+        available = [block_text(block).strip() for block in blocks if block["type"] == "heading_2" and block_text(block).strip()]
+        raise RuntimeError(
+            f"Heading_2 '{heading_text}' not found on PAGE_PRO_FI ({PAGE_ID[:8]}...). "
+            f"Available heading_2 values: {available or 'none'}"
+        )
 
     end = len(blocks)
     for idx in range(start + 1, len(blocks)):
@@ -153,6 +181,10 @@ def replace_section(heading_text: str, new_children: list[dict[str, Any]], expec
 
     old_slice = before[start:end]
     after_block_id = old_slice[-1]["id"]
+    if DRY_RUN:
+        print(f"  DRY-RUN {heading_text}: would append {len(new_children)} block(s) and delete {len(old_slice) - 1} old block(s)")
+        return True
+
     insert_after(PAGE_ID, after_block_id, new_children)
     time.sleep(0.6)
 
@@ -188,6 +220,12 @@ def cleanup_backstage_placeholder() -> bool:
 
 def embed_url(slug: str) -> str:
     return f"{BASE_URL}/{slug}.html"
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Sync the Pro & Financier Notion page embed sections.")
+    parser.add_argument("--dry-run", action="store_true", help="Read Notion and print planned mutations without writing.")
+    return parser.parse_args()
 
 
 SECTION_SPECS: list[dict[str, Any]] = [
@@ -297,14 +335,20 @@ SECTION_SPECS: list[dict[str, Any]] = [
 
 
 def main() -> None:
+    global DRY_RUN
+    args = parse_args()
+    DRY_RUN = args.dry_run
+
     blocks = top_level_blocks()
     find_backstage_toggle(blocks)
     print("→ Sync Pro & Financier")
+    if DRY_RUN:
+        print("  DRY-RUN: no Notion mutations will be sent")
     changed = 0
     for spec in SECTION_SPECS:
         changed += int(replace_section(spec["heading"], spec["children"], spec["expected_urls"], spec.get("intro")))
     changed += int(cleanup_backstage_placeholder())
-    print(f"\nDone. {changed} section(s) changed.")
+    print(f"\nDone. {changed} section(s) {'would change' if DRY_RUN else 'changed'}.")
 
 
 if __name__ == "__main__":

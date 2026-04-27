@@ -10,6 +10,7 @@ Optional finance DBs:
 - Finance mensuelle
 - Lignes budget mensuel
 - Journal Pro & Financier
+- Transactions Anthonny / Mirane
 
 Usage:
     python scripts/fetch_notion.py
@@ -28,18 +29,37 @@ from notion_client import Client
 
 load_dotenv()
 
-TOKEN = os.environ.get("NOTION_TOKEN")
-if not TOKEN:
-    sys.exit("ERROR: NOTION_TOKEN missing in env.")
 
-PLAN_DS = os.environ["PLAN_DS"]
-HABITUDES_DS = os.environ["HABITUDES_DS"]
-BACKLOG_DS = os.environ["BACKLOG_DS"]
-FINANCE_MONTHLY_DS = os.environ.get("FINANCE_MONTHLY_DS")
-BUDGET_LINES_DS = os.environ.get("BUDGET_LINES_DS")
-PRO_FI_JOURNAL_DS = os.environ.get("PRO_FI_JOURNAL_DS")
-TX_ANTHONNY_DS = os.environ.get("TX_ANTHONNY_DS", "b0439790-d16f-40ab-9724-9db3adec398a")
-TX_MIRANE_DS = os.environ.get("TX_MIRANE_DS", "88c44c29-091c-4989-b38b-9b1415eb13ea")
+def env_value(name: str) -> str | None:
+    value = os.environ.get(name)
+    if value is None:
+        return None
+    value = value.strip()
+    return value or None
+
+
+def require_env(*names: str) -> dict[str, str]:
+    values = {name: env_value(name) for name in names}
+    missing = [name for name, value in values.items() if value is None]
+    if missing:
+        missing_list = ", ".join(missing)
+        sys.exit(
+            f"ERROR: missing required env value(s): {missing_list}.\n"
+            "Set them in .env or export them before running scripts/fetch_notion.py."
+        )
+    return {name: value for name, value in values.items() if value is not None}
+
+
+required_env = require_env("NOTION_TOKEN", "PLAN_DS", "HABITUDES_DS", "BACKLOG_DS")
+TOKEN = required_env["NOTION_TOKEN"]
+PLAN_DS = required_env["PLAN_DS"]
+HABITUDES_DS = required_env["HABITUDES_DS"]
+BACKLOG_DS = required_env["BACKLOG_DS"]
+FINANCE_MONTHLY_DS = env_value("FINANCE_MONTHLY_DS")
+BUDGET_LINES_DS = env_value("BUDGET_LINES_DS")
+PRO_FI_JOURNAL_DS = env_value("PRO_FI_JOURNAL_DS")
+TX_ANTHONNY_DS = env_value("TX_ANTHONNY_DS")
+TX_MIRANE_DS = env_value("TX_MIRANE_DS")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = REPO_ROOT / "data" / "raw_notion.json"
@@ -149,30 +169,40 @@ def main() -> None:
         finance_raw = query_data_source(FINANCE_MONTHLY_DS)
         bundle["finance_monthly"] = simplify(finance_raw)
         print(f"Finance mensuelle total: {len(finance_raw)} pages\n")
+    else:
+        print("Skipping Finance mensuelle (FINANCE_MONTHLY_DS not set).\n")
 
     if BUDGET_LINES_DS:
         print("Fetching Lignes budget mensuel...")
         budget_lines_raw = query_data_source(BUDGET_LINES_DS)
         bundle["budget_lines"] = simplify(budget_lines_raw)
         print(f"Lignes budget mensuel total: {len(budget_lines_raw)} pages\n")
+    else:
+        print("Skipping Lignes budget mensuel (BUDGET_LINES_DS not set).\n")
 
     if PRO_FI_JOURNAL_DS:
         print("Fetching Journal Pro & Financier...")
         journal_raw = query_data_source(PRO_FI_JOURNAL_DS)
         bundle["pro_fi_journal"] = simplify(journal_raw)
         print(f"Journal Pro & Financier total: {len(journal_raw)} pages\n")
+    else:
+        print("Skipping Journal Pro & Financier (PRO_FI_JOURNAL_DS not set).\n")
 
     if TX_ANTHONNY_DS:
         print("Fetching Transactions Anthonny...")
         tx_anthonny_raw = query_data_source(TX_ANTHONNY_DS)
         bundle["transactions_anthonny"] = simplify(tx_anthonny_raw)
         print(f"Transactions Anthonny total: {len(tx_anthonny_raw)} pages\n")
+    else:
+        print("Skipping Transactions Anthonny (TX_ANTHONNY_DS not set).\n")
 
     if TX_MIRANE_DS:
         print("Fetching Transactions Mirane...")
         tx_mirane_raw = query_data_source(TX_MIRANE_DS)
         bundle["transactions_mirane"] = simplify(tx_mirane_raw)
         print(f"Transactions Mirane total: {len(tx_mirane_raw)} pages\n")
+    else:
+        print("Skipping Transactions Mirane (TX_MIRANE_DS not set).\n")
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(bundle, indent=2, ensure_ascii=False))

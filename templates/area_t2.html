@@ -104,6 +104,35 @@
   letter-spacing: 0;
   line-height: 1.3;
 }
+.empty-state-card {
+  padding: 18px 20px;
+}
+.empty-state-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.empty-state-text {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.empty-state-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.empty-state-list li {
+  font-size: 12px;
+  color: var(--muted);
+}
+.empty-state-list strong {
+  color: var(--text);
+}
 {% endblock %}
 
 {% block content %}
@@ -112,6 +141,19 @@
 {% set weeks  = hw.weeks %}
 {% set series = hw.series %}
 {% set n      = weeks | length %}
+{% set active_week = snap.get("active_habits_week") or ((weeks | last) if n else "semaine active") %}
+{% set real_start_week = (weeks | first) if n else active_week %}
+{% set real_end_week = (weeks | last) if n else active_week %}
+{% set prev_week = "semaine précédente" %}
+{% set proj_weeks = [] %}
+{% set last_week_num = (real_end_week[1:] | int) if real_end_week else 0 %}
+{% if last_week_num %}
+  {% for i in range(1, 11) %}
+    {% set _ = proj_weeks.append("W%02d" | format(last_week_num + i)) %}
+  {% endfor %}
+{% endif %}
+{% set proj_start_week = (proj_weeks | first) if proj_weeks else "projection" %}
+{% set proj_end_week = (proj_weeks | last) if proj_weeks else "projection" %}
 
 {# Pilier definitions in display order #}
 {% set piliers_def = [
@@ -138,26 +180,23 @@
 {{ m.section_header(
   eyebrow="PROGRESSION T2 2026",
   title="Évolution habit completion",
-  subtitle="W05 → W16 réel · W17 → W26 projection linéaire · 22 semaines"
+  subtitle="historique réel · projection linéaire · " ~ ((n + (proj_weeks | length)) | string) ~ " semaines"
 ) }}
-<div class="card">
-  {% call m.todo_placeholder(
-    title="Évolution habit completion — historique à construire",
-    reason="Une seule semaine de données (W16) est disponible. Il faut au moins 4 semaines pour un area chart pertinent. L'historique se remplira automatiquement à mesure que tu saisiras les habitudes chaque semaine.",
-    needed_db="DB Habitudes · semaines passées",
-    accent="#10B981"
-  ) %}
-    <h5>W16 — Données disponibles (semaine courante)</h5>
-    <ul>
-      {% for p in piliers_def %}
-      {% set last_val = series[p.name][-1] if p.name in series else none %}
-      <li>
-        <strong>{{ p.name }}</strong> ·
-        {% if last_val is not none %}W16 : {{ last_val }}%{% else %}pas de données{% endif %}
-      </li>
-      {% endfor %}
-    </ul>
-  {% endcall %}
+<div class="card empty-state-card">
+  <div class="empty-state-title">Historique à construire</div>
+  <div class="empty-state-text">
+    L'area chart s'affichera dès que l'historique hebdomadaire contient assez de points exploitables.
+  </div>
+  <ul class="empty-state-list">
+    {% for p in piliers_def %}
+    {% set vals = series[p.name] if p.name in series else [] %}
+    {% set last_val = (vals | last) if vals else none %}
+    <li>
+      <strong>{{ p.name }}</strong> ·
+      {% if last_val is not none %}{{ active_week }} : {{ last_val }}%{% else %}pas de données{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 {%- else %}
 
@@ -183,29 +222,31 @@
     {% set last_val  = vals | last %}
     {% set first_val = vals | first %}
 
-    {# Meilleur W16 #}
-    {% if last_val > ns.best_val %}
+    {# Meilleur score sur la semaine active #}
+    {% if last_val is not none and last_val > ns.best_val %}
       {% set ns.best_val    = last_val %}
       {% set ns.best_name   = p.name %}
       {% set ns.best_accent = p.accent %}
     {% endif %}
 
     {# Plus forte progression #}
-    {% set delta = last_val - first_val %}
-    {% if delta > ns.prog_delta %}
-      {% set ns.prog_delta  = delta %}
-      {% set ns.prog_name   = p.name %}
-      {% set ns.prog_accent = p.accent %}
-      {% set ns.prog_first  = first_val %}
-      {% set ns.prog_last   = last_val %}
+    {% if last_val is not none and first_val is not none %}
+      {% set delta = last_val - first_val %}
+      {% if delta > ns.prog_delta %}
+        {% set ns.prog_delta  = delta %}
+        {% set ns.prog_name   = p.name %}
+        {% set ns.prog_accent = p.accent %}
+        {% set ns.prog_first  = first_val %}
+        {% set ns.prog_last   = last_val %}
+      {% endif %}
     {% endif %}
 
-    {# Alerte: drop >= 5 pts from W15 (index -2) to W16 (last) #}
+    {# Alerte: drop >= 5 pts from previous week to active week #}
     {# Use slice to get second-to-last value safely              #}
     {% set penultimate = vals | list %}
     {% if penultimate | length >= 2 %}
       {% set prev_val = penultimate[penultimate | length - 2] %}
-      {% if prev_val - last_val >= 5 %}
+      {% if prev_val is not none and last_val is not none and prev_val - last_val >= 5 %}
         {% set part = p.name ~ ": " ~ prev_val ~ "% → " ~ last_val ~ "% (" ~ (last_val - prev_val) ~ " pts)" %}
         {% set ns.alert_parts = ns.alert_parts + [part] %}
       {% endif %}
@@ -217,7 +258,7 @@
 {{ m.section_header(
   eyebrow="PROGRESSION T2 2026",
   title="Évolution habit completion",
-  subtitle="W05 → W16 réel · W17 → W26 projection linéaire · 22 semaines"
+  subtitle=real_start_week ~ " → " ~ real_end_week ~ " réel · " ~ proj_start_week ~ " → " ~ proj_end_week ~ " projection linéaire · " ~ ((n + (proj_weeks | length)) | string) ~ " semaines"
 ) }}
 
 {# ── Chart card ───────────────────────────────────────────── #}
@@ -228,7 +269,7 @@
       <polyline points="2 18 9 11 14 16 22 7"/>
       <polyline points="17 7 22 7 22 12"/>
     </svg>
-    Evolution hebdomadaire W05-W16 réel · W17-W26 projection · 5 piliers
+    Evolution hebdomadaire · historique réel + projection · 5 piliers
   </div>
 
   <div class="chart-canvas-wrapper">
@@ -255,7 +296,7 @@
 <div class="insights-grid">
 
   <div class="insight-card" style="--insight-color: {{ ns.best_accent }};">
-    <div class="insight-label">Meilleur pilier W16</div>
+    <div class="insight-label">Meilleur pilier semaine active</div>
     <div class="insight-value">{{ ns.best_val }}%</div>
     <div class="insight-desc">{{ ns.best_name }} — score le plus élevé en semaine courante</div>
   </div>
@@ -263,12 +304,12 @@
   <div class="insight-card" style="--insight-color: {{ ns.prog_accent }};">
     <div class="insight-label">Plus forte progression T2</div>
     <div class="insight-value">+{{ ns.prog_delta }} pts</div>
-    <div class="insight-desc">{{ ns.prog_name }} — de {{ ns.prog_first }}% (W05) à {{ ns.prog_last }}% (W16)</div>
+    <div class="insight-desc">{{ ns.prog_name }} — de {{ ns.prog_first }}% au début de fenêtre à {{ ns.prog_last }}% en semaine active</div>
   </div>
 
   {% if ns.alert_parts %}
   <div class="insight-card insight-alert" style="--insight-color: #B91C1C;">
-    <div class="insight-label">Alerte chute W15 → W16</div>
+    <div class="insight-label">Alerte chute semaine précédente → active</div>
     <div class="insight-value">
       {% for part in ns.alert_parts %}{{ part }}{% if not loop.last %}<br>{% endif %}{% endfor %}
     </div>
@@ -276,9 +317,9 @@
   </div>
   {% else %}
   <div class="insight-card" style="--insight-color: #047857;">
-    <div class="insight-label">Stabilite W15 → W16</div>
+    <div class="insight-label">Stabilite semaine précédente → active</div>
     <div class="insight-value">Aucune alerte</div>
-    <div class="insight-desc">Aucun pilier n'a chuté de 5 pts ou plus entre W15 et W16</div>
+    <div class="insight-desc">Aucun pilier n'a chuté de 5 pts ou plus entre la semaine précédente et la semaine active</div>
   </div>
   {% endif %}
 
@@ -291,13 +332,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var ctx = document.getElementById('areaT2Chart').getContext('2d');
 
-  {# Build extended labels: W05..W16 (real) + W17..W26 (projection) #}
+  {# Build extended labels from the rolling history plus projection weeks #}
   {% set real_weeks = snap.historic_weekly_12w.weeks %}
-  {% set proj_weeks = ["W17","W18","W19","W20","W21","W22","W23","W24","W25","W26"] %}
   {% set all_weeks  = real_weeks + proj_weeks %}
 
-  var allLabels = {{ all_weeks | tojson }};
+  var allLabelsRaw = {{ all_weeks | tojson }};
   var rawSeries = {{ snap.historic_weekly_12w.series | tojson }};
+  var realCount = {{ real_weeks | length }};
+  var projCount = {{ proj_weeks | length }};
+  var allLabels = allLabelsRaw.map(function (_label, index) {
+    if (index < realCount) {
+      var offset = realCount - index - 1;
+      return offset === 0 ? 'Semaine active' : 'S-' + offset;
+    }
+    return 'Projection +' + (index - realCount + 1);
+  });
 
   {# Per-pilier cibles for projection endpoint #}
   var cibles = {
@@ -323,10 +372,9 @@ document.addEventListener('DOMContentLoaded', function () {
     return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
   }
 
-  // Build 10 linearly interpolated projection points from lastReal → cible
-  function buildProjection(lastReal, cible) {
+  // Build linearly interpolated projection points from lastReal to cible
+  function buildProjection(lastReal, cible, steps) {
     var pts = [];
-    var steps = 10; // W17..W26
     for (var i = 1; i <= steps; i++) {
       pts.push(Math.round(lastReal + (cible - lastReal) * i / steps));
     }
@@ -334,29 +382,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   var datasets = [];
-  var nulls12 = new Array(12).fill(null);
-  var nulls10 = new Array(10).fill(null);
+  var projectionNulls = new Array(projCount).fill(null);
 
   pilierOrder
     .filter(function (p) { return rawSeries[p.name] !== undefined; })
     .forEach(function (p) {
-      var real = rawSeries[p.name]; // 12 points
+      var real = rawSeries[p.name];
       var lastReal = real[real.length - 1];
       var cible    = cibles[p.name];
-      var proj     = buildProjection(lastReal, cible); // 10 points
+      var proj     = buildProjection(lastReal, cible, projCount);
 
-      // Real dataset: 12 real points + 10 nulls (only draws W05-W16)
-      // Append anchor at W16 position for seamless join with projection
-      var realData = real.concat(nulls10);
+      // Real dataset: rolling history + projection nulls.
+      var realData = real.concat(projectionNulls);
 
-      // Projection dataset: 12 nulls + overlap anchor at W16 + 9 proj points
-      // We include W16 value as first point so the dashed line starts from W16
-      var projData = nulls12.concat([lastReal]).concat(proj.slice(1));
-      // Actually: 12 nulls + 10 proj values (W17..W26), but we want the line
-      // to visually start at W16. So use 11 nulls + lastReal at index 11 + proj 10
-      // That's 22 total: indices 0-10 = null, index 11 = lastReal, indices 12-21 = proj
-      projData = new Array(11).fill(null).concat([lastReal]).concat(proj);
-      // That's 11 + 1 + 10 = 22 points total — matches allLabels length
+      // Projection starts at the last real point for a seamless dashed join.
+      var projData = new Array(Math.max(realCount - 1, 0)).fill(null).concat([lastReal]).concat(proj);
 
       datasets.push({
         label:               p.name,
@@ -392,8 +432,8 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-  // W16 is at index 11 (0-based), used for vertical separator annotation
-  var w16Index = 11;
+  // Active week is the last point in the rolling history.
+  var activeWeekIndex = Math.max(realCount - 1, 0);
 
   new Chart(ctx, {
     type: 'line',
@@ -438,22 +478,22 @@ document.addEventListener('DOMContentLoaded', function () {
         x: {
           grid: {
             color:      function (ctx) {
-              // Highlight the W16 separator with a slightly stronger line
-              return ctx.index === w16Index ? '#9CA3AF' : '#F3F4F6';
+              // Highlight the active-week separator with a slightly stronger line
+              return ctx.index === activeWeekIndex ? '#9CA3AF' : '#F3F4F6';
             },
             lineWidth:   function (ctx) {
-              return ctx.index === w16Index ? 1.5 : 1;
+              return ctx.index === activeWeekIndex ? 1.5 : 1;
             },
             drawBorder:  false
           },
           ticks: {
             font:  { family: 'Inter', size: 11 },
             color: function (ctx) {
-              return ctx.index === w16Index ? '#1A1A1A' : '#6B7280';
+              return ctx.index === activeWeekIndex ? '#1A1A1A' : '#6B7280';
             },
             callback: function (val, index) {
               var label = allLabels[index];
-              return label === 'W16' ? label + ' ▶' : label;
+              return index === activeWeekIndex ? label + ' ▶' : label;
             }
           },
           border: { display: false }
@@ -480,4 +520,3 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 {%- endif %}
 {% endblock %}
-

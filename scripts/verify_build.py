@@ -11,6 +11,7 @@ import json
 import sys
 from html import escape
 from pathlib import Path
+from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -62,6 +63,46 @@ def fail(message: str) -> None:
     sys.exit(1)
 
 
+def text_variants(value: Any) -> set[str]:
+    text = str(value or "")
+    if not text:
+        return set()
+    return {
+        text,
+        escape(text),
+        escape(text, quote=False),
+        text.replace("'", "&#39;"),
+    }
+
+
+def html_contains_value(html: str, value: Any) -> bool:
+    return any(variant in html for variant in text_variants(value))
+
+
+def first_nonempty(items: list[dict[str, Any]], key: str) -> str | None:
+    for item in items:
+        value = item.get(key)
+        if value:
+            return str(value)
+    return None
+
+
+def expect_first_snapshot_item_or_empty(
+    html: str,
+    items: list[dict[str, Any]],
+    key: str,
+    page_label: str,
+    empty_markers: tuple[str, ...],
+) -> None:
+    expected = first_nonempty(items, key)
+    if expected:
+        if not html_contains_value(html, expected):
+            fail(f"{page_label} missing first snapshot item: {expected}")
+        return
+    if not any(marker in html for marker in empty_markers):
+        fail(f"{page_label} missing empty state")
+
+
 def main() -> None:
     if not SNAPSHOTS_PATH.exists():
         fail(f"Missing {SNAPSHOTS_PATH}")
@@ -85,17 +126,10 @@ def main() -> None:
         fail("Habits fallback should resolve to latest_available_week")
 
     finance = snapshots.get("finance_current_month")
-    if not finance:
-        fail("finance_current_month missing from snapshots.json")
-
-    for key in REQUIRED_FINANCE_KEYS:
-        if key not in finance:
-            fail(f"finance_current_month missing key: {key}")
-
-    if not finance["income_lines"]:
-        fail("finance_current_month.income_lines is empty")
-    if not finance["expense_lines"]:
-        fail("finance_current_month.expense_lines is empty")
+    if finance:
+        for key in REQUIRED_FINANCE_KEYS:
+            if key not in finance:
+                fail(f"finance_current_month missing key: {key}")
 
     for filename in REQUIRED_HTML:
         path = DIST_PATH / filename
@@ -103,46 +137,56 @@ def main() -> None:
             fail(f"Missing generated HTML: {path}")
 
     transactions = snapshots.get("transactions_accounts")
-    if not transactions:
+    if transactions is None:
         fail("transactions_accounts missing from snapshots.json")
 
     for account_slug in ("anthonny", "mirane"):
         account = transactions.get(account_slug)
-        if not account:
-            fail(f"transactions_accounts.{account_slug} missing from snapshots.json")
-        for key in REQUIRED_TX_KEYS:
-            if key not in account:
-                fail(f"transactions_accounts.{account_slug} missing key: {key}")
-        if not account["months"]:
-            fail(f"transactions_accounts.{account_slug}.months is empty")
-        if not account["monthly_history"]:
-            fail(f"transactions_accounts.{account_slug}.monthly_history is empty")
-        if not account["expense_breakdowns_by_month"]:
-            fail(f"transactions_accounts.{account_slug}.expense_breakdowns_by_month is empty")
+        if account:
+            for key in REQUIRED_TX_KEYS:
+                if key not in account:
+                    fail(f"transactions_accounts.{account_slug} missing key: {key}")
+            if not account["months"]:
+                fail(f"transactions_accounts.{account_slug}.months is empty")
+            if not account["monthly_history"]:
+                fail(f"transactions_accounts.{account_slug}.monthly_history is empty")
+            if not account["expense_breakdowns_by_month"]:
+                fail(f"transactions_accounts.{account_slug}.expense_breakdowns_by_month is empty")
 
     sankey_html = (DIST_PATH / "sankey-revenu-profi.html").read_text()
-    month_title = str(finance["month_title"])
-    if month_title not in sankey_html:
-        fail("sankey-revenu-profi.html does not contain active month title")
+    if finance:
+        month_title = str(finance["month_title"])
+        if month_title not in sankey_html:
+            fail("sankey-revenu-profi.html does not contain active month title")
+        income_name = first_nonempty(finance.get("income_lines", []), "name")
+        if income_name and not html_contains_value(sankey_html, income_name):
+            fail(f"sankey-revenu-profi.html missing first income line: {income_name}")
+    elif "Sankey répartition du revenu — à venir" not in sankey_html:
+        fail("sankey-revenu-profi.html missing finance empty state")
 
     for account_slug in ("anthonny", "mirane"):
-        account = transactions[account_slug]
+        account = transactions.get(account_slug)
         html = (DIST_PATH / f"treemap-transactions-account-{account_slug}.html").read_text()
-        if account["account_name"] not in html:
-            fail(f"treemap-transactions-account-{account_slug}.html missing account name")
-        if account["latest_month"] not in html:
-            fail(f"treemap-transactions-account-{account_slug}.html missing latest month")
+        history_html = (DIST_PATH / f"history-transactions-account-{account_slug}.html").read_text()
+        if account:
+            if account["account_name"] not in html:
+                fail(f"treemap-transactions-account-{account_slug}.html missing account name")
+            if account["latest_month"] not in html:
+                fail(f"treemap-transactions-account-{account_slug}.html missing latest month")
+        else:
+            if "Treemap transactions — à venir" not in html:
+                fail(f"treemap-transactions-account-{account_slug}.html missing empty state")
+            if "Historique transactions — à venir" not in history_html:
+                fail(f"history-transactions-account-{account_slug}.html missing empty state")
 
     pro_fi = snapshots.get("piliers", {}).get("pro_fi")
     if not pro_fi:
         fail("piliers.pro_fi missing from snapshots.json")
-    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_w16", "habit_completion_12w", "roadmap", "journal_recent", "tasks_week_items", "achievements_active", "sous_achievements"):
+    for key in ("habits_week_requested", "habits_week_used", "habits_week_is_fallback", "habits_active_week", "habits_w16", "habit_completion_12w", "roadmap", "journal_recent", "tasks_week_items", "achievements_active", "sous_achievements"):
         if key not in pro_fi:
             fail(f"piliers.pro_fi missing key: {key}")
     if not pro_fi.get("time_pilier"):
         fail("piliers.pro_fi.time_pilier missing from snapshots.json")
-    if not pro_fi.get("roadmap"):
-        fail("piliers.pro_fi.roadmap missing from snapshots.json")
 
     habits_kpi = snapshots.get("kpi_catalog", {}).get("pro-fi-habits")
     if not habits_kpi:
@@ -159,14 +203,24 @@ def main() -> None:
     achievements_html = (DIST_PATH / "achievements-pilier-pro-fi.html").read_text()
     if "Achievements actifs" not in achievements_html:
         fail("achievements-pilier-pro-fi.html missing title")
-    if "Budget familial maîtrisé" not in achievements_html:
-        fail("achievements-pilier-pro-fi.html missing achievement content")
+    expect_first_snapshot_item_or_empty(
+        achievements_html,
+        pro_fi.get("achievements_active", []),
+        "name",
+        "achievements-pilier-pro-fi.html",
+        ("Aucun achievement actif",),
+    )
 
     sous_html = (DIST_PATH / "sous-achievements-pilier-pro-fi.html").read_text()
     if "Sous-achievements &amp; paliers" not in sous_html and "Sous-achievements & paliers" not in sous_html:
         fail("sous-achievements-pilier-pro-fi.html missing title")
-    if "Choisir + installer outil tracker budget" not in sous_html:
-        fail("sous-achievements-pilier-pro-fi.html missing sub-achievement content")
+    expect_first_snapshot_item_or_empty(
+        sous_html,
+        pro_fi.get("sous_achievements", []),
+        "name",
+        "sous-achievements-pilier-pro-fi.html",
+        ("Aucun sous-achievement visible",),
+    )
 
     tasks_html = (DIST_PATH / "tasks-week-pilier-pro-fi.html").read_text()
     if "liste pilotable + répartition par jour" not in tasks_html:
@@ -188,18 +242,26 @@ def main() -> None:
         fail("tasks-week-pilier-pro-fi.html missing empty-week state")
 
     gantt_html = (DIST_PATH / "gantt-pilier-pro-fi.html").read_text()
-    if "Budget familial maîtrisé" not in gantt_html:
-        fail("gantt-pilier-pro-fi.html missing roadmap content")
+    expect_first_snapshot_item_or_empty(
+        gantt_html,
+        pro_fi.get("roadmap", []),
+        "name",
+        "gantt-pilier-pro-fi.html",
+        ("Roadmap vide",),
+    )
     if "Aujourd'hui" not in gantt_html:
         fail("gantt-pilier-pro-fi.html missing today marker")
 
     journal_html = (DIST_PATH / "journal-pilier-pro-fi.html").read_text()
     if "Journal Pro &amp; Financier" not in journal_html and "Journal Pro & Financier" not in journal_html:
         fail("journal-pilier-pro-fi.html missing title")
-    if "Construction budget mai 2026" not in journal_html:
-        fail("journal-pilier-pro-fi.html missing recent journal entry")
-    if not pro_fi.get("journal_recent"):
-        fail("piliers.pro_fi.journal_recent missing from snapshots.json")
+    expect_first_snapshot_item_or_empty(
+        journal_html,
+        pro_fi.get("journal_recent", []),
+        "title",
+        "journal-pilier-pro-fi.html",
+        ("aucune entrée récente",),
+    )
 
     print("verify_build.py OK")
     print(
@@ -210,20 +272,23 @@ def main() -> None:
     )
     print(
         "  finance:",
-        finance["month_title"],
-        f"revenus={finance['cash_income_total']}",
-        f"dépenses={finance['budgeted_expenses']}",
-        f"résultat={finance['projected_result']}",
+        finance["month_title"] if finance else "not configured",
+        f"revenus={finance['cash_income_total']}" if finance else "",
+        f"dépenses={finance['budgeted_expenses']}" if finance else "",
+        f"résultat={finance['projected_result']}" if finance else "",
     )
     for account_slug in ("anthonny", "mirane"):
-        account = transactions[account_slug]
-        print(
-            "  transactions:",
-            account["account_name"],
-            f"mois={len(account['months'])}",
-            f"latest={account['latest_month']}",
-            f"rows={account['transaction_count']}",
-        )
+        account = transactions.get(account_slug)
+        if account:
+            print(
+                "  transactions:",
+                account["account_name"],
+                f"mois={len(account['months'])}",
+                f"latest={account['latest_month']}",
+                f"rows={account['transaction_count']}",
+            )
+        else:
+            print("  transactions:", account_slug, "not configured")
 
 
 if __name__ == "__main__":

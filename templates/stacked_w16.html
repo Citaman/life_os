@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 {% import "_macros.html" as m %}
 
-{% block title %}W16 — Tâches par pilier{% endblock %}
+{% block title %}Tâches par pilier{% endblock %}
 
 {% block extra_css %}
 .chart-wrap {
@@ -83,6 +83,32 @@
   color: var(--text);
   letter-spacing: -0.02em;
 }
+.empty-state-card {
+  padding: 18px 20px;
+}
+.empty-state-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.empty-state-text {
+  font-size: 13px;
+  color: var(--muted);
+}
+.empty-state-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.empty-state-list li {
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.empty-state-list strong {
+  color: var(--text);
+}
 .insight-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -123,10 +149,16 @@
 {% block content %}
 
 {# ── Real data from snap ────────────────────────────────────────────── #}
-{# tasks_w16_by_day_by_pilier = {"Lun": {"Intérieur": 0, ...}, "Mar": {...}, ...} #}
+{# Prefer the active task week when present; keep legacy snapshots compatible. #}
 
 {%- set day_keys   = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"] -%}
 {%- set day_labels = ["L",   "M",   "M",   "J",   "V",   "S",   "D"] -%}
+{%- set tasks_active = snap.get("tasks_active_week") -%}
+{%- set task_counts = tasks_active.get("counts") if tasks_active and tasks_active.get("counts") else snap.get("tasks_w16_by_day_by_pilier", {}) -%}
+{%- set task_week_label = snap.get("current_week") or snap.get("active_habits_week") or "semaine active" -%}
+{%- set week_start = tasks_active.get("week_start") if tasks_active else none -%}
+{%- set week_end = tasks_active.get("week_end") if tasks_active else none -%}
+{%- set week_range_label = (week_start ~ " → " ~ week_end) if week_start and week_end else "semaine active" -%}
 
 {# Pilier definitions: name in DB, slug for snap.piliers, slug key #}
 {%- set pilier_defs = [
@@ -142,7 +174,7 @@
 {%- for p in pilier_defs -%}
   {%- set data_arr = [] -%}
   {%- for day in day_keys -%}
-    {%- set day_dict = snap.tasks_w16_by_day_by_pilier.get(day, {}) -%}
+    {%- set day_dict = task_counts.get(day, {}) -%}
     {%- set v = day_dict.get(p.db_name, 0) or 0 -%}
     {%- set _ = data_arr.append(v) -%}
   {%- endfor -%}
@@ -160,27 +192,25 @@
 
 {# ── Section header ───────────────────────────────────────────────────── #}
 {{ m.section_header(
-    eyebrow="PLANNING W16",
-    title="Tâches complétées par pilier",
-    subtitle="Semaine du 13 au 19 avril 2026 · répartition quotidienne"
+    eyebrow="PLANNING " ~ task_week_label,
+    title="Tâches par pilier",
+    subtitle=week_range_label ~ " · répartition quotidienne"
 ) }}
 
-{# ── TODO or Chart ─────────────────────────────────────────────────────── #}
+{# ── Empty state or Chart ───────────────────────────────────────────────── #}
 {% if grand_total == 0 %}
 
-{% call m.todo_placeholder(
-    title="Tâches W16 complétées par pilier — 0 tâche terminée",
-    reason="Aucune tâche atomique dans Plan d'exécution n'est encore marquée 'Complété' avec une date dans la semaine W16 (13-19 avril). Le stacked column se remplit dès que tu coches des tâches.",
-    needed_db="Plan d'exécution · Statut + Date",
-    accent="#2F7D5B"
-) %}
-  <h5>Tâches datées aujourd'hui ({{ snap.tasks_today.total }})</h5>
-  <ul>
+<div class="card empty-state-card">
+  <div class="empty-state-title">Aucune tâche à afficher sur {{ task_week_label }}</div>
+  <div class="empty-state-text">Le graphique se remplira dès que des tâches datées seront disponibles pour cette semaine.</div>
+  {% if snap.tasks_today.total %}
+  <ul class="empty-state-list">
     {% for t in snap.tasks_today['items'] %}
       <li><strong>{{ t.pilier }}</strong> · {{ t.status }} · {{ t.name }}</li>
     {% endfor %}
   </ul>
-{% endcall %}
+  {% endif %}
+</div>
 
 {% else %}
 
@@ -224,7 +254,7 @@
 
 {# Grand total #}
 <div class="grand-total">
-  <strong>{{ grand_total }}</strong> tâches complétées en W16 · sur 7 jours
+  <strong>{{ grand_total }}</strong> tâches sur {{ task_week_label }} · 7 jours
 </div>
 
 {# ── Compute insight stats ──────────────────────────────────────────────── #}
@@ -271,6 +301,8 @@
 {# Re-compute grand_total in extra_js scope — block content vars not accessible here #}
 {%- set _day_keys_js   = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"] -%}
 {%- set _day_labels_js = ["L",   "M",   "M",   "J",   "V",   "S",   "D"] -%}
+{%- set _tasks_active_js = snap.get("tasks_active_week") -%}
+{%- set _task_counts_js = _tasks_active_js.get("counts") if _tasks_active_js and _tasks_active_js.get("counts") else snap.get("tasks_w16_by_day_by_pilier", {}) -%}
 {%- set _pilier_defs_js = [
   {"name": "Intérieur",      "db_name": "Intérieur",      "slug": "interieur"},
   {"name": "Famille",        "db_name": "Famille",        "slug": "famille"},
@@ -282,9 +314,10 @@
 {%- for pd in _pilier_defs_js -%}
   {%- set _row = [] -%}
   {%- for dk in _day_keys_js -%}
-    {%- set _row = _row + [snap.tasks_w16_by_day_by_pilier[dk][pd.db_name] | default(0)] -%}
+    {%- set _day_dict = _task_counts_js.get(dk, {}) -%}
+    {%- set _ = _row.append(_day_dict.get(pd.db_name, 0) | default(0)) -%}
   {%- endfor -%}
-  {%- set _w16_js = _w16_js + [{"slug": pd.slug, "name": pd.name, "data": _row}] -%}
+  {%- set _ = _w16_js.append({"slug": pd.slug, "name": pd.name, "data": _row}) -%}
 {%- endfor -%}
 {%- set _gt_js = namespace(v=0) -%}
 {%- for p in _w16_js -%}
@@ -304,7 +337,7 @@
     spirituel: "{{ snap.piliers.spirituel.accent }}"
   };
 
-  /* ── W16 real data from snap ────────────────────────────────── */
+  /* ── Real data from snap ────────────────────────────────────── */
   var labels = {{ _day_labels_js | tojson }};
   var series = [
     {% for p in _w16_js %}
@@ -330,7 +363,11 @@
   });
 
   /* ── Compute y-axis max ─────────────────────────────────────── */
-  var dayTotals = {{ day_totals | tojson }};
+  var dayTotals = labels.map(function (_label, dayIndex) {
+    return series.reduce(function (sum, s) {
+      return sum + (s.data[dayIndex] || 0);
+    }, 0);
+  });
   var maxTotal  = Math.max.apply(null, dayTotals);
   var yMax      = Math.ceil(maxTotal / 2) * 2 + 2;
 

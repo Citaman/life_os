@@ -8,27 +8,18 @@ Idempotent enough for reruns:
 
 Usage:
     python scripts/sync_transactions_page.py
+    python scripts/sync_transactions_page.py --dry-run
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 from typing import Any
 
 from dotenv import load_dotenv
 from notion_client import Client
-
-load_dotenv()
-
-TOKEN = os.environ.get("NOTION_TOKEN")
-if not TOKEN:
-    sys.exit("ERROR: NOTION_TOKEN missing in env.")
-
-client = Client(auth=TOKEN)
-
-BASE_URL = "https://citaman.github.io/life_os"
-TRANSACTIONS_PAGE_ID = os.environ.get("PAGE_TRANSACTIONS_REAL", "34a845e8-e836-812e-b958-f1aa64329625")
 
 EMBEDS: list[tuple[str, str]] = [
     ("Treemap dépenses · Anthonny", "treemap-transactions-account-anthonny"),
@@ -40,7 +31,37 @@ EMBEDS: list[tuple[str, str]] = [
 SECTION_HEADING = "Visuels transactions live"
 
 
-def list_top_level_blocks(page_id: str) -> list[dict[str, Any]]:
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        sys.exit(f"ERROR: {name} missing in env.")
+    return value
+
+
+def require_base_url() -> str:
+    value = os.environ.get("TRANSACTIONS_BASE_URL") or os.environ.get("BASE_URL")
+    if not value:
+        sys.exit(
+            "ERROR: TRANSACTIONS_BASE_URL missing in env. "
+            "BASE_URL is also accepted as a fallback env name. "
+            "Set it to the published life_os base URL, for example https://example.com/life_os."
+        )
+    return value.rstrip("/")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Append missing live transaction embeds to the configured Notion page."
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Read the Notion page and print what would be appended without mutating Notion.",
+    )
+    return parser.parse_args()
+
+
+def list_top_level_blocks(client: Client, page_id: str) -> list[dict[str, Any]]:
     blocks: list[dict[str, Any]] = []
     cursor: str | None = None
     while True:
@@ -100,7 +121,14 @@ def make_embed(url: str, caption: str) -> dict[str, Any]:
 
 
 def main() -> None:
-    blocks = list_top_level_blocks(TRANSACTIONS_PAGE_ID)
+    load_dotenv()
+    args = parse_args()
+    token = require_env("NOTION_TOKEN")
+    base_url = require_base_url()
+    transactions_page_id = require_env("PAGE_TRANSACTIONS_REAL")
+    client = Client(auth=token)
+
+    blocks = list_top_level_blocks(client, transactions_page_id)
     existing_urls = {
         block.get("embed", {}).get("url")
         for block in blocks
@@ -125,7 +153,7 @@ def main() -> None:
 
     added = 0
     for title, slug in EMBEDS:
-        url = f"{BASE_URL}/{slug}.html"
+        url = f"{base_url}/{slug}.html"
         if url in existing_urls:
             continue
         children.append(make_heading_3(title))
@@ -136,7 +164,14 @@ def main() -> None:
         print("Transactions page already up to date.")
         return
 
-    client.blocks.children.append(block_id=TRANSACTIONS_PAGE_ID, children=children)
+    if args.dry_run:
+        print(
+            "Transactions page would be updated: "
+            f"{added} embed(s), {len(children)} block(s) appended. No mutation performed."
+        )
+        return
+
+    client.blocks.children.append(block_id=transactions_page_id, children=children)
     print(f"Transactions page updated: {added} embed(s) added.")
 
 

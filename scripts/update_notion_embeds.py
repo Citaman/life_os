@@ -3,11 +3,13 @@ Append an "Embeds live" section at the bottom of each Notion Life OS page
 with iframe embed blocks pointing to https://citaman.github.io/life_os/*.html
 
 Usage:
+    python scripts/update_notion_embeds.py --dry-run
     python scripts/update_notion_embeds.py
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 from typing import Any
@@ -17,25 +19,36 @@ from notion_client import Client
 
 load_dotenv()
 
-TOKEN = os.environ["NOTION_TOKEN"]
+DEFAULT_BASE_URL = "https://citaman.github.io/life_os"
+
+
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        sys.exit(f"ERROR: {name} missing in env. Refusing to mutate Notion without explicit page configuration.")
+    return value
+
+
+TOKEN = require_env("NOTION_TOKEN")
 client = Client(auth=TOKEN)
 
-BASE_URL = "https://citaman.github.io/life_os"
+BASE_URL = (os.environ.get("LIFE_OS_BASE_URL") or os.environ.get("BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
+DRY_RUN = False
 
 # Page ID → list of (title, embed_slug) pairs
 PAGE_EMBEDS: dict[str, tuple[str, list[tuple[str, str]]]] = {
     # Dashboard racine
-    os.environ["PAGE_DASHBOARD"]: (
+    require_env("PAGE_DASHBOARD"): (
         "Dashboard",
         [
             ("Radar 5 piliers — actuel vs cible", "radar"),
             ("Flux de temps semaine 168 h", "sankey-week"),
             ("Évolution T2 — W05 → W26 projection", "area-t2"),
-            ("Tâches W16 par pilier — stacked column", "stacked-w16"),
+            ("Tâches semaine active par pilier — stacked column", "stacked-w16"),
         ],
     ),
     # Intérieur
-    os.environ["PAGE_INTERIEUR"]: (
+    require_env("PAGE_INTERIEUR"): (
         "Intérieur",
         [
             ("Heatmap habitudes — 4 sem × 7 j", "heatmap-habits-interieur"),
@@ -45,7 +58,7 @@ PAGE_EMBEDS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ],
     ),
     # Famille
-    os.environ["PAGE_FAMILLE"]: (
+    require_env("PAGE_FAMILLE"): (
         "Famille",
         [
             ("Heatmap habitudes", "heatmap-habits-famille"),
@@ -55,7 +68,7 @@ PAGE_EMBEDS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ],
     ),
     # Pro & Financier
-    os.environ["PAGE_PRO_FI"]: (
+    require_env("PAGE_PRO_FI"): (
         "Pro & Financier",
         [
             ("Heatmap habitudes", "heatmap-habits-pro-fi"),
@@ -66,7 +79,7 @@ PAGE_EMBEDS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ],
     ),
     # Création
-    os.environ["PAGE_CREATION"]: (
+    require_env("PAGE_CREATION"): (
         "Création",
         [
             ("Heatmap habitudes", "heatmap-habits-creation"),
@@ -76,7 +89,7 @@ PAGE_EMBEDS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ],
     ),
     # Spirituel
-    os.environ["PAGE_SPIRITUEL"]: (
+    require_env("PAGE_SPIRITUEL"): (
         "Spirituel",
         [
             ("Heatmap habitudes", "heatmap-habits-spirituel"),
@@ -177,19 +190,32 @@ def append_embeds_to_page(page_id: str, page_name: str, embeds: list[tuple[str, 
 
     # API accepts up to 100 children per call
     print(f"  appending {len(children)} blocks to {page_name} ({page_id[:8]}...)")
+    if DRY_RUN:
+        print(f"  DRY-RUN would append embeds: {[slug for _, slug in embeds]}")
+        return
     client.blocks.children.append(block_id=page_id, children=children)
 
 
 def main() -> None:
+    global DRY_RUN
+    parser = argparse.ArgumentParser(description="Append legacy live embed sections to Notion pages.")
+    parser.add_argument("--dry-run", action="store_true", help="Print planned append operations without writing Notion.")
+    args = parser.parse_args()
+    DRY_RUN = args.dry_run
+
+    if DRY_RUN:
+        print("DRY-RUN: no Notion mutations will be sent")
+
     for page_id, (name, embeds) in PAGE_EMBEDS.items():
         print(f"→ {name}")
         try:
             append_embeds_to_page(page_id, name, embeds)
-            print(f"  ✓ OK {len(embeds)} embeds added")
+            verb = "planned" if DRY_RUN else "added"
+            print(f"  ✓ OK {len(embeds)} embeds {verb}")
         except Exception as e:
-            print(f"  ✗ {e}")
+            print(f"  ✗ failed to append embeds to {name} ({page_id[:8]}...). Check page env/access: {e}")
             sys.exit(1)
-    print("\nAll 6 Notion pages updated.")
+    print("\nAll 6 Notion pages checked." if DRY_RUN else "\nAll 6 Notion pages updated.")
 
 
 if __name__ == "__main__":

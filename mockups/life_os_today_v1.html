@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Life OS — Today Mockup v1</title>
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --surface: #ffffff;
+      --surface-soft: #f1f0eb;
+      --ink: #20201d;
+      --muted: #6d6a62;
+      --line: #dfddd5;
+      --green: #1f7a4d;
+      --blue: #235c9f;
+      --amber: #a46200;
+      --red: #9f3030;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 32px 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.08;
+      font-weight: 760;
+    }
+
+    .subtitle {
+      max-width: 700px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 280px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 680;
+    }
+
+    .button.primary {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .band {
+      margin-top: 20px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .panel.pad {
+      padding: 16px;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .kpi {
+      min-height: 102px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .kpi-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .kpi-value {
+      margin-top: 8px;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 780;
+    }
+
+    .kpi-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 720;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status.green {
+      color: var(--green);
+      background: #e8f3ed;
+    }
+
+    .status.blue {
+      color: var(--blue);
+      background: #e8eff8;
+    }
+
+    .status.amber {
+      color: var(--amber);
+      background: #f7eee0;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .list-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .list-item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .source-note {
+      margin-top: 16px;
+      padding: 12px;
+      border: 1px dashed #c9c6bb;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 860px) {
+      .page {
+        padding: 24px 18px 40px;
+      }
+
+      .topbar,
+      .grid,
+      .two {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      .actions {
+        justify-content: flex-start;
+        min-width: 0;
+      }
+
+      .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      h1 {
+        font-size: 31px;
+      }
+
+      .kpis {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Mockup v1 · aucune mutation Notion</p>
+        <h1>Life OS — Today</h1>
+        <p class="subtitle">
+          Une page quotidienne unique pour planifier, executer, verifier les signaux importants, puis fermer la journee.
+        </p>
+      </div>
+      <nav class="actions" aria-label="Navigation cible">
+        <span class="button primary">Aujourd'hui</span>
+        <span class="button">Semaine</span>
+        <span class="button">Finance</span>
+        <span class="button">Piliers</span>
+        <span class="button">Backstage</span>
+      </nav>
+    </header>
+
+    <section class="band">
+      <div class="section-title">
+        <h2>Signals</h2>
+        <span class="source-chip">Sources: snapshots.json + Notion</span>
+      </div>
+      <div class="kpis">
+        <article class="kpi">
+          <div class="kpi-label">Taches aujourd'hui</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-note">Plan d'execution · Date prevue = aujourd'hui</div>
+        </article>
+        <article class="kpi">
+          <div class="kpi-label">Habitudes semaine</div>
+          <div class="kpi-value">--%</div>
+          <div class="kpi-note">Habitudes · semaine courante ou derniere semaine disponible</div>
+        </article>
+        <article class="kpi">
+          <div class="kpi-label">Budget actif</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-note">Finance mensuelle + lignes budget</div>
+        </article>
+        <article class="kpi">
+          <div class="kpi-label">Workout</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-note">Regle jour courant + source sport fiable</div>
+        </article>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section>
+        <div class="section-title">
+          <h2>Plan · Execute · Wrap-Up</h2>
+          <span class="source-chip">Plan d'execution</span>
+        </div>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Priorite</th>
+                <th>Action</th>
+                <th>Pilier</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>P1</td>
+                <td>Vue dynamique des taches atomiques du jour</td>
+                <td>Source</td>
+                <td><span class="status blue">A faire</span></td>
+              </tr>
+              <tr>
+                <td>P2</td>
+                <td>Vue dynamique des taches bloquees ou en retard</td>
+                <td>Source</td>
+                <td><span class="status amber">A clarifier</span></td>
+              </tr>
+              <tr>
+                <td>P3</td>
+                <td>Wrap-up: reporter, terminer, ou archiver</td>
+                <td>Systeme</td>
+                <td><span class="status green">Rituel</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside>
+        <div class="section-title">
+          <h2>Quick Capture</h2>
+          <span class="source-chip">Inbox</span>
+        </div>
+        <div class="panel pad">
+          <div class="list">
+            <div class="list-item">
+              <strong>Nouvelle tache</strong>
+              <span>Capture rapide vers Plan d'execution, pas une checklist statique.</span>
+            </div>
+            <div class="list-item">
+              <strong>Nouvelle note</strong>
+              <span>Capture vers Backstage / Inbox, puis tri pendant la review.</span>
+            </div>
+            <div class="list-item">
+              <strong>Transaction</strong>
+              <span>Import CSV ou saisie controlee, avec upsert cote repo.</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="band two">
+      <div>
+        <div class="section-title">
+          <h2>Finance Active</h2>
+          <span class="source-chip">Finance mensuelle</span>
+        </div>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Bloc</th>
+                <th>Ce qui s'affiche</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Budget</td>
+                <td>Mois actif, lignes budget, ecarts reels</td>
+              </tr>
+              <tr>
+                <td>Transactions</td>
+                <td>Anthonny + Mirane, page non deleted</td>
+              </tr>
+              <tr>
+                <td>Actions</td>
+                <td>Taches finance de la semaine</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">
+          <h2>Body + Objectifs</h2>
+          <span class="source-chip">Sport + achievements</span>
+        </div>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Bloc</th>
+                <th>Regle d'affichage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Workout</td>
+                <td>Une seule seance du jour, pas d'historique fake</td>
+              </tr>
+              <tr>
+                <td>Habitudes</td>
+                <td>Habitudes actives, semaine dynamique</td>
+              </tr>
+              <tr>
+                <td>Objectifs</td>
+                <td>Achievements actifs par pilier</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="source-note">
+      Contrat du mockup: tout bloc visible doit etre alimente par Notion ou par un calcul du repo.
+      Si une source manque, la section est masquee ou deplacee dans Backstage. Aucun W16, TODO, Source manquante,
+      journal fake, ou page deleted ne doit rester dans l'interface active.
+    </section>
+  </main>
+</body>
+</html>

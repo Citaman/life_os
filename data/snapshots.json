@@ -1,31 +1,93 @@
 {
-  "generated_at": "2026-04-22T09:52:42.827312Z",
-  "current_week": "W17",
-  "active_habits_week": "W16",
-  "latest_habits_week": "W16",
+  "generated_at": "2026-04-27T14:43:27.621152Z",
+  "current_week": "W18",
+  "active_habits_week": "W17",
+  "latest_habits_week": "W17",
   "habits_week_context": {
-    "requested_week": "W17",
-    "active_week": "W16",
-    "latest_available_week": "W16",
+    "requested_week": "W18",
+    "active_week": "W17",
+    "latest_available_week": "W17",
     "used_fallback": true,
     "requested_row_count": 0,
     "active_row_count": 9
   },
   "current_trimester": "T2 2026",
-  "current_date": "2026-04-22",
-  "today_fr": "mercredi 22 avril 2026",
+  "current_date": "2026-04-27",
+  "current_week_range": {
+    "week_start": "2026-04-27",
+    "week_end": "2026-05-03"
+  },
+  "today_fr": "lundi 27 avril 2026",
   "badge_week": {
-    "week": "W16",
-    "status": "JAUNE",
-    "score": 66,
-    "total_fait": 35,
-    "total_cible": 53,
+    "week": "W17",
+    "status": "ROUGE",
+    "score": 19,
+    "total_fait": 10,
+    "total_cible": 52,
     "streak_weeks_vert": null
   },
   "tasks_today": {
     "done": 0,
-    "total": 0,
-    "items": []
+    "total": 1,
+    "items": [
+      {
+        "id": "347845e8-e836-81e8-b04f-e006a4fd7843",
+        "name": "Faire 21 jours consécutifs ≥5 min de tracé (1 prompt simple/j)",
+        "pilier": "Création",
+        "status": "Pas commencé"
+      }
+    ]
+  },
+  "tasks_completed_week_by_day_by_pilier": {
+    "Lun": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Mar": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Mer": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Jeu": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Ven": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Sam": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    },
+    "Dim": {
+      "Intérieur": 0,
+      "Famille": 0,
+      "Pro & Financier": 0,
+      "Création": 0,
+      "Spirituel": 0
+    }
   },
   "tasks_w16_by_day_by_pilier": {
     "Lun": {
@@ -79,19 +141,19 @@
     }
   },
   "tasks_active_week": {
-    "week_start": "2026-04-20",
-    "week_end": "2026-04-26",
+    "week_start": "2026-04-27",
+    "week_end": "2026-05-03",
     "counts": {
       "Lun": {
-        "Intérieur": 2,
+        "Intérieur": 0,
         "Famille": 0,
         "Pro & Financier": 0,
         "Création": 1,
-        "Spirituel": 21
+        "Spirituel": 0
       },
       "Mar": {
-        "Intérieur": 2,
-        "Famille": 0,
+        "Intérieur": 0,
+        "Famille": 1,
         "Pro & Financier": 0,
         "Création": 0,
         "Spirituel": 0
@@ -111,23 +173,23 @@
         "Spirituel": 0
       },
       "Ven": {
-        "Intérieur": 0,
-        "Famille": 0,
-        "Pro & Financier": 0,
-        "Création": 0,
-        "Spirituel": 0
+        "Intérieur": 1,
+        "Famille": 2,
+        "Pro & Financier": 1,
+        "Création": 1,
+        "Spirituel": 7
       },
       "Sam": {
-        "Intérieur": 4,
-        "Famille": 3,
+        "Intérieur": 2,
+        "Famille": 2,
         "Pro & Financier": 0,
-        "Création": 5,
-        "Spirituel": 1
+        "Création": 2,
+        "Spirituel": 0
       },
       "Dim": {
-        "Intérieur": 5,
-        "Famille": 9,
-        "Pro & Financier": 4,
+        "Intérieur": 2,
+        "Famille": 2,
+        "Pro & Financier": 1,
         "Création": 0,
         "Spirituel": 0
       }
@@ -137,15 +199,14 @@
     "achievements_total_active": 9,
     "sous_total_active": 14,
     "sous_total_done": 0,
-    "tasks_total_done": 0,
-    "tasks_total_en_cours": 16,
+    "tasks_total_done": 3,
+    "tasks_total_en_cours": 13,
     "total_plan_pages": 1391,
     "t2_percent": 0
   },
   "time_week": null,
   "historic_weekly_12w": {
     "weeks": [
-      "W05",
       "W06",
       "W07",
       "W08",
@@ -156,7 +217,8 @@
       "W13",
       "W14",
       "W15",
-      "W16"
+      "W16",
+      "W17"
     ],
     "series": {
       "Intérieur": [
@@ -170,8 +232,8 @@
         null,
         null,
         null,
-        null,
-        68
+        68,
+        56
       ],
       "Famille": [
         null,
@@ -184,8 +246,8 @@
         null,
         null,
         null,
-        null,
-        67
+        67,
+        0
       ],
       "Pro & Financier": [
         null,
@@ -198,8 +260,8 @@
         null,
         null,
         null,
-        null,
-        57
+        57,
+        0
       ],
       "Création": [
         null,
@@ -212,8 +274,8 @@
         null,
         null,
         null,
-        null,
-        67
+        67,
+        0
       ],
       "Spirituel": [
         null,
@@ -226,8 +288,8 @@
         null,
         null,
         null,
-        null,
-        67
+        67,
+        0
       ]
     }
   },
@@ -3193,7 +3255,7 @@
       "tint_light": "#D4E5DB",
       "progress_avg": 15,
       "radar": {
-        "actuel": 68,
+        "actuel": 56,
         "cible": null,
         "gap": null
       },
@@ -3287,53 +3349,43 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-8142-8b39-cc174d56e090",
-              "name": "Activer Yazio rappels 8h / 12h30 / 19h30",
+              "id": "347845e8-e836-8158-88c4-e25d2fa15ff2",
+              "name": "Logger toutes séries Strong/Hevy app (palier muscu 3)",
               "status": "Pas commencé",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8106-aa00-ded20e6d0f34",
-              "parent_name": "Nutri Phase 1 — Observation Yazio (S1-S2)",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-8170-a2bb-c79342db6970",
+              "parent_name": "Muscu palier 3 — Premier palier charge (S5-S8)",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-81f3-a43c-e900da7085a3",
-              "name": "Acheter balance cuisine numérique 1g (Salter ~20€)",
+              "id": "347845e8-e836-81f6-893a-d74b63ec2ded",
+              "name": "Pesée hebdo samedi matin à jeun (palier 120→115)",
               "status": "Pas commencé",
-              "date": "2026-04-21",
-              "day": "Mar",
-              "parent_id": "347845e8-e836-8106-aa00-ded20e6d0f34",
-              "parent_name": "Nutri Phase 1 — Observation Yazio (S1-S2)",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81ed-9cb5-d5d43f496bd7",
-              "name": "Courses samedi matin avec liste caddie (rotation 1-5)",
-              "status": "Pas commencé",
-              "date": "2026-04-25",
+              "date": "2026-05-02",
               "day": "Sam",
-              "parent_id": "347845e8-e836-818e-bbba-e1e2256d37d1",
-              "parent_name": "Meal prep dominical opérationnel",
+              "parent_id": "347845e8-e836-819b-8b57-f484f24840fd",
+              "parent_name": "Palier poids 2 — 120 → 115 kg",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8103-852f-d8f4782fa5f1",
-              "name": "Hydratation 2-3L : water bottle 1L × 2-3/jour ancre bureau",
+              "id": "347845e8-e836-8143-89ae-d930a8e04201",
+              "name": "Mensurations taille/hanches mensuel (palier 120→115)",
               "status": "Pas commencé",
-              "date": "2026-04-26",
+              "date": "2026-05-03",
               "day": "Dim",
-              "parent_id": "347845e8-e836-8149-a144-c4d9f60a4591",
-              "parent_name": "Hydratation — 2L eau/j loggés Yazio",
+              "parent_id": "347845e8-e836-819b-8b57-f484f24840fd",
+              "parent_name": "Palier poids 2 — 120 → 115 kg",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8118-803d-cffa5b1c8067",
-              "name": "Meal prep dimanche 11h (5 lunchs semaine)",
+              "id": "347845e8-e836-814f-bba6-ed2593103a07",
+              "name": "Photos progression mensuelle face/profil/dos (palier 120→115)",
               "status": "Pas commencé",
-              "date": "2026-04-26",
+              "date": "2026-05-03",
               "day": "Dim",
-              "parent_id": "347845e8-e836-818e-bbba-e1e2256d37d1",
-              "parent_name": "Meal prep dominical opérationnel",
+              "parent_id": "347845e8-e836-819b-8b57-f484f24840fd",
+              "parent_name": "Palier poids 2 — 120 → 115 kg",
               "parent_type": "Sous-achievement"
             }
           ]
@@ -3403,50 +3455,10 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-8121-9285-ea22fb01af15",
-              "name": "Logger nuit Notion (template 5 champs)",
-              "status": "En cours",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8191-910d-f3b4c5722afa",
-              "parent_name": "Sommeil Phase 1 — Audit baseline 7 jours",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81ca-aed0-e31f7c92cac9",
-              "name": "Réunion couple 30 min — règle tours nocturnes Harper",
-              "status": "En cours",
-              "date": "2026-04-21",
-              "day": "Mar",
-              "parent_id": "347845e8-e836-818c-8cdf-c03ac5f2c7a3",
-              "parent_name": "Gestion fragmentation Harper (règle tours Mirane)",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-8163-b23c-f36e927d2e1f",
-              "name": "Acheter magnésium glycinate 400mg (test 30 jours)",
+              "id": "347845e8-e836-8100-83b2-fed419d04bf4",
+              "name": "NSDR 20 min YouTube Huberman si fragmentation",
               "status": "Pas commencé",
-              "date": "2026-04-25",
-              "day": "Sam",
-              "parent_id": "347845e8-e836-81fc-b8c9-ee85dc56bc5d",
-              "parent_name": "Hygiène sommeil de base (S2-S3)",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-8176-9051-c62b24788096",
-              "name": "Installer thermomètre chambre + viser 18-19°C",
-              "status": "Pas commencé",
-              "date": "2026-04-25",
-              "day": "Sam",
-              "parent_id": "347845e8-e836-810c-9c7d-ef3392cc8da4",
-              "parent_name": "Nuit optimisée (chambre 18-19°C + magnésium)",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-816c-9dd5-c7c2d19bc6ed",
-              "name": "Tableau tours nocturnes Mirane affiché réfrigérateur",
-              "status": "Pas commencé",
-              "date": "2026-04-25",
+              "date": "2026-05-02",
               "day": "Sam",
               "parent_id": "347845e8-e836-818c-8cdf-c03ac5f2c7a3",
               "parent_name": "Gestion fragmentation Harper (règle tours Mirane)",
@@ -3837,54 +3849,148 @@
           "deadline": null
         }
       ],
-      "habits_week_requested": "W17",
-      "habits_week_used": "W16",
+      "habits_week_requested": "W18",
+      "habits_week_used": "W17",
       "habits_week_is_fallback": true,
-      "habits_w16": [
+      "habits_active_week": [
+        {
+          "name": "Hydratation 2 L",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "fait": 6,
+          "score_pct": 86
+        },
         {
           "name": "Séance sport",
-          "cible": 5,
+          "cible": 4,
           "days": [
-            false,
-            false,
             true,
+            true,
+            false,
             true,
             true,
             false,
             false
           ],
-          "fait": 3,
-          "score_pct": 60
-        },
-        {
-          "name": "Hydratation 2 L",
-          "cible": 7,
-          "days": [
-            false,
-            true,
-            true,
-            false,
-            true,
-            true,
-            true
-          ],
-          "fait": 5,
-          "score_pct": 71
+          "fait": 4,
+          "score_pct": 100
         },
         {
           "name": "Coucher 22 h 30",
           "cible": 7,
           "days": [
             false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_week": [
+        {
+          "name": "Hydratation 2 L",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "fait": 6,
+          "score_pct": 86
+        },
+        {
+          "name": "Séance sport",
+          "cible": 4,
+          "days": [
             true,
             true,
             false,
             true,
             true,
-            true
+            false,
+            false
           ],
-          "fait": 5,
-          "score_pct": 71
+          "fait": 4,
+          "score_pct": 100
+        },
+        {
+          "name": "Coucher 22 h 30",
+          "cible": 7,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Hydratation 2 L",
+          "cible": 7,
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "fait": 6,
+          "score_pct": 86
+        },
+        {
+          "name": "Séance sport",
+          "cible": 4,
+          "days": [
+            true,
+            true,
+            false,
+            true,
+            true,
+            false,
+            false
+          ],
+          "fait": 4,
+          "score_pct": 100
+        },
+        {
+          "name": "Coucher 22 h 30",
+          "cible": 7,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
         }
       ],
       "habit_completion_12w": [
@@ -3898,138 +4004,58 @@
         null,
         null,
         null,
-        null,
-        68
+        68,
+        56
       ],
       "tasks_week_items": [
         {
-          "id": "347845e8-e836-8142-8b39-cc174d56e090",
-          "name": "Activer Yazio rappels 8h / 12h30 / 19h30",
+          "id": "347845e8-e836-8158-88c4-e25d2fa15ff2",
+          "name": "Logger toutes séries Strong/Hevy app (palier muscu 3)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8106-aa00-ded20e6d0f34",
-          "parent_name": "Nutri Phase 1 — Observation Yazio (S1-S2)",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-8170-a2bb-c79342db6970",
+          "parent_name": "Muscu palier 3 — Premier palier charge (S5-S8)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8121-9285-ea22fb01af15",
-          "name": "Logger nuit Notion (template 5 champs)",
-          "status": "En cours",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8191-910d-f3b4c5722afa",
-          "parent_name": "Sommeil Phase 1 — Audit baseline 7 jours",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81f3-a43c-e900da7085a3",
-          "name": "Acheter balance cuisine numérique 1g (Salter ~20€)",
+          "id": "347845e8-e836-8100-83b2-fed419d04bf4",
+          "name": "NSDR 20 min YouTube Huberman si fragmentation",
           "status": "Pas commencé",
-          "date": "2026-04-21",
-          "day": "Mar",
-          "parent_id": "347845e8-e836-8106-aa00-ded20e6d0f34",
-          "parent_name": "Nutri Phase 1 — Observation Yazio (S1-S2)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81ca-aed0-e31f7c92cac9",
-          "name": "Réunion couple 30 min — règle tours nocturnes Harper",
-          "status": "En cours",
-          "date": "2026-04-21",
-          "day": "Mar",
-          "parent_id": "347845e8-e836-818c-8cdf-c03ac5f2c7a3",
-          "parent_name": "Gestion fragmentation Harper (règle tours Mirane)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8163-b23c-f36e927d2e1f",
-          "name": "Acheter magnésium glycinate 400mg (test 30 jours)",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-81fc-b8c9-ee85dc56bc5d",
-          "parent_name": "Hygiène sommeil de base (S2-S3)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81ed-9cb5-d5d43f496bd7",
-          "name": "Courses samedi matin avec liste caddie (rotation 1-5)",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-818e-bbba-e1e2256d37d1",
-          "parent_name": "Meal prep dominical opérationnel",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8176-9051-c62b24788096",
-          "name": "Installer thermomètre chambre + viser 18-19°C",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-810c-9c7d-ef3392cc8da4",
-          "parent_name": "Nuit optimisée (chambre 18-19°C + magnésium)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-816c-9dd5-c7c2d19bc6ed",
-          "name": "Tableau tours nocturnes Mirane affiché réfrigérateur",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
+          "date": "2026-05-02",
           "day": "Sam",
           "parent_id": "347845e8-e836-818c-8cdf-c03ac5f2c7a3",
           "parent_name": "Gestion fragmentation Harper (règle tours Mirane)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-819f-86f0-f13c53a42e89",
-          "name": "Caféine cut-off 14h (alerte iPhone quotidienne)",
+          "id": "347845e8-e836-81f6-893a-d74b63ec2ded",
+          "name": "Pesée hebdo samedi matin à jeun (palier 120→115)",
           "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81fc-b8c9-ee85dc56bc5d",
-          "parent_name": "Hygiène sommeil de base (S2-S3)",
+          "date": "2026-05-02",
+          "day": "Sam",
+          "parent_id": "347845e8-e836-819b-8b57-f484f24840fd",
+          "parent_name": "Palier poids 2 — 120 → 115 kg",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8103-852f-d8f4782fa5f1",
-          "name": "Hydratation 2-3L : water bottle 1L × 2-3/jour ancre bureau",
+          "id": "347845e8-e836-8143-89ae-d930a8e04201",
+          "name": "Mensurations taille/hanches mensuel (palier 120→115)",
           "status": "Pas commencé",
-          "date": "2026-04-26",
+          "date": "2026-05-03",
           "day": "Dim",
-          "parent_id": "347845e8-e836-8149-a144-c4d9f60a4591",
-          "parent_name": "Hydratation — 2L eau/j loggés Yazio",
+          "parent_id": "347845e8-e836-819b-8b57-f484f24840fd",
+          "parent_name": "Palier poids 2 — 120 → 115 kg",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8118-803d-cffa5b1c8067",
-          "name": "Meal prep dimanche 11h (5 lunchs semaine)",
+          "id": "347845e8-e836-814f-bba6-ed2593103a07",
+          "name": "Photos progression mensuelle face/profil/dos (palier 120→115)",
           "status": "Pas commencé",
-          "date": "2026-04-26",
+          "date": "2026-05-03",
           "day": "Dim",
-          "parent_id": "347845e8-e836-818e-bbba-e1e2256d37d1",
-          "parent_name": "Meal prep dominical opérationnel",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81fb-9b61-ebe8d153053d",
-          "name": "Préparer shaker protéines whey post-séance",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-818e-bbba-e1e2256d37d1",
-          "parent_name": "Meal prep dominical opérationnel",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81c1-99a0-dcb04241838e",
-          "name": "Régler coucher 22h30 (alarme reverse iPhone)",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81fc-b8c9-ee85dc56bc5d",
-          "parent_name": "Hygiène sommeil de base (S2-S3)",
+          "parent_id": "347845e8-e836-819b-8b57-f484f24840fd",
+          "parent_name": "Palier poids 2 — 120 → 115 kg",
           "parent_type": "Sous-achievement"
         }
       ],
@@ -4106,7 +4132,7 @@
       "tint_light": "#F2D0D0",
       "progress_avg": 0,
       "radar": {
-        "actuel": 67,
+        "actuel": 0,
         "cible": null,
         "gap": null
       },
@@ -4154,31 +4180,21 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-81ae-8ed2-eab9eb2accea",
-              "name": "Acheter 5 livres adaptés 3 ans James (FR + EN)",
+              "id": "347845e8-e836-8152-8817-f08950ebf78d",
+              "name": "Rotation bilingue 30% EN minimum (2 livres EN /sem)",
               "status": "Pas commencé",
-              "date": "2026-04-25",
-              "day": "Sam",
+              "date": "2026-04-28",
+              "day": "Mar",
               "parent_id": "347845e8-e836-818a-b620-f9bbf0db53d6",
               "parent_name": "Rituel lecture quotidien père-James (20 min)",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8124-8718-dc819a34d649",
-              "name": "Sortie père-James hebdo (samedi matin OU mercredi)",
+              "id": "347845e8-e836-81f7-89b7-d422ec5ccb41",
+              "name": "Cycle nouveau livre /sem bibliothèque James",
               "status": "Pas commencé",
-              "date": "2026-04-25",
+              "date": "2026-05-02",
               "day": "Sam",
-              "parent_id": "347845e8-e836-8125-827a-d4971c1c4d4f",
-              "parent_name": "Sortie père-James hebdo (sans Mirane/Harper)",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81ed-8d5b-f6ca35b823dd",
-              "name": "Rituel post-bain 18h45 lecture 20 min James",
-              "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
               "parent_id": "347845e8-e836-818a-b620-f9bbf0db53d6",
               "parent_name": "Rituel lecture quotidien père-James (20 min)",
               "parent_type": "Sous-achievement"
@@ -4236,53 +4252,33 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-8199-b09a-e7fb0585be46",
-              "name": "Bloquer créneau récurrent agenda partagé date night",
+              "id": "347845e8-e836-8179-896d-df4e9a8f8c9e",
+              "name": "Choisir 3 activités sport ensemble Mirane (yoga/jogging/salle)",
               "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-8198-aa9c-fe08ac6ad28c",
+              "parent_name": "Sport ensemble Mirane (1 séance/sem)",
+              "parent_type": "Sous-achievement"
+            },
+            {
+              "id": "347845e8-e836-8191-8973-da133c1b4f36",
+              "name": "Gardiennage enfants planifié (Ashley/baby-sitter rotation)",
+              "status": "Pas commencé",
+              "date": "2026-05-01",
+              "day": "Ven",
               "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
               "parent_name": "Date night hebdo protégée (Mirane)",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8166-8e10-c6b94b62e459",
-              "name": "Choisir jour fixe date night (vendredi ou samedi soir)",
+              "id": "347845e8-e836-817b-bc5f-f61a4fe155a1",
+              "name": "Tracker 6 magic hours /sem (departs+retours+date+caresse)",
               "status": "Pas commencé",
-              "date": "2026-04-26",
+              "date": "2026-05-03",
               "day": "Dim",
-              "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
-              "parent_name": "Date night hebdo protégée (Mirane)",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81df-9097-c72577873fde",
-              "name": "Créer template doc 'State of Union' Notion",
-              "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
-              "parent_id": "347845e8-e836-81af-857e-e02121ccdf08",
-              "parent_name": "State of the Union Gottman hebdo",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81f6-905c-c49385b77b7a",
-              "name": "Créneau fixe state of union dimanche soir 30 min",
-              "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
-              "parent_id": "347845e8-e836-81af-857e-e02121ccdf08",
-              "parent_name": "State of the Union Gottman hebdo",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81fa-abc2-f86dcd0264a1",
-              "name": "Lister 10 idées date night (restos/ciné/balade/cuisine)",
-              "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
-              "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
-              "parent_name": "Date night hebdo protégée (Mirane)",
+              "parent_id": "347845e8-e836-81b3-ac73-c0fbacebac55",
+              "parent_name": "6 magic hours Gottman tracées",
               "parent_type": "Sous-achievement"
             }
           ]
@@ -4420,24 +4416,58 @@
           "deadline": null
         }
       ],
-      "habits_week_requested": "W17",
-      "habits_week_used": "W16",
+      "habits_week_requested": "W18",
+      "habits_week_used": "W17",
       "habits_week_is_fallback": true,
+      "habits_active_week": [
+        {
+          "name": "Lecture avec James",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_week": [
+        {
+          "name": "Lecture avec James",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
       "habits_w16": [
         {
           "name": "Lecture avec James",
           "cible": 6,
           "days": [
             false,
-            true,
-            true,
             false,
-            true,
-            true,
+            false,
+            false,
+            false,
+            false,
             false
           ],
-          "fait": 4,
-          "score_pct": 67
+          "fait": 0,
+          "score_pct": 0
         }
       ],
       "habit_completion_12w": [
@@ -4451,128 +4481,78 @@
         null,
         null,
         null,
-        null,
-        67
+        67,
+        0
       ],
       "tasks_week_items": [
         {
-          "id": "347845e8-e836-81ae-8ed2-eab9eb2accea",
-          "name": "Acheter 5 livres adaptés 3 ans James (FR + EN)",
+          "id": "347845e8-e836-8152-8817-f08950ebf78d",
+          "name": "Rotation bilingue 30% EN minimum (2 livres EN /sem)",
           "status": "Pas commencé",
-          "date": "2026-04-25",
+          "date": "2026-04-28",
+          "day": "Mar",
+          "parent_id": "347845e8-e836-818a-b620-f9bbf0db53d6",
+          "parent_name": "Rituel lecture quotidien père-James (20 min)",
+          "parent_type": "Sous-achievement"
+        },
+        {
+          "id": "347845e8-e836-8179-896d-df4e9a8f8c9e",
+          "name": "Choisir 3 activités sport ensemble Mirane (yoga/jogging/salle)",
+          "status": "Pas commencé",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-8198-aa9c-fe08ac6ad28c",
+          "parent_name": "Sport ensemble Mirane (1 séance/sem)",
+          "parent_type": "Sous-achievement"
+        },
+        {
+          "id": "347845e8-e836-8191-8973-da133c1b4f36",
+          "name": "Gardiennage enfants planifié (Ashley/baby-sitter rotation)",
+          "status": "Pas commencé",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
+          "parent_name": "Date night hebdo protégée (Mirane)",
+          "parent_type": "Sous-achievement"
+        },
+        {
+          "id": "347845e8-e836-8118-b7b5-e59ca9296102",
+          "name": "Appel Kimberley /2 sem (samedi matin)",
+          "status": "Pas commencé",
+          "date": "2026-05-02",
+          "day": "Sam",
+          "parent_id": "347845e8-e836-81da-9f68-cd1c12e2f95e",
+          "parent_name": "Week-end famille élargie mensuel (sœurs)",
+          "parent_type": "Sous-achievement"
+        },
+        {
+          "id": "347845e8-e836-81f7-89b7-d422ec5ccb41",
+          "name": "Cycle nouveau livre /sem bibliothèque James",
+          "status": "Pas commencé",
+          "date": "2026-05-02",
           "day": "Sam",
           "parent_id": "347845e8-e836-818a-b620-f9bbf0db53d6",
           "parent_name": "Rituel lecture quotidien père-James (20 min)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-81e6-8bd4-c6260d14ea23",
-          "name": "Setup coin motricité libre (tapis Pikler + objets)",
+          "id": "347845e8-e836-8130-8dbf-c66089bbb1d4",
+          "name": "Planning 1 visite/mois sœurs (premier dimanche)",
           "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-8107-989d-c2c3bd754e14",
-          "parent_name": "Motricité libre + portage Harper (quotidien)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8124-8718-dc819a34d649",
-          "name": "Sortie père-James hebdo (samedi matin OU mercredi)",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-8125-827a-d4971c1c4d4f",
-          "parent_name": "Sortie père-James hebdo (sans Mirane/Harper)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-817d-be63-e7db681c4adc",
-          "name": "30 min portage Harper /jour (matin courses ou balade)",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
+          "date": "2026-05-03",
           "day": "Dim",
-          "parent_id": "347845e8-e836-8107-989d-c2c3bd754e14",
-          "parent_name": "Motricité libre + portage Harper (quotidien)",
+          "parent_id": "347845e8-e836-81da-9f68-cd1c12e2f95e",
+          "parent_name": "Week-end famille élargie mensuel (sœurs)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8199-b09a-e7fb0585be46",
-          "name": "Bloquer créneau récurrent agenda partagé date night",
+          "id": "347845e8-e836-817b-bc5f-f61a4fe155a1",
+          "name": "Tracker 6 magic hours /sem (departs+retours+date+caresse)",
           "status": "Pas commencé",
-          "date": "2026-04-26",
+          "date": "2026-05-03",
           "day": "Dim",
-          "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
-          "parent_name": "Date night hebdo protégée (Mirane)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8174-944d-d7c14473f827",
-          "name": "Choisir destination voyage annuel famille avant juin",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-810f-a743-d2675064576e",
-          "parent_name": "Voyage annuel famille (Espagne/USA)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8166-8e10-c6b94b62e459",
-          "name": "Choisir jour fixe date night (vendredi ou samedi soir)",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
-          "parent_name": "Date night hebdo protégée (Mirane)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81df-9097-c72577873fde",
-          "name": "Créer template doc 'State of Union' Notion",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81af-857e-e02121ccdf08",
-          "parent_name": "State of the Union Gottman hebdo",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81f6-905c-c49385b77b7a",
-          "name": "Créneau fixe state of union dimanche soir 30 min",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81af-857e-e02121ccdf08",
-          "parent_name": "State of the Union Gottman hebdo",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-810c-84e6-eab32e172753",
-          "name": "Journal éveil Harper : 1 obs /sem",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-8107-989d-c2c3bd754e14",
-          "parent_name": "Motricité libre + portage Harper (quotidien)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81fa-abc2-f86dcd0264a1",
-          "name": "Lister 10 idées date night (restos/ciné/balade/cuisine)",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81f1-bbb2-caef2fe525c0",
-          "parent_name": "Date night hebdo protégée (Mirane)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81ed-8d5b-f6ca35b823dd",
-          "name": "Rituel post-bain 18h45 lecture 20 min James",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-818a-b620-f9bbf0db53d6",
-          "parent_name": "Rituel lecture quotidien père-James (20 min)",
+          "parent_id": "347845e8-e836-81b3-ac73-c0fbacebac55",
+          "parent_name": "6 magic hours Gottman tracées",
           "parent_type": "Sous-achievement"
         }
       ],
@@ -4657,7 +4637,7 @@
       "tint_light": "#C9D8E8",
       "progress_avg": 0,
       "radar": {
-        "actuel": 57,
+        "actuel": 0,
         "cible": null,
         "gap": null
       },
@@ -4729,43 +4709,23 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-819a-a18c-d701cd67ab09",
-              "name": "Connecter tous les comptes bancaires à l'outil tracker",
+              "id": "347845e8-e836-8139-8ade-cb58dd175ca5",
+              "name": "Saisie quotidienne 15 min (après dîner)",
               "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
-              "parent_id": "347845e8-e836-8157-917b-da53e2b8e47c",
-              "parent_name": "Choisir + installer outil tracker budget",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-81ee-a888-cac7441545e3",
+              "parent_name": "3 mois consécutifs budget tracké 100%",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8167-b969-cd10f3589132",
-              "name": "Définir 8-10 catégories budget max",
+              "id": "347845e8-e836-815b-8a67-e16a321a53d2",
+              "name": "Revue dominicale budget 30 min (alertes semaine)",
               "status": "Pas commencé",
-              "date": "2026-04-26",
+              "date": "2026-05-03",
               "day": "Dim",
-              "parent_id": "347845e8-e836-8157-917b-da53e2b8e47c",
-              "parent_name": "Choisir + installer outil tracker budget",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-8125-a50b-e9560cb829c4",
-              "name": "Ouvrir AV Linxea Spirit 2 (100€)",
-              "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
-              "parent_id": "347845e8-e836-81f5-adec-de03ab0653bd",
-              "parent_name": "Assurance-vie ouverte + 1er versement",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-81c7-b36a-e380a0837f19",
-              "name": "Ouvrir PEA Trade Republic / BoursoBank (100€)",
-              "status": "Pas commencé",
-              "date": "2026-04-26",
-              "day": "Dim",
-              "parent_id": "347845e8-e836-81ef-9ebf-eecd1e081e3a",
-              "parent_name": "PEA ouvert + 1er versement (compteur fiscal)",
+              "parent_id": "347845e8-e836-81ee-a888-cac7441545e3",
+              "parent_name": "3 mois consécutifs budget tracké 100%",
               "parent_type": "Sous-achievement"
             }
           ]
@@ -5112,24 +5072,58 @@
           "deadline": null
         }
       ],
-      "habits_week_requested": "W17",
-      "habits_week_used": "W16",
+      "habits_week_requested": "W18",
+      "habits_week_used": "W17",
       "habits_week_is_fallback": true,
+      "habits_active_week": [
+        {
+          "name": "Budget 10 min",
+          "cible": 7,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_week": [
+        {
+          "name": "Budget 10 min",
+          "cible": 7,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
       "habits_w16": [
         {
           "name": "Budget 10 min",
           "cible": 7,
           "days": [
             false,
-            true,
-            true,
-            true,
-            true,
+            false,
+            false,
+            false,
+            false,
             false,
             false
           ],
-          "fait": 4,
-          "score_pct": 57
+          "fait": 0,
+          "score_pct": 0
         }
       ],
       "habit_completion_12w": [
@@ -5143,48 +5137,28 @@
         null,
         null,
         null,
-        null,
-        57
+        57,
+        0
       ],
       "tasks_week_items": [
         {
-          "id": "347845e8-e836-819a-a18c-d701cd67ab09",
-          "name": "Connecter tous les comptes bancaires à l'outil tracker",
+          "id": "347845e8-e836-8139-8ade-cb58dd175ca5",
+          "name": "Saisie quotidienne 15 min (après dîner)",
           "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-8157-917b-da53e2b8e47c",
-          "parent_name": "Choisir + installer outil tracker budget",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-81ee-a888-cac7441545e3",
+          "parent_name": "3 mois consécutifs budget tracké 100%",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8167-b969-cd10f3589132",
-          "name": "Définir 8-10 catégories budget max",
+          "id": "347845e8-e836-815b-8a67-e16a321a53d2",
+          "name": "Revue dominicale budget 30 min (alertes semaine)",
           "status": "Pas commencé",
-          "date": "2026-04-26",
+          "date": "2026-05-03",
           "day": "Dim",
-          "parent_id": "347845e8-e836-8157-917b-da53e2b8e47c",
-          "parent_name": "Choisir + installer outil tracker budget",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8125-a50b-e9560cb829c4",
-          "name": "Ouvrir AV Linxea Spirit 2 (100€)",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81f5-adec-de03ab0653bd",
-          "parent_name": "Assurance-vie ouverte + 1er versement",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81c7-b36a-e380a0837f19",
-          "name": "Ouvrir PEA Trade Republic / BoursoBank (100€)",
-          "status": "Pas commencé",
-          "date": "2026-04-26",
-          "day": "Dim",
-          "parent_id": "347845e8-e836-81ef-9ebf-eecd1e081e3a",
-          "parent_name": "PEA ouvert + 1er versement (compteur fiscal)",
+          "parent_id": "347845e8-e836-81ee-a888-cac7441545e3",
+          "parent_name": "3 mois consécutifs budget tracké 100%",
           "parent_type": "Sous-achievement"
         }
       ],
@@ -5314,7 +5288,7 @@
       "tint_light": "#DDCEE7",
       "progress_avg": 0,
       "radar": {
-        "actuel": 67,
+        "actuel": 0,
         "cible": null,
         "gap": null
       },
@@ -5394,20 +5368,20 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-8188-bfd0-e84ded2016ff",
-              "name": "Lire LeCun 1998 (LeNet-5) + makemore part 3 (BatchNorm)",
+              "id": "347845e8-e836-8108-ae26-fc994e21c7fc",
+              "name": "Implémenter conv2d via unfold/im2col en torch.tensor pur",
               "status": "Pas commencé",
-              "date": "2026-04-25",
+              "date": "2026-05-02",
               "day": "Sam",
               "parent_id": "347845e8-e836-81ff-806a-c125f329796b",
               "parent_name": "ML P3 — CNN LeNet (PyTorch tensor ops sans nn.Conv2d)",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8132-b202-d8af3be20bc4",
-              "name": "[Tâche] Karpathy micrograd — vidéo 2h25 + reprod classe Value step-by-step",
+              "id": "347845e8-e836-81b8-98a5-ed0137b6a9a4",
+              "name": "[Tâche] micrograd — MLP qui apprend XOR (loss < 0.01 en <100 epochs)",
               "status": "Pas commencé",
-              "date": "2026-04-25",
+              "date": "2026-05-02",
               "day": "Sam",
               "parent_id": "347845e8-e836-8127-8bf0-cc7eb1f45906",
               "parent_name": "ML P0 — micrograd (autograd scalaire)",
@@ -6738,39 +6712,103 @@
           "deadline": null
         }
       ],
-      "habits_week_requested": "W17",
-      "habits_week_used": "W16",
+      "habits_week_requested": "W18",
+      "habits_week_used": "W17",
       "habits_week_is_fallback": true,
-      "habits_w16": [
-        {
-          "name": "Maths 30 min",
-          "cible": 6,
-          "days": [
-            false,
-            true,
-            false,
-            false,
-            true,
-            true,
-            true
-          ],
-          "fait": 4,
-          "score_pct": 67
-        },
+      "habits_active_week": [
         {
           "name": "Micrograd 30 min",
           "cible": 6,
           "days": [
             false,
-            true,
             false,
-            true,
-            true,
-            true,
+            false,
+            false,
+            false,
+            false,
             false
           ],
-          "fait": 4,
-          "score_pct": 67
+          "fait": 0,
+          "score_pct": 0
+        },
+        {
+          "name": "Maths 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_week": [
+        {
+          "name": "Micrograd 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        },
+        {
+          "name": "Maths 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_w16": [
+        {
+          "name": "Micrograd 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        },
+        {
+          "name": "Maths 30 min",
+          "cible": 6,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
         }
       ],
       "habit_completion_12w": [
@@ -6784,65 +6822,45 @@
         null,
         null,
         null,
-        null,
-        67
+        67,
+        0
       ],
       "tasks_week_items": [
         {
-          "id": "347845e8-e836-8167-95d7-cc40348b986c",
-          "name": "[Tâche] Regarder Essence of Linear Algebra (3B1B) en entier",
+          "id": "347845e8-e836-81e8-b04f-e006a4fd7843",
+          "name": "Faire 21 jours consécutifs ≥5 min de tracé (1 prompt simple/j)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
+          "date": "2026-04-27",
           "day": "Lun",
+          "parent_id": "347845e8-e836-810f-bac6-e882ad4edc6d",
+          "parent_name": "Dessin P1 — Habitude 5 min/jour (21 jours consécutifs)",
+          "parent_type": "Sous-achievement"
+        },
+        {
+          "id": "347845e8-e836-817c-b748-da009f366354",
+          "name": "[Tâche] MIT 18.06 lectures 1-10 (Strang) — espace colonne, A=LU, A=QR",
+          "status": "Pas commencé",
+          "date": "2026-05-01",
+          "day": "Ven",
           "parent_id": "347845e8-e836-81cc-8507-cc01db0eedf1",
           "parent_name": "Maths S1 — Algèbre linéaire (vecteurs, matrices, SVD, eigen)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8172-9a6e-e792839e164e",
-          "name": "Acheter carnet A5 + crayon HB/2B + gomme + feutre noir (15€)",
+          "id": "347845e8-e836-8108-ae26-fc994e21c7fc",
+          "name": "Implémenter conv2d via unfold/im2col en torch.tensor pur",
           "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-810f-bac6-e882ad4edc6d",
-          "parent_name": "Dessin P1 — Habitude 5 min/jour (21 jours consécutifs)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8169-a233-ed423d32f76e",
-          "name": "Installer app habitude (Streaks ou Habitica) + créer habitude 'Dessin 5 min'",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-810f-bac6-e882ad4edc6d",
-          "parent_name": "Dessin P1 — Habitude 5 min/jour (21 jours consécutifs)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8188-bfd0-e84ded2016ff",
-          "name": "Lire LeCun 1998 (LeNet-5) + makemore part 3 (BatchNorm)",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
+          "date": "2026-05-02",
           "day": "Sam",
           "parent_id": "347845e8-e836-81ff-806a-c125f329796b",
           "parent_name": "ML P3 — CNN LeNet (PyTorch tensor ops sans nn.Conv2d)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-819e-9bc9-e1f4cc2fdd81",
-          "name": "Règle anti-culpabilité : si jour raté, repartir compteur à 1",
+          "id": "347845e8-e836-81b8-98a5-ed0137b6a9a4",
+          "name": "[Tâche] micrograd — MLP qui apprend XOR (loss < 0.01 en <100 epochs)",
           "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-810f-bac6-e882ad4edc6d",
-          "parent_name": "Dessin P1 — Habitude 5 min/jour (21 jours consécutifs)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8132-b202-d8af3be20bc4",
-          "name": "[Tâche] Karpathy micrograd — vidéo 2h25 + reprod classe Value step-by-step",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
+          "date": "2026-05-02",
           "day": "Sam",
           "parent_id": "347845e8-e836-8127-8bf0-cc7eb1f45906",
           "parent_name": "ML P0 — micrograd (autograd scalaire)",
@@ -7012,7 +7030,7 @@
       "tint_light": "#ECD9A8",
       "progress_avg": 0,
       "radar": {
-        "actuel": 67,
+        "actuel": 0,
         "cible": null,
         "gap": null
       },
@@ -7058,38 +7076,7 @@
             "Statuer Jillian: baptême OU transmission à fin du livre",
             "Avancer 1 chapitre Vivre pour toujours/1-2 sem"
           ],
-          "linked_tasks_week": [
-            {
-              "id": "347845e8-e836-81a3-9dbb-d93b773cf7a6",
-              "name": "Fixer créneau hebdo Jillian + obtenir accord parents",
-              "status": "En cours",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8190-b82b-ed1b401cf64a",
-              "parent_name": "Fixer cadence Jillian: 1 séance/sem ≥30 min, 4/4",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-8185-857b-f5bdf07cb265",
-              "name": "Logger en fin séance Jillian: chapitre + questions + recherche à faire",
-              "status": "Pas commencé",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-81d3-8f34-e0acac21aa6f",
-              "parent_name": "Avancer 1 chapitre Vivre pour toujours/1-2 sem",
-              "parent_type": "Sous-achievement"
-            },
-            {
-              "id": "347845e8-e836-810e-ba96-d8f26fd28a69",
-              "name": "Préparer chaque chapitre la veille: 3 questions clés + 1 application ado 14 ans",
-              "status": "Pas commencé",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-81d3-8f34-e0acac21aa6f",
-              "parent_name": "Avancer 1 chapitre Vivre pour toujours/1-2 sem",
-              "parent_type": "Sous-achievement"
-            }
-          ]
+          "linked_tasks_week": []
         },
         {
           "id": "347845e8-e836-8180-b73e-e9389a04f6a6",
@@ -7142,43 +7129,43 @@
           ],
           "linked_tasks_week": [
             {
-              "id": "347845e8-e836-8155-8e0b-f67883a57489",
-              "name": "Confirmer chaque jeudi soir le RDV prédication samedi",
-              "status": "En cours",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-              "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
+              "id": "347845e8-e836-81e2-88af-c11a58a55996",
+              "name": "Conduire étude biblique avec Alexandre (heures comptent vers palier)",
+              "status": "Pas commencé",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-812b-a01d-d74f0c1d153f",
+              "parent_name": "Palier 2 — Atteindre 30h prédication/mois",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-8132-b1dd-ead41edb0a0a",
-              "name": "Logger heures prédication après chaque sortie (compteur JW Library)",
-              "status": "En cours",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-              "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
+              "id": "347845e8-e836-811b-be8f-e5608146fda8",
+              "name": "Démarcher 1 frère pour RDV prédication récurrent (mardi midi/jeudi soir)",
+              "status": "Pas commencé",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-81cb-b689-e0a765207dab",
+              "parent_name": "Débloquer 1 RDV prédication récurrent semaine",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-814e-8642-ccf93aac1f49",
-              "name": "Préparer présentation prédication (script + 2 points + 1 verset) avant chaque sortie",
-              "status": "En cours",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-              "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
+              "id": "347845e8-e836-8119-83f6-d18a8b5f244a",
+              "name": "Inviter parents en prédication (chaque trimestre)",
+              "status": "Pas commencé",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-812b-a01d-d74f0c1d153f",
+              "parent_name": "Palier 2 — Atteindre 30h prédication/mois",
               "parent_type": "Sous-achievement"
             },
             {
-              "id": "347845e8-e836-819c-8308-d4085d1adcf9",
-              "name": "Tenir DB Visites prédication à jour (nom/adresse/sujet/suite)",
-              "status": "En cours",
-              "date": "2026-04-20",
-              "day": "Lun",
-              "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-              "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
+              "id": "347845e8-e836-8145-acfb-f16eb03b178b",
+              "name": "Écrire 1 lettre de prédication/sem (vendredi 20 min)",
+              "status": "Pas commencé",
+              "date": "2026-05-01",
+              "day": "Ven",
+              "parent_id": "347845e8-e836-815f-b13d-e8202b6e6c03",
+              "parent_name": "Palier 1 — Prédication 1×/sem stable 2 mois",
               "parent_type": "Sous-achievement"
             }
           ]
@@ -7396,9 +7383,73 @@
           "deadline": null
         }
       ],
-      "habits_week_requested": "W17",
-      "habits_week_used": "W16",
+      "habits_week_requested": "W18",
+      "habits_week_used": "W17",
       "habits_week_is_fallback": true,
+      "habits_active_week": [
+        {
+          "name": "Prédication",
+          "cible": 2,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        },
+        {
+          "name": "Étude personnelle",
+          "cible": 7,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
+      "habits_week": [
+        {
+          "name": "Prédication",
+          "cible": 2,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        },
+        {
+          "name": "Étude personnelle",
+          "cible": 7,
+          "days": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "fait": 0,
+          "score_pct": 0
+        }
+      ],
       "habits_w16": [
         {
           "name": "Prédication",
@@ -7409,26 +7460,26 @@
             false,
             false,
             false,
-            true,
+            false,
             false
           ],
-          "fait": 1,
-          "score_pct": 50
+          "fait": 0,
+          "score_pct": 0
         },
         {
           "name": "Étude personnelle",
           "cible": 7,
           "days": [
             false,
-            true,
-            true,
-            true,
-            true,
             false,
-            true
+            false,
+            false,
+            false,
+            false,
+            false
           ],
-          "fait": 5,
-          "score_pct": 71
+          "fait": 0,
+          "score_pct": 0
         }
       ],
       "habit_completion_12w": [
@@ -7442,228 +7493,78 @@
         null,
         null,
         null,
-        null,
-        67
+        67,
+        0
       ],
       "tasks_week_items": [
         {
-          "id": "347845e8-e836-810a-a3b6-e23c9e44e09e",
-          "name": "Bloquer créneau étude perso fixe dans calendrier (samedi 06h-07h)",
+          "id": "347845e8-e836-81fb-8117-fcead794bf89",
+          "name": "Choisir 1 cantique le 1er du mois → écouter 5×/sem → chanter 1× famille",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8135-ad23-c4b645ef5734",
-          "parent_name": "Étude personnelle hebdo ≥45 min sur 8 sem",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-81a4-bd63-dcc78e75fe1f",
+          "parent_name": "Réinscription chorale Béthel + 1 cantique/mois (profil Béthel)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8102-9f88-c836f70c3adc",
-          "name": "Choisir sujet étude perso le dimanche soir",
+          "id": "347845e8-e836-81e2-88af-c11a58a55996",
+          "name": "Conduire étude biblique avec Alexandre (heures comptent vers palier)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8135-ad23-c4b645ef5734",
-          "parent_name": "Étude personnelle hebdo ≥45 min sur 8 sem",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-812b-a01d-d74f0c1d153f",
+          "parent_name": "Palier 2 — Atteindre 30h prédication/mois",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-811a-885a-f109bf85164f",
-          "name": "Cocher prière matin/midi/soir dans tracker chaque jour",
+          "id": "347845e8-e836-811b-be8f-e5608146fda8",
+          "name": "Démarcher 1 frère pour RDV prédication récurrent (mardi midi/jeudi soir)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-817d-bf69-c708e24512b5",
-          "parent_name": "Tenir prière 3×/jour 7/7 sur 4 sem",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-81cb-b689-e0a765207dab",
+          "parent_name": "Débloquer 1 RDV prédication récurrent semaine",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8155-8e0b-f67883a57489",
-          "name": "Confirmer chaque jeudi soir le RDV prédication samedi",
-          "status": "En cours",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-          "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81aa-a5e8-f12d08f4a880",
-          "name": "Dimanche matin: relire en route le commentaire ciblé",
+          "id": "347845e8-e836-8119-83f6-d18a8b5f244a",
+          "name": "Inviter parents en prédication (chaque trimestre)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-814e-b07b-eb8478b94676",
-          "parent_name": "Préparer + commenter réunion week-end (dimanche) 8/8",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-812b-a01d-d74f0c1d153f",
+          "parent_name": "Palier 2 — Atteindre 30h prédication/mois",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-81a3-9dbb-d93b773cf7a6",
-          "name": "Fixer créneau hebdo Jillian + obtenir accord parents",
-          "status": "En cours",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8190-b82b-ed1b401cf64a",
-          "parent_name": "Fixer cadence Jillian: 1 séance/sem ≥30 min, 4/4",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8129-bb8e-e6679d760f41",
-          "name": "Lever main dimanche pour ≥1 commentaire + cocher tracker",
+          "id": "347845e8-e836-8127-8439-f56d8bdefcd6",
+          "name": "Recevoir checklist tâches AM (sono/micro/accueil/littérature/comptes)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-814e-b07b-eb8478b94676",
-          "parent_name": "Préparer + commenter réunion week-end (dimanche) 8/8",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-8120-b404-c90bca490047",
+          "parent_name": "Préparer tâches techniques AM (sono, micro, accueil, comptes)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-81b7-897f-c3dad568a411",
-          "name": "Lever main mardi pour ≥1 commentaire + cocher tracker",
+          "id": "347845e8-e836-811f-8374-d34d9190c29d",
+          "name": "Réinscription chorale Béthel — remplir formulaire JW.org",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8162-8f73-ddea243f6313",
-          "parent_name": "Préparer + commenter réunion semaine (mardi) 8/8",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-81a4-bd63-dcc78e75fe1f",
+          "parent_name": "Réinscription chorale Béthel + 1 cantique/mois (profil Béthel)",
           "parent_type": "Sous-achievement"
         },
         {
-          "id": "347845e8-e836-8165-a61d-cb8953723815",
-          "name": "Lire 1 chapitre Bible avant extinction lumière + noter livre/chapitre",
+          "id": "347845e8-e836-8145-acfb-f16eb03b178b",
+          "name": "Écrire 1 lettre de prédication/sem (vendredi 20 min)",
           "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-81ed-b6b2-d6493099199b",
-          "parent_name": "Lire 1 chapitre Bible/jour 6/7 sur 4 sem",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8185-857b-f5bdf07cb265",
-          "name": "Logger en fin séance Jillian: chapitre + questions + recherche à faire",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-81d3-8f34-e0acac21aa6f",
-          "parent_name": "Avancer 1 chapitre Vivre pour toujours/1-2 sem",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8132-b1dd-ead41edb0a0a",
-          "name": "Logger heures prédication après chaque sortie (compteur JW Library)",
-          "status": "En cours",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-          "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-810e-84a1-f704b519fdd7",
-          "name": "Lundi soir: télécharger Cahier semaine + surligner réponses (15 min)",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8162-8f73-ddea243f6313",
-          "parent_name": "Préparer + commenter réunion semaine (mardi) 8/8",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-818d-9f28-dedb0959c514",
-          "name": "Mardi 18h: relire 2 paragraphes ciblés + préparer commentaire (10 min)",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8162-8f73-ddea243f6313",
-          "parent_name": "Préparer + commenter réunion semaine (mardi) 8/8",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81c6-a59c-ceec6fcafab2",
-          "name": "Noter en fin séance: sujet + 1 idée à appliquer",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8135-ad23-c4b645ef5734",
-          "parent_name": "Étude personnelle hebdo ≥45 min sur 8 sem",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8100-9fd5-db4896f08136",
-          "name": "Ouvrir JW Library texte du jour dans 30 min après réveil",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-81de-8fe3-f9724adcac15",
-          "parent_name": "Lire texte du jour chaque matin (JW Library)",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81e2-a1a0-eac92ec4a051",
-          "name": "Programmer 3 alarmes prière téléphone (07h00/12h30/22h00)",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-817d-bf69-c708e24512b5",
-          "parent_name": "Tenir prière 3×/jour 7/7 sur 4 sem",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-810e-ba96-d8f26fd28a69",
-          "name": "Préparer chaque chapitre la veille: 3 questions clés + 1 application ado 14 ans",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-81d3-8f34-e0acac21aa6f",
-          "parent_name": "Avancer 1 chapitre Vivre pour toujours/1-2 sem",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-814e-8642-ccf93aac1f49",
-          "name": "Préparer présentation prédication (script + 2 points + 1 verset) avant chaque sortie",
-          "status": "En cours",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-          "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81d8-b8cb-fb5d22a9f363",
-          "name": "Samedi soir: lire Tour de Garde dimanche + surligner ≥1 paragraphe",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-814e-b07b-eb8478b94676",
-          "parent_name": "Préparer + commenter réunion week-end (dimanche) 8/8",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-81e3-8a93-c4cc67db2c93",
-          "name": "Suivre plan lecture Bible École biblique (par défaut)",
-          "status": "Pas commencé",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-81ed-b6b2-d6493099199b",
-          "parent_name": "Lire 1 chapitre Bible/jour 6/7 sur 4 sem",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-819c-8308-d4085d1adcf9",
-          "name": "Tenir DB Visites prédication à jour (nom/adresse/sujet/suite)",
-          "status": "En cours",
-          "date": "2026-04-20",
-          "day": "Lun",
-          "parent_id": "347845e8-e836-8166-b73c-fca16eb40d95",
-          "parent_name": "Palier 0 — Reprendre prédication samedi hebdo 4/4",
-          "parent_type": "Sous-achievement"
-        },
-        {
-          "id": "347845e8-e836-8100-a160-d077023ee5c1",
-          "name": "Prendre RDV avec ancien référent (date nomination + périmètre)",
-          "status": "Pas commencé",
-          "date": "2026-04-25",
-          "day": "Sam",
-          "parent_id": "347845e8-e836-8122-ab39-f296399b0c36",
-          "parent_name": "Confirmer date nomination + périmètre AM auprès ancien",
+          "date": "2026-05-01",
+          "day": "Ven",
+          "parent_id": "347845e8-e836-815f-b13d-e8202b6e6c03",
+          "parent_name": "Palier 1 — Prédication 1×/sem stable 2 mois",
           "parent_type": "Sous-achievement"
         }
       ],
@@ -7743,17 +7644,17 @@
   "kpi_catalog": {
     "dash-tasks-today": {
       "eyebrow": "TÂCHES DU JOUR",
-      "value": "0 / 0",
-      "sub": "aucune tâche datée aujourd'hui",
+      "value": "0 / 1",
+      "sub": "complétées · 1 en attente",
       "accent": "#3B82F6",
       "accent_light": "#DBEAFE"
     },
     "dash-badge-week": {
-      "eyebrow": "BADGE SEMAINE W16",
-      "value": "66 %",
-      "sub": "JAUNE · 35 / 53 habitudes tenues",
-      "accent": "#F59E0B",
-      "accent_light": "#FEF3C7"
+      "eyebrow": "BADGE SEMAINE W17",
+      "value": "19 %",
+      "sub": "ROUGE · 10 / 52 habitudes tenues",
+      "accent": "#EF4444",
+      "accent_light": "#FEE2E2"
     },
     "dash-trimester-t2": {
       "eyebrow": "TRIMESTRE T2 2026",
@@ -7810,16 +7711,16 @@
       "accent_light": "#D4E5DB"
     },
     "interieur-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "68 %",
-      "sub": "13 / 19 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "56 %",
+      "sub": "10 / 18 cibles semaine",
       "accent": "#2F7D5B",
       "accent_light": "#D4E5DB"
     },
     "interieur-signature": {
-      "eyebrow": "POIDS ACTUEL",
+      "eyebrow": "INTÉRIEUR",
       "value": "—",
-      "sub": "DB Mesures corps à brancher",
+      "sub": "Suivi par tâches, habitudes et roadmap",
       "accent": "#2F7D5B",
       "accent_light": "#D4E5DB"
     },
@@ -7831,16 +7732,16 @@
       "accent_light": "#F2D0D0"
     },
     "famille-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "67 %",
-      "sub": "4 / 6 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "0 %",
+      "sub": "0 / 6 cibles semaine",
       "accent": "#C84B4B",
       "accent_light": "#F2D0D0"
     },
     "famille-signature": {
-      "eyebrow": "DATE-NIGHT CETTE SEMAINE",
+      "eyebrow": "FAMILLE",
       "value": "—",
-      "sub": "DB Couple à brancher",
+      "sub": "Suivi par tâches, habitudes et roadmap",
       "accent": "#C84B4B",
       "accent_light": "#F2D0D0"
     },
@@ -7852,9 +7753,9 @@
       "accent_light": "#C9D8E8"
     },
     "pro-fi-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "57 %",
-      "sub": "4 / 7 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "0 %",
+      "sub": "0 / 7 cibles semaine",
       "accent": "#1E4D8C",
       "accent_light": "#C9D8E8"
     },
@@ -7873,9 +7774,9 @@
       "accent_light": "#DDCEE7"
     },
     "creation-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "67 %",
-      "sub": "8 / 12 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "0 %",
+      "sub": "0 / 12 cibles semaine",
       "accent": "#6B3FA0",
       "accent_light": "#DDCEE7"
     },
@@ -7894,16 +7795,16 @@
       "accent_light": "#ECD9A8"
     },
     "spirituel-habits": {
-      "eyebrow": "HABITUDES W16",
-      "value": "67 %",
-      "sub": "6 / 9 cibles semaine",
+      "eyebrow": "HABITUDES W17",
+      "value": "0 %",
+      "sub": "0 / 9 cibles semaine",
       "accent": "#B8860B",
       "accent_light": "#ECD9A8"
     },
     "spirituel-signature": {
-      "eyebrow": "PRÉDICATION AVRIL",
+      "eyebrow": "SPIRITUEL",
       "value": "—",
-      "sub": "DB Rapports prédication à brancher",
+      "sub": "Suivi par tâches, habitudes et roadmap",
       "accent": "#B8860B",
       "accent_light": "#ECD9A8"
     }

@@ -105,6 +105,28 @@ cd dist && python -m http.server 8000
 # → http://localhost:8000/radar.html
 ```
 
+## QA locale
+
+Installer les outils QA si l'environnement local ne les a pas déjà :
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+```
+
+Commandes de vérification sans accès Notion :
+
+```bash
+python3 -m pytest
+python3 -m ruff check .
+python3 -m compileall scripts tests
+```
+
+Le smoke test d'artefacts générés reste séparé et suppose que `data/snapshots.json` et `dist/` existent :
+
+```bash
+python3 scripts/verify_build.py
+```
+
 ## Workflow finance mensuel
 
 La source de vérité finance/pro est maintenant portée par 3 data sources Notion :

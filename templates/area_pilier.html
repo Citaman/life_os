@@ -58,6 +58,11 @@
 {% block content %}
 {% set weeks = snap.historic_weekly_12w.weeks %}
 {% set values = pilier.habit_completion_12w %}
+{% set display_weeks = [] %}
+{% for week in weeks %}
+  {% set offset = (weeks | length) - loop.index %}
+  {% set _ = display_weeks.append(("S-" ~ offset) if offset > 0 else "Semaine active") %}
+{% endfor %}
 {% set ns = namespace(real_points=0, latest=none, latest_week=none, best=none, best_week=none, average=none) %}
 
 {% for value in values %}
@@ -80,7 +85,7 @@
 {{ m.section_header(
   eyebrow=pilier.name,
   title="Évolution trimestrielle",
-  subtitle="Habit completion hebdomadaire · fenêtre glissante 12 semaines · semaine active " ~ (pilier.habits_week_used or snap.active_habits_week),
+  subtitle="Habit completion hebdomadaire · fenêtre glissante 12 semaines · semaine active",
   accent=pilier.accent
 ) }}
 
@@ -113,12 +118,12 @@
   <div class="meta-card">
     <div class="meta-label">Dernier score</div>
     <div class="meta-value" style="color: {{ pilier.accent }};">{{ ns.latest }}%</div>
-    <div class="meta-sub">{{ ns.latest_week or pilier.habits_week_used }}</div>
+    <div class="meta-sub">semaine active</div>
   </div>
   <div class="meta-card">
     <div class="meta-label">Pic trimestriel</div>
     <div class="meta-value">{{ ns.best }}%</div>
-    <div class="meta-sub">{{ ns.best_week or "—" }}</div>
+    <div class="meta-sub">meilleur point sur 12 semaines</div>
   </div>
   <div class="meta-card">
     <div class="meta-label">Moyenne 12 semaines</div>
@@ -136,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!canvas) return;
 
   var ctx = canvas.getContext('2d');
-  var labels = {{ weeks | tojson }};
+  var labels = {{ display_weeks | tojson }};
   var data = {{ values | tojson }};
   var accent = {{ pilier.accent | tojson }};
 

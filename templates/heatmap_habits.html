@@ -191,7 +191,7 @@
   margin-top: 4px;
 }
 
-/* ── Right panel: Semaine W16 — détail (V8 §4.6) ─────────── */
+/* ── Right panel: active week detail ─────────────────────── */
 .tracker-panel {
   display: flex;
   flex-direction: column;
@@ -338,22 +338,31 @@
   {%- set today_idx = 6 -%}
 {%- endif -%}
 
+{# ── Dynamic week labels from the rolling history and active habit week ──── #}
+{%- set historic_weeks = snap.get("historic_weekly_12w", {}).get("weeks", []) -%}
+{%- set hw_len = historic_weeks | length -%}
+{%- set active_week_label = "Active" -%}
+{%- set week_1_label = "S-3" -%}
+{%- set week_2_label = "S-2" -%}
+{%- set week_3_label = "S-1" -%}
+
 {# ── Section header ──────────────────────────────────────────────────────── #}
 {{ m.section_header(
     eyebrow="RÉGULARITÉ",
     title="Heatmap habitudes · " + pilier.name,
-    subtitle=(pilier.habits_w16|length)|string + " habitude" + ("s" if pilier.habits_w16|length > 1 else "") + " · 4 dernières semaines × 7 jours",
+    subtitle=(pilier.habits_active_week|length)|string + " habitude" + ("s" if pilier.habits_active_week|length > 1 else "") + " · 4 dernières semaines × 7 jours",
     accent=pilier.accent
 ) }}
 
 {# ── Main card ────────────────────────────────────────────────────────────── #}
 <div class="card">
 
-  {# ── Historic weeks: indices 8,9,10 of habit_completion_12w = W13,W14,W15 #}
-  {#    Index 11 = W16 (we use actual days[] instead)                         #}
-  {%- set w13_pct = pilier.habit_completion_12w[8] if pilier.habit_completion_12w|length > 8 else none -%}
-  {%- set w14_pct = pilier.habit_completion_12w[9] if pilier.habit_completion_12w|length > 9 else none -%}
-  {%- set w15_pct = pilier.habit_completion_12w[10] if pilier.habit_completion_12w|length > 10 else none -%}
+  {# ── Last three historic weeks use completion_12w; active week uses days[]. #}
+  {%- set completion_12w = pilier.habit_completion_12w -%}
+  {%- set completion_len = completion_12w | length -%}
+  {%- set week_1_pct = completion_12w[completion_len - 4] if completion_len >= 4 else none -%}
+  {%- set week_2_pct = completion_12w[completion_len - 3] if completion_len >= 3 else none -%}
+  {%- set week_3_pct = completion_12w[completion_len - 2] if completion_len >= 2 else none -%}
 
   {# ── Pattern seeds — deterministic 7-day patterns per completion band      #}
   {# Band A: >=85% → 6+ days tenu — pattern A [1,1,1,1,1,1,0]               #}
@@ -403,7 +412,7 @@
   {# Day column labels (empty first cell for row-label column) #}
   {%- set day_labels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'] -%}
   {%- set day_names  = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] -%}
-  {%- set week_labels = ['W13', 'W14', 'W15', 'W16'] -%}
+  {%- set week_labels = [week_1_label, week_2_label, week_3_label, active_week_label] -%}
 
   {# ── Compute avg score across all habits ─────────────────────────────── #}
   {%- set ns = namespace(score_sum=0, total_fait=0, total_cible=0) -%}
@@ -422,33 +431,33 @@
       {% for habit in pilier.habits_w16 %}
       {%- set h_idx = loop.index0 -%}
 
-      {# Compute per-habit historic patterns for W13/W14/W15 — only when non-null #}
-      {%- set w13_null = w13_pct is none -%}
-      {%- set w14_null = w14_pct is none -%}
-      {%- set w15_null = w15_pct is none -%}
+      {# Compute per-habit historic patterns only when the week score is non-null #}
+      {%- set week_1_null = week_1_pct is none -%}
+      {%- set week_2_null = week_2_pct is none -%}
+      {%- set week_3_null = week_3_pct is none -%}
 
-      {%- if not w13_null -%}
-        {%- set b13 = get_band(w13_pct) | trim -%}
-        {%- set rot13 = (h_idx + 0) % 3 -%}
-        {%- set pat13 = band_patterns[b13][rot13] -%}
+      {%- if not week_1_null -%}
+        {%- set b1 = get_band(week_1_pct) | trim -%}
+        {%- set rot1 = (h_idx + 0) % 3 -%}
+        {%- set pat1 = band_patterns[b1][rot1] -%}
       {%- else -%}
-        {%- set pat13 = none -%}
+        {%- set pat1 = none -%}
       {%- endif -%}
 
-      {%- if not w14_null -%}
-        {%- set b14 = get_band(w14_pct) | trim -%}
-        {%- set rot14 = (h_idx + 1) % 3 -%}
-        {%- set pat14 = band_patterns[b14][rot14] -%}
+      {%- if not week_2_null -%}
+        {%- set b2 = get_band(week_2_pct) | trim -%}
+        {%- set rot2 = (h_idx + 1) % 3 -%}
+        {%- set pat2 = band_patterns[b2][rot2] -%}
       {%- else -%}
-        {%- set pat14 = none -%}
+        {%- set pat2 = none -%}
       {%- endif -%}
 
-      {%- if not w15_null -%}
-        {%- set b15 = get_band(w15_pct) | trim -%}
-        {%- set rot15 = (h_idx + 2) % 3 -%}
-        {%- set pat15 = band_patterns[b15][rot15] -%}
+      {%- if not week_3_null -%}
+        {%- set b3 = get_band(week_3_pct) | trim -%}
+        {%- set rot3 = (h_idx + 2) % 3 -%}
+        {%- set pat3 = band_patterns[b3][rot3] -%}
       {%- else -%}
-        {%- set pat15 = none -%}
+        {%- set pat3 = none -%}
       {%- endif -%}
 
       {# Score pill color — green if >=80%, amber if >=60%, red otherwise #}
@@ -478,51 +487,51 @@
           <div class="hm-col-label">{{ lbl }}</div>
           {% endfor %}
 
-          {# ── W13 row #}
-          <div class="hm-row-label">W13</div>
+          {# ── Historic week row 1 #}
+          <div class="hm-row-label">{{ week_1_label }}</div>
           {% for i in range(7) %}
-            {%- if w13_null -%}
-          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="W13 {{ day_names[i] }} — données non saisies"></div>
-            {%- elif pat13[i] == 1 -%}
-          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W13 {{ day_names[i] }} — tenu"></div>
+            {%- if week_1_null -%}
+          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="{{ week_1_label }} {{ day_names[i] }} — données non saisies"></div>
+            {%- elif pat1[i] == 1 -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="{{ week_1_label }} {{ day_names[i] }} — tenu"></div>
             {%- else -%}
-          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W13 {{ day_names[i] }} — manqué"></div>
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="{{ week_1_label }} {{ day_names[i] }} — manqué"></div>
             {%- endif -%}
           {% endfor %}
 
-          {# ── W14 row #}
-          <div class="hm-row-label">W14</div>
+          {# ── Historic week row 2 #}
+          <div class="hm-row-label">{{ week_2_label }}</div>
           {% for i in range(7) %}
-            {%- if w14_null -%}
-          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="W14 {{ day_names[i] }} — données non saisies"></div>
-            {%- elif pat14[i] == 1 -%}
-          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W14 {{ day_names[i] }} — tenu"></div>
+            {%- if week_2_null -%}
+          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="{{ week_2_label }} {{ day_names[i] }} — données non saisies"></div>
+            {%- elif pat2[i] == 1 -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="{{ week_2_label }} {{ day_names[i] }} — tenu"></div>
             {%- else -%}
-          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W14 {{ day_names[i] }} — manqué"></div>
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="{{ week_2_label }} {{ day_names[i] }} — manqué"></div>
             {%- endif -%}
           {% endfor %}
 
-          {# ── W15 row #}
-          <div class="hm-row-label">W15</div>
+          {# ── Historic week row 3 #}
+          <div class="hm-row-label">{{ week_3_label }}</div>
           {% for i in range(7) %}
-            {%- if w15_null -%}
-          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="W15 {{ day_names[i] }} — données non saisies"></div>
-            {%- elif pat15[i] == 1 -%}
-          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W15 {{ day_names[i] }} — tenu"></div>
+            {%- if week_3_null -%}
+          <div class="hm-cell" style="background: #F3F4F6; border: 1px dashed #D1D5DB;" title="{{ week_3_label }} {{ day_names[i] }} — données non saisies"></div>
+            {%- elif pat3[i] == 1 -%}
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="{{ week_3_label }} {{ day_names[i] }} — tenu"></div>
             {%- else -%}
-          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W15 {{ day_names[i] }} — manqué"></div>
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="{{ week_3_label }} {{ day_names[i] }} — manqué"></div>
             {%- endif -%}
           {% endfor %}
 
-          {# ── W16 row (current — uses actual days[]) #}
-          <div class="hm-row-label">W16</div>
+          {# ── Active week row uses actual days[] #}
+          <div class="hm-row-label">{{ active_week_label }}</div>
           {% for i in range(7) %}
             {%- if i > today_idx -%}
-          <div class="hm-cell-avenir" title="W16 {{ day_names[i] }} — à venir"></div>
+          <div class="hm-cell-avenir" title="{{ active_week_label }} {{ day_names[i] }} — à venir"></div>
             {%- elif habit.days[i] -%}
-          <div class="hm-cell" style="background: {{ pilier.accent }};" title="W16 {{ day_names[i] }} — tenu"></div>
+          <div class="hm-cell" style="background: {{ pilier.accent }};" title="{{ active_week_label }} {{ day_names[i] }} — tenu"></div>
             {%- else -%}
-          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="W16 {{ day_names[i] }} — manqué"></div>
+          <div class="hm-cell" style="background: {{ pilier.tint_light }};" title="{{ active_week_label }} {{ day_names[i] }} — manqué"></div>
             {%- endif -%}
           {% endfor %}
 
@@ -555,9 +564,9 @@
       </div>
 
       {# ── Transparency note ────────────────────────────────────────────── #}
-      {%- if w13_null or w14_null or w15_null -%}
+      {%- if week_1_null or week_2_null or week_3_null -%}
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; font-style: italic;">
-        Historique W13-W15 transparent tant que les semaines passées ne sont pas saisies dans la DB Habitudes.
+        Historique {{ week_1_label }}-{{ week_3_label }} transparent tant que les semaines passées ne sont pas saisies dans la DB Habitudes.
       </p>
       {%- endif -%}
 
@@ -565,14 +574,14 @@
       <div class="score-global" style="--pg-accent: {{ pilier.accent }};">
         <div class="score-global-label">Score global pilier</div>
         <div class="score-global-value">{{ avg_score }}%</div>
-        <div class="score-global-sub">Moyenne sur {{ pilier.habits_w16|length }} habitude{{ "s" if pilier.habits_w16|length > 1 else "" }} · semaine W16</div>
+        <div class="score-global-sub">Moyenne sur {{ pilier.habits_w16|length }} habitude{{ "s" if pilier.habits_w16|length > 1 else "" }} · {{ active_week_label }}</div>
       </div>
 
     </div>{# /.heatmap-wrap #}
 
-    {# ── RIGHT: Semaine W16 — détail (V8 §4.6) ─────────────────────────── #}
+    {# ── RIGHT: active week detail ─────────────────────────────────────── #}
     <div class="tracker-panel">
-      <div class="tracker-panel-title">Semaine W16 — détail</div>
+      <div class="tracker-panel-title">{{ active_week_label }} — détail</div>
 
       {% for habit in pilier.habits_w16 %}
       <div class="tracker-habit-row">

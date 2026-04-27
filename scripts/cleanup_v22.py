@@ -1,17 +1,20 @@
 """
+LEGACY destructive cleanup script. Requires --confirm for real mutations.
+
 cleanup_v22.py — V2.2-C cleanup of 6 Life OS Notion pages.
 
 Operations (executed in order):
   Phase 0 — Resolve all short block IDs (8 hex chars) to full UUIDs by scanning pages
-  Phase 1 — DELETE redundant blocks (LIVE-TODO, CHART-TODO inline, Vue liée notes,
+  Phase 1 — DELETE redundant blocks (legacy live placeholders, chart placeholders, Vue liée notes,
              fake journal callouts, fake historique bullets)
   Phase 2 — UPDATE stale KPI values from snapshots.json
   Phase 3 — UPDATE stale Création commentary paragraph
-  Phase 4 — REPLACE LIVE-TODO journal paragraphs with "DB Journal à venir" callout
+  Phase 4 — REPLACE legacy journal placeholder paragraphs with a neutral journal callout
   Phase 5 — UPDATE stale "mise à jour" dates to 2026-04-20
 
 Usage:
-    python scripts/cleanup_v22.py
+    python scripts/cleanup_v22.py --dry-run
+    python scripts/cleanup_v22.py --confirm
 
 Safety: each block text verified against expected fragment before delete/update.
 Rate-limit: 0.35 s between every API call.
@@ -19,6 +22,7 @@ Rate-limit: 0.35 s between every API call.
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -30,7 +34,16 @@ from dotenv import load_dotenv
 from notion_client import Client
 
 load_dotenv()
-TOKEN = os.environ["NOTION_TOKEN"]
+
+
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        sys.exit(f"ERROR: {name} missing in env. Refusing to mutate Notion without explicit page configuration.")
+    return value
+
+
+TOKEN = require_env("NOTION_TOKEN")
 client = Client(auth=TOKEN)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -42,12 +55,12 @@ if not SNAPSHOTS_PATH.exists():
 snap = json.loads(SNAPSHOTS_PATH.read_text())
 
 # ─── Page IDs ────────────────────────────────────────────────────────────────
-P_DASH = os.environ["PAGE_DASHBOARD"]
-P_INT  = os.environ["PAGE_INTERIEUR"]
-P_FAM  = os.environ["PAGE_FAMILLE"]
-P_PRO  = os.environ["PAGE_PRO_FI"]
-P_CRE  = os.environ["PAGE_CREATION"]
-P_SPI  = os.environ["PAGE_SPIRITUEL"]
+P_DASH = require_env("PAGE_DASHBOARD")
+P_INT  = require_env("PAGE_INTERIEUR")
+P_FAM  = require_env("PAGE_FAMILLE")
+P_PRO  = require_env("PAGE_PRO_FI")
+P_CRE  = require_env("PAGE_CREATION")
+P_SPI  = require_env("PAGE_SPIRITUEL")
 
 # ─── Full UUID map (resolved in Phase 0) ─────────────────────────────────────
 # Keyed by the 8-char short ID (first hex group before '-')
@@ -58,6 +71,7 @@ total_deleted = 0
 total_updated = 0
 total_skipped = 0
 errors: list[str] = []
+DRY_RUN = False
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -86,12 +100,18 @@ def list_children(block_id: str) -> list[dict[str, Any]]:
 
 
 def api_delete(block_id: str) -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN delete block {block_id[:8]}")
+        return
     client.blocks.delete(block_id=block_id)
     time.sleep(0.35)
 
 
 def api_update(block_id: str, block_type: str, new_text: str) -> None:
     payload: dict[str, Any] = {"rich_text": [{"type": "text", "text": {"content": new_text}}]}
+    if DRY_RUN:
+        print(f"    DRY-RUN update {block_type} {block_id[:8]} → {new_text!r}")
+        return
     client.blocks.update(block_id=block_id, **{block_type: payload})
     time.sleep(0.35)
 
@@ -109,7 +129,7 @@ def uid(short: str) -> str:
     # Maybe it was passed as a full UUID already
     if "-" in short and len(short) > 8:
         return short
-    raise KeyError(f"UUID for short ID '{short}' not resolved — run Phase 0 first")
+    raise KeyError(f"target block short ID '{short}' was not found while scanning configured PAGE_* pages")
 
 
 # ─── Phase 0 — Resolve all short block IDs ───────────────────────────────────
@@ -202,7 +222,8 @@ def run_phase0_resolve() -> None:
     missing = ALL_SHORT_IDS - set(UUID_MAP.keys())
     print(f"  resolved {len(UUID_MAP)}/{len(ALL_SHORT_IDS)}")
     if missing:
-        print(f"  WARNING — unresolved IDs: {missing}")
+        print(f"  WARNING — unresolved target block IDs: {sorted(missing)}")
+        print("  These targets will be skipped; check PAGE_* env values or whether the blocks were already removed.")
 
 
 # ─── Phase 1 — DELETE list ───────────────────────────────────────────────────
@@ -212,18 +233,18 @@ BLOCKS_TO_DELETE: list[tuple[str, str | None]] = [
     ("911b4545", "computed"),
     ("27bdf5fd", "computed"),
     ("422745a3", "computed"),
-    ("d1b17eb0", "LIVE-TODO"),
+    ("d1b17eb0", "legacy live placeholder"),
     ("cd42af0e", "Viz non-natives"),
-    ("61a65779", "LIVE-TODO"),
-    ("7609680a", "LIVE-TODO"),
-    ("de73930f", "LIVE-TODO"),
-    ("61a28607", "LIVE-TODO"),
-    ("8bb7cf4e", "LIVE-TODO"),
+    ("61a65779", "legacy live placeholder"),
+    ("7609680a", "legacy live placeholder"),
+    ("de73930f", "legacy live placeholder"),
+    ("61a28607", "legacy live placeholder"),
+    ("8bb7cf4e", "legacy live placeholder"),
 
     # ── Intérieur ──
-    ("d4e29e2d", "LIVE-TODO"),
-    ("1fe415a3", "LIVE-TODO"),
-    ("52926420", "LIVE-TODO"),
+    ("d4e29e2d", "legacy live placeholder"),
+    ("1fe415a3", "legacy live placeholder"),
+    ("52926420", "legacy live placeholder"),
     ("69d0db2f", "Vue liée Plan"),
     ("02be5ad1", "CHART-TODO"),
     ("1182532c", "Vue liée Plan"),
@@ -243,13 +264,13 @@ BLOCKS_TO_DELETE: list[tuple[str, str | None]] = [
     ("21afba8b", "JEUDI 17 AVRIL"),
     ("be0915f9", "MARDI 15 AVRIL"),
     ("2b24b600", "LUNDI 14 AVRIL"),
-    # LIVE-TODO journal placeholder (will be replaced in Phase 4)
-    ("f3a9edf9", "LIVE-TODO"),
+    # Legacy journal placeholder (will be replaced in Phase 4)
+    ("f3a9edf9", "legacy live placeholder"),
 
     # ── Famille ──
-    ("1133e791", "LIVE-TODO"),
-    ("39331c71", "LIVE-TODO"),
-    ("f2818be7", "LIVE-TODO"),
+    ("1133e791", "legacy live placeholder"),
+    ("39331c71", "legacy live placeholder"),
+    ("f2818be7", "legacy live placeholder"),
     ("fb4e8b34", "Vue liée Plan"),
     ("3eaa1354", "CHART-TODO"),
     ("e8521af2", "Vue liée Plan"),
@@ -264,13 +285,13 @@ BLOCKS_TO_DELETE: list[tuple[str, str | None]] = [
     ("ab77397d", "JEUDI 10 AVRIL"),
     ("3e0ba4ad", "DIMANCHE 7 AVRIL"),
     ("703a547d", "VENDREDI 4 AVRIL"),
-    # LIVE-TODO journal placeholder
-    ("4f4fb568", "LIVE-TODO"),
+    # Legacy journal placeholder
+    ("4f4fb568", "legacy live placeholder"),
 
     # ── Pro & Financier ──
-    ("cf2ad71c", "LIVE-TODO"),
-    ("dba477bf", "LIVE-TODO"),
-    ("2258857d", "LIVE-TODO"),
+    ("cf2ad71c", "legacy live placeholder"),
+    ("dba477bf", "legacy live placeholder"),
+    ("2258857d", "legacy live placeholder"),
     ("dd58876f", "Vue liée Plan"),
     ("2b9d137e", "CHART-TODO"),
     ("9d6cfa7f", "Vue liée Plan"),
@@ -284,13 +305,13 @@ BLOCKS_TO_DELETE: list[tuple[str, str | None]] = [
     ("fad5af7d", "LUNDI 14 AVRIL"),
     ("08a2140b", "MARDI 15 AVRIL"),
     ("cb1e2707", "SAMEDI 19 AVRIL"),
-    # LIVE-TODO journal placeholder
-    ("4335403d", "LIVE-TODO"),
+    # Legacy journal placeholder
+    ("4335403d", "legacy live placeholder"),
 
     # ── Création ──
-    ("8ff71385", "LIVE-TODO"),
-    ("2b93c605", "LIVE-TODO"),
-    ("87476544", "LIVE-TODO"),
+    ("8ff71385", "legacy live placeholder"),
+    ("2b93c605", "legacy live placeholder"),
+    ("87476544", "legacy live placeholder"),
     ("296f4335", "Vue liée Plan"),
     ("3e90bc85", "CHART-TODO"),
     ("1646316c", "Vue liée Plan"),
@@ -304,13 +325,13 @@ BLOCKS_TO_DELETE: list[tuple[str, str | None]] = [
     ("81530326", "MERCREDI 16 AVRIL"),
     ("3f2861f0", "VENDREDI 18 AVRIL"),
     ("4059a2e9", "DIMANCHE 13 AVRIL"),
-    # LIVE-TODO journal placeholder
-    ("dc79ef7e", "LIVE-TODO"),
+    # Legacy journal placeholder
+    ("dc79ef7e", "legacy live placeholder"),
 
     # ── Spirituel ──
-    ("f72b87f1", "LIVE-TODO"),
-    ("9df3272c", "LIVE-TODO"),
-    ("df22cc9e", "LIVE-TODO"),
+    ("f72b87f1", "legacy live placeholder"),
+    ("9df3272c", "legacy live placeholder"),
+    ("df22cc9e", "legacy live placeholder"),
     ("5613e428", "Vue liée Plan"),
     ("80c31ef0", "CHART-TODO"),
     ("cbf75c28", "Vue liée Plan"),
@@ -324,8 +345,8 @@ BLOCKS_TO_DELETE: list[tuple[str, str | None]] = [
     ("acb5cb12", "SAMEDI 12 AVRIL"),
     ("e7c714db", "MERCREDI 9 AVRIL"),
     ("bfebaa51", "DIMANCHE 6 AVRIL"),
-    # LIVE-TODO journal placeholder
-    ("3e10e55d", "LIVE-TODO"),
+    # Legacy journal placeholder
+    ("3e10e55d", "legacy live placeholder"),
 ]
 
 
@@ -560,6 +581,10 @@ def run_phase4_journal_callouts() -> None:
 
     for pilier_name, page_id in PILIER_PAGES:
         try:
+            if DRY_RUN:
+                print(f"  DRY-RUN INS   {pilier_name} → append journal callout to {page_id[:8]}")
+                total_updated += 1
+                continue
             result = client.blocks.children.append(
                 block_id=page_id,
                 children=[DB_JOURNAL_CALLOUT],
@@ -615,10 +640,24 @@ def run_phase5_mise_a_jour() -> None:
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="LEGACY destructive Notion cleanup for V2.2-C.")
+    parser.add_argument("--dry-run", action="store_true", help="Resolve/read targets and print planned mutations without writing.")
+    parser.add_argument("--confirm", action="store_true", help="Required for real mutations because this script deletes and updates old hardcoded targets.")
+    return parser.parse_args()
+
+
 def main() -> None:
+    global DRY_RUN
+    args = parse_args()
+    DRY_RUN = args.dry_run
+    if not DRY_RUN and not args.confirm:
+        sys.exit("ERROR: cleanup_v22.py is a legacy destructive script and requires --confirm. Run --dry-run first.")
+
     print("=" * 60)
-    print("cleanup_v22.py — V2.2-C Notion Cleanup")
+    print("cleanup_v22.py — LEGACY V2.2-C Notion Cleanup")
     print(f"Snapshot: {SNAPSHOTS_PATH}")
+    print("Mode: DRY-RUN (no Notion mutations)" if DRY_RUN else "Mode: CONFIRMED mutation")
     print("=" * 60)
 
     run_phase0_resolve()
@@ -631,8 +670,9 @@ def main() -> None:
     print("\n" + "=" * 60)
     print("FINAL SUMMARY")
     print("=" * 60)
-    print(f"  Deleted  : {total_deleted}")
-    print(f"  Updated  : {total_updated}")
+    label_suffix = " planned" if DRY_RUN else ""
+    print(f"  Deleted{label_suffix}  : {total_deleted}")
+    print(f"  Updated{label_suffix}  : {total_updated}")
     print(f"  Skipped  : {total_skipped}  (text mismatch — verify manually)")
     print(f"  Errors   : {len(errors)}")
     if errors:

@@ -19,6 +19,7 @@
 {% endblock %}
 
 {% block content %}
+{% set index_task_week = snap.get("current_week") or snap.get("active_habits_week") or "semaine active" %}
 {{ m.section_header(eyebrow="LIFE OS", title="Embeds · V2 Phase B", subtitle="31 HTMLs iframés dans les pages Notion · data live générée via Python cron quotidien depuis les DBs coeur et transactions.") }}
 
 <div class="group">
@@ -26,8 +27,8 @@
   <div class="grid-3">
     <a class="tile" href="radar.html"><h3>Radar 5 piliers</h3><p>Actuel vs cible · systémique</p></a>
     <a class="tile" href="sankey-week.html"><h3>Sankey semaine 168 h</h3><p>Flux de temps</p></a>
-    <a class="tile" href="area-t2.html"><h3>Area T2</h3><p>W05-W16 5 piliers</p></a>
-    <a class="tile" href="stacked-w16.html"><h3>Stacked column W16</h3><p>Tâches/jour par pilier</p></a>
+    <a class="tile" href="area-t2.html"><h3>Area T2</h3><p>Fenêtre 12 semaines · 5 piliers</p></a>
+    <a class="tile" href="stacked-w16.html"><h3>Stacked column</h3><p>{{ index_task_week }} · tâches/jour par pilier</p></a>
   </div>
 </div>
 

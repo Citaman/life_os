@@ -9,11 +9,13 @@ Operations per page:
     with real computed values from snapshots.json.
 
 Usage:
+    python scripts/sync_notion_embeds.py --dry-run
     python scripts/sync_notion_embeds.py
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -25,21 +27,32 @@ from dotenv import load_dotenv
 from notion_client import Client
 
 load_dotenv()
-TOKEN = os.environ["NOTION_TOKEN"]
+DEFAULT_BASE_URL = "https://citaman.github.io/life_os"
+
+
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        sys.exit(f"ERROR: {name} missing in env. Refusing to mutate Notion without explicit page configuration.")
+    return value
+
+
+TOKEN = require_env("NOTION_TOKEN")
 client = Client(auth=TOKEN)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SNAPSHOTS_PATH = REPO_ROOT / "data" / "snapshots.json"
 
-BASE_URL = "https://citaman.github.io/life_os"
+BASE_URL = (os.environ.get("LIFE_OS_BASE_URL") or os.environ.get("BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
+DRY_RUN = False
 
 # Page IDs
-P_DASH = os.environ["PAGE_DASHBOARD"]
-P_INT = os.environ["PAGE_INTERIEUR"]
-P_FAM = os.environ["PAGE_FAMILLE"]
-P_PRO = os.environ["PAGE_PRO_FI"]
-P_CRE = os.environ["PAGE_CREATION"]
-P_SPI = os.environ["PAGE_SPIRITUEL"]
+P_DASH = require_env("PAGE_DASHBOARD")
+P_INT = require_env("PAGE_INTERIEUR")
+P_FAM = require_env("PAGE_FAMILLE")
+P_PRO = require_env("PAGE_PRO_FI")
+P_CRE = require_env("PAGE_CREATION")
+P_SPI = require_env("PAGE_SPIRITUEL")
 
 # Per-page: H2 section heading (substring match) → embed slug
 PAGE_EMBEDS_INLINE: dict[str, dict[str, str]] = {
@@ -113,7 +126,10 @@ def list_children(page_id: str) -> list[dict[str, Any]]:
         payload: dict[str, Any] = {"block_id": page_id, "page_size": 100}
         if cursor:
             payload["start_cursor"] = cursor
-        resp = client.blocks.children.list(**payload)
+        try:
+            resp = client.blocks.children.list(**payload)
+        except Exception as e:  # noqa: BLE001
+            raise RuntimeError(f"Could not read Notion children for block/page {page_id[:8]}...: {e}") from e
         out.extend(resp["results"])
         if not resp.get("has_more"):
             break
@@ -126,10 +142,16 @@ def make_embed_block(url: str) -> dict[str, Any]:
 
 
 def delete_block(block_id: str) -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN delete block {block_id[:8]}")
+        return
     client.blocks.delete(block_id=block_id)
 
 
 def insert_after(parent_id: str, after_block_id: str, blocks: list[dict[str, Any]]) -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN append {len(blocks)} block(s) after {after_block_id[:8]} on {parent_id[:8]}")
+        return
     client.blocks.children.append(block_id=parent_id, after=after_block_id, children=blocks)
 
 
@@ -145,14 +167,16 @@ def delete_legacy_embed_section(page_id: str, page_name: str) -> int:
     for i, b in enumerate(children):
         if b["type"] == "heading_2" and "Embeds live" in block_text(b):
             h2_idx = i
-            break
     if h2_idx is None:
+        print(f"    · no legacy 'Embeds live' section found on {page_name} ({page_id[:8]}...)")
         return 0
     # Back up one to catch the divider just before
     start = h2_idx
     if start > 0 and children[start - 1]["type"] == "divider":
         start = h2_idx - 1
     to_delete = children[start:]
+    if DRY_RUN:
+        print(f"    DRY-RUN would delete {len(to_delete)} legacy block(s) from {page_name} starting at index {start}")
     for b in to_delete:
         try:
             delete_block(b["id"])
@@ -183,6 +207,11 @@ def inline_replace_chart_todos(page_id: str, page_name: str, mapping: dict[str, 
                 if section_key in current_h2:
                     swap_plan.append((b["id"], slug))
                     break
+            else:
+                print(
+                    f"    ! CHART-TODO {b['id'][:8]} on {page_name} is under unmatched heading "
+                    f"'{current_h2 or '<none>'}'. Expected one of: {list(mapping.keys()) or 'none'}"
+                )
     print(f"  · identified {len(swap_plan)} CHART-TODO toggles to replace")
     count = 0
     for toggle_id, slug in swap_plan:
@@ -201,6 +230,9 @@ def inline_replace_chart_todos(page_id: str, page_name: str, mapping: dict[str, 
 
 
 def _update_heading1_text(block_id: str, new_text: str) -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN update heading_1 {block_id[:8]} → {new_text!r}")
+        return
     client.blocks.update(
         block_id=block_id,
         heading_1={"rich_text": [{"type": "text", "text": {"content": new_text}}]},
@@ -208,6 +240,9 @@ def _update_heading1_text(block_id: str, new_text: str) -> None:
 
 
 def _update_paragraph_text(block_id: str, new_text: str, italic: bool = False, color: str = "default") -> None:
+    if DRY_RUN:
+        print(f"    DRY-RUN update paragraph {block_id[:8]} → {new_text!r}")
+        return
     client.blocks.update(
         block_id=block_id,
         paragraph={
@@ -233,13 +268,13 @@ def update_dashboard_kpis(snapshots: dict[str, Any]) -> int:
             column_list_id = b["id"]
             break
     if not column_list_id:
-        print("  · no column_list found — aperçu KPIs not updated")
+        print(f"  · no column_list found on Dashboard ({P_DASH[:8]}...) — aperçu KPIs not updated")
         return 0
 
     # Each column contains a callout with heading_1 + paragraphs
     columns = list_children(column_list_id)
     if len(columns) < 3:
-        print(f"  · expected 3 columns, got {len(columns)}")
+        print(f"  · Dashboard KPI column_list {column_list_id[:8]} expected 3 columns, got {len(columns)}")
         return 0
 
     # Values from snapshots
@@ -257,7 +292,7 @@ def update_dashboard_kpis(snapshots: dict[str, Any]) -> int:
         {  # Column 2: BADGE SEMAINE
             "heading": f"{badge['score']} %" if badge["score"] is not None else "—",
             "sub": f"{badge['status']} · {badge['total_fait']} / {badge['total_cible']} habitudes tenues" if badge["status"] else "aucune donnée habitude",
-            "note": "computed · somme Habitudes.Fait / somme Cible /sem pour W16",
+            "note": f"computed · somme Habitudes.Fait / somme Cible /sem pour {badge.get('week') or 'la semaine active'}",
         },
         {  # Column 3: TRIMESTRE T2
             "heading": f"{tri['t2_percent']} %" if tri["t2_percent"] is not None else "—",
@@ -300,9 +335,18 @@ def update_dashboard_kpis(snapshots: dict[str, Any]) -> int:
 
 
 def main() -> None:
+    global DRY_RUN
+    parser = argparse.ArgumentParser(description="Replace legacy Notion embed/TODO blocks with live embeds.")
+    parser.add_argument("--dry-run", action="store_true", help="Read Notion and print planned mutations without writing.")
+    args = parser.parse_args()
+    DRY_RUN = args.dry_run
+
     if not SNAPSHOTS_PATH.exists():
         sys.exit("Missing snapshots.json — run transform.py first.")
     snapshots = json.loads(SNAPSHOTS_PATH.read_text())
+
+    if DRY_RUN:
+        print("DRY-RUN: no Notion mutations will be sent")
 
     total_deleted = 0
     total_swapped = 0
@@ -311,19 +355,19 @@ def main() -> None:
         print(f"\n→ {name}")
         print(f"  [1/2] deleting legacy Embeds live · {name} section")
         deleted = delete_legacy_embed_section(page_id, name)
-        print(f"    · {deleted} legacy blocks deleted")
+        print(f"    · {deleted} legacy blocks {'would be deleted' if DRY_RUN else 'deleted'}")
         total_deleted += deleted
 
         print(f"  [2/2] inline-replace CHART-TODO toggles with embeds")
         mapping = PAGE_EMBEDS_INLINE.get(page_id, {})
         swapped = inline_replace_chart_todos(page_id, name, mapping)
-        print(f"    · {swapped} toggles swapped for embeds")
+        print(f"    · {swapped} toggles {'would be swapped' if DRY_RUN else 'swapped'} for embeds")
         total_swapped += swapped
 
     # Dashboard KPIs: real values
     print(f"\n→ Dashboard KPIs with real values")
     updated = update_dashboard_kpis(snapshots)
-    print(f"  · {updated} KPI callout headings updated")
+    print(f"  · {updated} KPI callout headings {'would be updated' if DRY_RUN else 'updated'}")
 
     print(f"\nDone. legacy deleted: {total_deleted} · toggles swapped: {total_swapped} · KPI headings: {updated}")
 

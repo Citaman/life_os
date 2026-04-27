@@ -1,4 +1,6 @@
 """
+LEGACY one-shot migration script.
+
 V2.3-D · Convert static Notion KPI callouts into iframe embeds pointing to live-regenerated HTMLs.
 
 Replaces 23 callouts across 6 pages:
@@ -9,12 +11,15 @@ Replaces 23 callouts across 6 pages:
 Idempotent: skips columns that already contain an embed.
 
 Usage:
-    python scripts/convert_to_embeds.py
+    python scripts/convert_to_embeds.py --dry-run
+    python scripts/convert_to_embeds.py --confirm
 """
 
 from __future__ import annotations
 
+import argparse
 import os
+import sys
 import time
 from typing import Any
 
@@ -22,17 +27,28 @@ from dotenv import load_dotenv
 from notion_client import Client
 
 load_dotenv()
-TOKEN = os.environ["NOTION_TOKEN"]
+DEFAULT_BASE_URL = "https://citaman.github.io/life_os"
+
+
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        sys.exit(f"ERROR: {name} missing in env. Refusing to mutate Notion without explicit page configuration.")
+    return value
+
+
+TOKEN = require_env("NOTION_TOKEN")
 client = Client(auth=TOKEN)
 
-BASE_URL = "https://citaman.github.io/life_os"
+BASE_URL = (os.environ.get("LIFE_OS_BASE_URL") or os.environ.get("BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
+DRY_RUN = False
 
-P_DASH = os.environ["PAGE_DASHBOARD"]
-P_INT = os.environ["PAGE_INTERIEUR"]
-P_FAM = os.environ["PAGE_FAMILLE"]
-P_PRO = os.environ["PAGE_PRO_FI"]
-P_CRE = os.environ["PAGE_CREATION"]
-P_SPI = os.environ["PAGE_SPIRITUEL"]
+P_DASH = require_env("PAGE_DASHBOARD")
+P_INT = require_env("PAGE_INTERIEUR")
+P_FAM = require_env("PAGE_FAMILLE")
+P_PRO = require_env("PAGE_PRO_FI")
+P_CRE = require_env("PAGE_CREATION")
+P_SPI = require_env("PAGE_SPIRITUEL")
 
 PAGE_TO_SLUG: dict[str, str] = {
     P_INT: "interieur",
@@ -54,7 +70,7 @@ PAGE_NAMES = {
 # Callout text → kpi slug (for pilier Aperçu)
 APERCU_KEYS_TO_KPI = {
     "ACHIEVEMENTS ACTIFS": "{slug}-achievements",
-    "HABITUDES W16": "{slug}-habits",
+    "HABITUDES ACTIVES": "{slug}-habits",
     # Signature metrics use various titles — match any "third" KPI callout
     "POIDS ACTUEL": "{slug}-signature",
     "DATE-NIGHT CETTE SEMAINE": "{slug}-signature",
@@ -66,7 +82,7 @@ APERCU_KEYS_TO_KPI = {
 # Dashboard Aperçu du jour callout text → kpi slug
 DASHBOARD_APERCU = {
     "TÂCHES DU JOUR": "dash-tasks-today",
-    "BADGE SEMAINE W16": "dash-badge-week",
+    "BADGE SEMAINE": "dash-badge-week",
     "TRIMESTRE T2 2026": "dash-trimester-t2",
 }
 
@@ -95,7 +111,10 @@ def list_children(block_id: str) -> list[dict[str, Any]]:
         payload: dict[str, Any] = {"block_id": block_id, "page_size": 100}
         if cursor:
             payload["start_cursor"] = cursor
-        resp = client.blocks.children.list(**payload)
+        try:
+            resp = client.blocks.children.list(**payload)
+        except Exception as e:  # noqa: BLE001
+            raise RuntimeError(f"Could not read Notion children for block/page {block_id[:8]}...: {e}") from e
         out.extend(resp["results"])
         if not resp.get("has_more"):
             break
@@ -120,6 +139,9 @@ def column_has_embed(column_id: str) -> bool:
 def replace_callout_with_embed(parent_id: str, callout_id: str, embed_slug: str) -> bool:
     """Insert embed after callout, then delete callout."""
     url = f"{BASE_URL}/kpi-{embed_slug}.html"
+    if DRY_RUN:
+        print(f"    DRY-RUN would insert {url} after callout {callout_id[:8]} then delete the callout")
+        return True
     try:
         client.blocks.children.append(
             block_id=parent_id, after=callout_id, children=[make_embed_block(url)]
@@ -145,7 +167,9 @@ def convert_dashboard(page_id: str) -> int:
         if b["type"] == "column_list":
             col_list_apercu = b
             break
-    if col_list_apercu:
+    if not col_list_apercu:
+        print(f"    ! Dashboard ({page_id[:8]}...) has no column_list for Aperçu du jour; skipped")
+    else:
         columns = list_children(col_list_apercu["id"])
         for col in columns:
             if column_has_embed(col["id"]):
@@ -165,15 +189,20 @@ def convert_dashboard(page_id: str) -> int:
     # Find "Les 5 piliers" section — under H2 "Les 5 piliers", there are 2 column_lists
     children = list_children(page_id)  # refresh because we just mutated
     in_section = False
+    found_pilier_section = False
     pilier_col_lists: list[dict[str, Any]] = []
     for b in children:
         if b["type"] == "heading_2":
             in_section = "Les 5 piliers" in block_text(b)
+            found_pilier_section = found_pilier_section or in_section
             continue
         if in_section and b["type"] == "column_list":
             pilier_col_lists.append(b)
-        elif in_section and b["type"] == "heading_2":
-            in_section = False
+
+    if not found_pilier_section:
+        print(f"    ! heading_2 'Les 5 piliers' not found on Dashboard ({page_id[:8]}...); pilier cards skipped")
+    elif not pilier_col_lists:
+        print(f"    ! Dashboard heading_2 'Les 5 piliers' found but no column_list was found below it")
 
     for col_list in pilier_col_lists:
         columns = list_children(col_list["id"])
@@ -212,6 +241,7 @@ def convert_pilier(page_id: str, page_name: str) -> int:
             col_list = b
             break
     if not col_list:
+        print(f"    ! {page_name} ({page_id[:8]}...) has no column_list for Aperçu du pilier; skipped")
         return 0
     columns = list_children(col_list["id"])
     for col in columns:
@@ -236,6 +266,19 @@ def convert_pilier(page_id: str, page_name: str) -> int:
 
 
 def main() -> None:
+    global DRY_RUN
+    parser = argparse.ArgumentParser(description="LEGACY: convert static Notion KPI callouts into live embeds.")
+    parser.add_argument("--dry-run", action="store_true", help="Read Notion and print planned mutations without writing.")
+    parser.add_argument("--confirm", action="store_true", help="Required for real mutations because this is a legacy one-shot script.")
+    args = parser.parse_args()
+    DRY_RUN = args.dry_run
+    if not DRY_RUN and not args.confirm:
+        sys.exit("ERROR: legacy mutation script requires --confirm. Run with --dry-run first to inspect planned swaps.")
+    if DRY_RUN:
+        print("DRY-RUN: no Notion mutations will be sent")
+    else:
+        print("CONFIRMED legacy migration: Notion mutations enabled")
+
     print("→ Dashboard")
     d = convert_dashboard(P_DASH)
     print(f"  total: {d} swaps")
