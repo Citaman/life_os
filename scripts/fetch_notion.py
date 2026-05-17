@@ -11,6 +11,7 @@ Optional finance DBs:
 - Lignes budget mensuel
 - Journal Pro & Financier
 - Transactions Anthonny / Mirane
+- Transactions Compte joint
 
 Usage:
     python scripts/fetch_notion.py
@@ -60,6 +61,7 @@ BUDGET_LINES_DS = env_value("BUDGET_LINES_DS")
 PRO_FI_JOURNAL_DS = env_value("PRO_FI_JOURNAL_DS")
 TX_ANTHONNY_DS = env_value("TX_ANTHONNY_DS")
 TX_MIRANE_DS = env_value("TX_MIRANE_DS")
+TX_JOINT_DS = env_value("TX_JOINT_DS")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = REPO_ROOT / "data" / "raw_notion.json"
@@ -162,6 +164,7 @@ def main() -> None:
         "pro_fi_journal": [],
         "transactions_anthonny": [],
         "transactions_mirane": [],
+        "transactions_joint": [],
     }
 
     if FINANCE_MONTHLY_DS:
@@ -203,6 +206,14 @@ def main() -> None:
         print(f"Transactions Mirane total: {len(tx_mirane_raw)} pages\n")
     else:
         print("Skipping Transactions Mirane (TX_MIRANE_DS not set).\n")
+
+    if TX_JOINT_DS:
+        print("Fetching Transactions Compte joint...")
+        tx_joint_raw = query_data_source(TX_JOINT_DS)
+        bundle["transactions_joint"] = simplify(tx_joint_raw)
+        print(f"Transactions Compte joint total: {len(tx_joint_raw)} pages\n")
+    else:
+        print("Skipping Transactions Compte joint (TX_JOINT_DS not set).\n")
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(bundle, indent=2, ensure_ascii=False))

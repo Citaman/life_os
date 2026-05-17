@@ -5,7 +5,7 @@ Personal Life OS with Notion as source of truth + GitHub Pages as visualization 
 ## Architecture
 
 ```
-NOTION (8 DBs · édition + source de vérité)
+NOTION (9 DBs · édition + source de vérité)
   ├─ Plan d'exécution  (achievements · sous-achievements · tâches)
   ├─ Habitudes         (9 habitudes W-weekly · checkboxes L-D + formula Fait)
   ├─ Backlog Vie       (registre intentions tous piliers · 6 horizons)
@@ -13,7 +13,8 @@ NOTION (8 DBs · édition + source de vérité)
   ├─ Lignes budget mensuel (postes détaillés revenus / dépenses / allègements)
   └─ Journal Pro & Financier (décisions · suivis · blocages)
   ├─ Transactions Anthonny (transactions consolidées catégorisées)
-  └─ Transactions Mirane   (transactions consolidées catégorisées)
+  ├─ Transactions Mirane   (transactions consolidées catégorisées)
+  └─ Transactions Compte joint (transactions consolidées catégorisées)
          │
          │  read-only API · token repo secret NOTION_TOKEN
          ▼
@@ -61,11 +62,13 @@ NOTION (iframes embed blocks à la place des CHART-TODO)
 - `book-progression-spirituel.html`
 - `line-predication-spirituel.html`
 
-### Transactions réelles par compte (4)
+### Transactions réelles par compte (6)
 - `treemap-transactions-account-anthonny.html`
 - `history-transactions-account-anthonny.html`
 - `treemap-transactions-account-mirane.html`
 - `history-transactions-account-mirane.html`
+- `treemap-transactions-account-joint.html`
+- `history-transactions-account-joint.html`
 
 ## Stack
 
@@ -154,10 +157,11 @@ Les vues `sankey-revenu-profi`, `treemap-depenses-profi` et la KPI signature du 
 
 ## Workflow transactions par compte
 
-La source de vérité des dépenses réelles par compte est maintenant portée par 2 data sources Notion :
+La source de vérité des dépenses réelles par compte est maintenant portée par 3 data sources Notion :
 
 - `Transactions Anthonny`
 - `Transactions Mirane`
+- `Transactions Compte joint`
 
 Chaque ligne contient au minimum :
 
@@ -179,8 +183,8 @@ Le pipeline produit ensuite :
 
 Pour recharger un dump consolidé :
 
-1. mettre à jour `consolidated_transactions.csv`
-2. lancer `python scripts/import_transactions_to_notion.py`
+1. mettre à jour `consolidated_transactions.csv` ou générer un import SG avec `python scripts/convert_sg_exports_to_transactions.py`
+2. lancer `python scripts/import_transactions_to_notion.py --csv <fichier-import.csv>`
 3. lancer `bash scripts/rebuild_life_os.sh`
 4. vérifier localement dans `dist/`
 5. lancer `bash scripts/trigger_remote_sync.sh --watch` si publication immédiate voulue

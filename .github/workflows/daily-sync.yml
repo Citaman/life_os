@@ -53,6 +53,7 @@ jobs:
           PRO_FI_JOURNAL_DS: 17e8dfa9-0029-4a35-9266-fe777163989b
           TX_ANTHONNY_DS: b0439790-d16f-40ab-9724-9db3adec398a
           TX_MIRANE_DS: 88c44c29-091c-4989-b38b-9b1415eb13ea
+          TX_JOINT_DS: 912bdd7f-8f08-47b3-bdc9-e5f319618968
         run: python scripts/fetch_notion.py
 
       - name: Compute calendar context

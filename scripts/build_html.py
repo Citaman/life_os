@@ -48,7 +48,7 @@ PILIER_TEMPLATES = [
 ]
 PILIER_SLUGS = ["interieur", "famille", "pro_fi", "creation", "spirituel"]
 ACCOUNT_TEMPLATES = ["treemap_transactions_account.html", "history_transactions_account.html"]
-ACCOUNT_SLUGS = ["anthonny", "mirane"]
+ACCOUNT_SLUGS = ["anthonny", "mirane", "joint"]
 
 
 def main() -> None:

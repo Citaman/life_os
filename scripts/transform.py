@@ -812,11 +812,13 @@ def main() -> None:
     pro_fi_journal = raw.get("pro_fi_journal", [])
     transactions_anthonny = raw.get("transactions_anthonny", [])
     transactions_mirane = raw.get("transactions_mirane", [])
+    transactions_joint = raw.get("transactions_joint", [])
 
     print(
         f"Loaded {len(plan)} plan pages + {len(hab)} habit pages + {len(raw['backlog_vie'])} backlog pages "
         f"+ {len(finance_monthly)} finance months + {len(budget_lines)} budget lines + {len(pro_fi_journal)} journal entries "
-        f"+ {len(transactions_anthonny)} tx Anthonny + {len(transactions_mirane)} tx Mirane."
+        f"+ {len(transactions_anthonny)} tx Anthonny + {len(transactions_mirane)} tx Mirane "
+        f"+ {len(transactions_joint)} tx Joint."
     )
 
     habits_week_context = resolve_habits_week(hab, CURRENT_WEEK)
@@ -908,6 +910,7 @@ def main() -> None:
     transactions_snapshot = {
         "anthonny": transaction_account_snapshot(transactions_anthonny, "Anthonny"),
         "mirane": transaction_account_snapshot(transactions_mirane, "Mirane"),
+        "joint": transaction_account_snapshot(transactions_joint, "Compte joint"),
     }
 
     snapshots = {

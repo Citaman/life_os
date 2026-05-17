@@ -47,3 +47,25 @@ def test_source_key_defaults_missing_fields_to_empty_strings(monkeypatch):
 
     expected_raw = "Mirane||||||||||||"
     assert importer.source_key({"account": "Mirane"}) == hashlib.sha1(expected_raw.encode("utf-8")).hexdigest()
+
+
+def test_identity_key_ignores_merchant_and_category(monkeypatch):
+    importer = import_transaction_importer(monkeypatch)
+
+    base = {
+        "Date": "2026-04-23",
+        "Montant": -20,
+        "Direction": "expense",
+        "Libellé": "CARTE X7234 22/04",
+        "Détail": "CARTE X7234 22/04 RELAIS DE MONTAIGUT 110611300848454IOPD",
+        "Marchand": "Old merchant",
+        "Catégorie": "Uncategorized",
+    }
+    corrected = {
+        **base,
+        "Montant": "-20.00",
+        "Marchand": "Corrected merchant",
+        "Catégorie": "Food",
+    }
+
+    assert importer.identity_key(base) == importer.identity_key(corrected)

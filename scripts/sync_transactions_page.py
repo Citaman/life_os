@@ -26,6 +26,8 @@ EMBEDS: list[tuple[str, str]] = [
     ("Historique dépenses · Anthonny", "history-transactions-account-anthonny"),
     ("Treemap dépenses · Mirane", "treemap-transactions-account-mirane"),
     ("Historique dépenses · Mirane", "history-transactions-account-mirane"),
+    ("Treemap dépenses · Compte joint", "treemap-transactions-account-joint"),
+    ("Historique dépenses · Compte joint", "history-transactions-account-joint"),
 ]
 
 SECTION_HEADING = "Visuels transactions live"

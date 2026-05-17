@@ -33,6 +33,8 @@ REQUIRED_HTML = [
     "history-transactions-account-anthonny.html",
     "treemap-transactions-account-mirane.html",
     "history-transactions-account-mirane.html",
+    "treemap-transactions-account-joint.html",
+    "history-transactions-account-joint.html",
 ]
 
 REQUIRED_FINANCE_KEYS = [
@@ -140,7 +142,7 @@ def main() -> None:
     if transactions is None:
         fail("transactions_accounts missing from snapshots.json")
 
-    for account_slug in ("anthonny", "mirane"):
+    for account_slug in ("anthonny", "mirane", "joint"):
         account = transactions.get(account_slug)
         if account:
             for key in REQUIRED_TX_KEYS:
@@ -164,7 +166,7 @@ def main() -> None:
     elif "Sankey répartition du revenu — à venir" not in sankey_html:
         fail("sankey-revenu-profi.html missing finance empty state")
 
-    for account_slug in ("anthonny", "mirane"):
+    for account_slug in ("anthonny", "mirane", "joint"):
         account = transactions.get(account_slug)
         html = (DIST_PATH / f"treemap-transactions-account-{account_slug}.html").read_text()
         history_html = (DIST_PATH / f"history-transactions-account-{account_slug}.html").read_text()
@@ -277,7 +279,7 @@ def main() -> None:
         f"dépenses={finance['budgeted_expenses']}" if finance else "",
         f"résultat={finance['projected_result']}" if finance else "",
     )
-    for account_slug in ("anthonny", "mirane"):
+    for account_slug in ("anthonny", "mirane", "joint"):
         account = transactions.get(account_slug)
         if account:
             print(

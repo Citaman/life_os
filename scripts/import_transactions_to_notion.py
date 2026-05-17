@@ -1,7 +1,8 @@
 """
-Import categorized consolidated transactions into 2 Notion data sources:
+Import categorized consolidated transactions into 3 Notion data sources:
 - Transactions Anthonny
 - Transactions Mirane
+- Transactions Compte joint
 
 The import is idempotent on the custom "Source clé" property.
 
@@ -44,6 +45,7 @@ REQUIRED_COLUMNS = {
 ACCOUNT_DATA_SOURCES = {
     "Anthonny": "TX_ANTHONNY_DS",
     "Mirane": "TX_MIRANE_DS",
+    "Joint": "TX_JOINT_DS",
 }
 
 RICH_TEXT_PROPERTIES = {
@@ -64,6 +66,12 @@ class ExistingPage:
     values: dict[str, Any]
 
 
+@dataclass(frozen=True)
+class ExistingPages:
+    by_source_key: dict[str, ExistingPage]
+    by_identity_key: dict[str, ExistingPage]
+
+
 def source_key(row: dict[str, str]) -> str:
     raw = "||".join(
         [
@@ -74,6 +82,26 @@ def source_key(row: dict[str, str]) -> str:
             row.get("merchant", ""),
             row.get("libelle", ""),
             row.get("detail", ""),
+        ]
+    )
+    return hashlib.sha1(raw.encode("utf-8")).hexdigest()
+
+
+def identity_amount(value: Any) -> str:
+    try:
+        return f"{float(value):.2f}"
+    except (TypeError, ValueError):
+        return str(value or "")
+
+
+def identity_key(values: dict[str, Any]) -> str:
+    raw = "||".join(
+        [
+            str(values.get("Date") or values.get("date") or ""),
+            identity_amount(values.get("Montant", values.get("amount", ""))),
+            str(values.get("Direction") or values.get("direction") or ""),
+            str(values.get("Libellé") or values.get("libelle") or ""),
+            str(values.get("Détail") or values.get("detail") or ""),
         ]
     )
     return hashlib.sha1(raw.encode("utf-8")).hexdigest()
@@ -217,8 +245,9 @@ def notion_value(properties: dict[str, Any], name: str) -> Any:
     return None
 
 
-def query_existing_pages(client: Client, data_source_id: str, account_name: str) -> dict[str, ExistingPage]:
-    pages: dict[str, ExistingPage] = {}
+def query_existing_pages(client: Client, data_source_id: str, account_name: str) -> ExistingPages:
+    pages_by_source_key: dict[str, ExistingPage] = {}
+    pages_by_identity_key: dict[str, ExistingPage] = {}
     cursor: str | None = None
     while True:
         payload: dict[str, Any] = {"data_source_id": data_source_id, "page_size": 100}
@@ -229,19 +258,26 @@ def query_existing_pages(client: Client, data_source_id: str, account_name: str)
             properties = page.get("properties", {})
             key = notion_value(properties, "Source clé")
             page_id = page.get("id")
-            if not key or not page_id:
+            if not page_id:
                 continue
-            if key in pages:
-                print(f"WARNING: duplicate Source clé in {account_name}: {key}; keeping first page.")
-                continue
-            pages[key] = ExistingPage(
+            existing_page = ExistingPage(
                 page_id=page_id,
                 values={name: notion_value(properties, name) for name in desired_value_names()},
             )
+            if key:
+                if key in pages_by_source_key:
+                    print(f"WARNING: duplicate Source clé in {account_name}: {key}; keeping first page.")
+                else:
+                    pages_by_source_key[key] = existing_page
+            natural_key = identity_key(existing_page.values)
+            if natural_key in pages_by_identity_key:
+                print(f"WARNING: duplicate transaction identity in {account_name}: {natural_key}; keeping first page.")
+            else:
+                pages_by_identity_key[natural_key] = existing_page
         if not resp.get("has_more"):
             break
         cursor = resp.get("next_cursor")
-    return pages
+    return ExistingPages(by_source_key=pages_by_source_key, by_identity_key=pages_by_identity_key)
 
 
 def desired_value_names() -> tuple[str, ...]:
@@ -338,7 +374,7 @@ def upsert_rows(
     for row in rows:
         key = source_key(row)
         values = desired_values(row)
-        page = existing.get(key)
+        page = existing.by_source_key.get(key) or existing.by_identity_key.get(identity_key(values))
         if not page:
             creates.append(row)
             continue
@@ -349,7 +385,7 @@ def upsert_rows(
     create_label = "would create" if dry_run else "to create"
     update_label = "would update" if dry_run else "to update"
     print(
-        f"{account_name}: {len(existing)} existing, "
+        f"{account_name}: {len(existing.by_identity_key)} existing, "
         f"{len(creates)} {create_label}, {len(updates)} {update_label}"
     )
 
