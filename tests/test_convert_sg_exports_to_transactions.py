@@ -69,6 +69,51 @@ def test_uber_trip_is_transport_not_food_delivery_or_shopping():
     assert converted["subcategory"] == "Ride Hailing"
 
 
+def test_sodag_vending_is_food_not_general_shopping():
+    row = {
+        "date": "2026-07-10",
+        "amount": -2.50,
+        "libelle": "CARTE X0949 10/07",
+        "detail": "CARTE X0949 10/07 SODAG 2,50 EUR FRANCE",
+    }
+
+    converted = classify(row, "Anthonny")
+
+    assert converted["merchant"] == "SODAG"
+    assert converted["category"] == "Food"
+    assert converted["subcategory"] == "Coffee & Bakery"
+
+
+def test_lpb_magenta_is_categorized_as_restaurant():
+    row = {
+        "date": "2026-06-18",
+        "amount": -17.90,
+        "libelle": "CARTE X0949 18/06",
+        "detail": "CARTE X0949 18/06 LPB MAGENTA 17,90 EUR FRANCE",
+    }
+
+    converted = classify(row, "Anthonny")
+
+    assert converted["merchant"] == "LPB Magenta"
+    assert converted["category"] == "Food"
+    assert converted["subcategory"] == "Restaurant"
+
+
+def test_fbpm_is_categorized_as_clothing():
+    row = {
+        "date": "2026-05-24",
+        "amount": -34.99,
+        "libelle": "CARTE X0949 24/05",
+        "detail": "CARTE X0949 24/05 FBPM 34,99 EUR FRANCE",
+    }
+
+    converted = classify(row, "Anthonny")
+
+    assert converted["merchant"] == "FBPM"
+    assert converted["category"] == "Shopping"
+    assert converted["subcategory"] == "Clothing"
+
+
 def test_daily_balances_are_reconstructed_backwards_from_closing_balance():
     rows = [
         {"date": "2026-01-03", "amount": "-10.00", "daily_balance": ""},

@@ -257,9 +257,12 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
                 "MAXICOFFEE",
                 "SBX3524POS",
                 "MC THE",
+                "SODAG",
             ),
         ):
             merchant = clean_card_merchant(detail).title()
+            if "SODAG" in upper:
+                merchant = "SODAG"
             category, subcategory = "Food", "Coffee & Bakery"
         elif contains_any(
             upper,
@@ -295,9 +298,13 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
                 "UBCE",
                 "PARIS 2",
                 "AMB",
+                "QUIMPER",
+                "LPB MAGENTA",
             ),
         ):
             merchant = clean_card_merchant(detail).title()
+            if "LPB MAGENTA" in upper:
+                merchant = "LPB Magenta"
             category, subcategory = "Food", "Restaurant"
         elif contains_any(upper, ("PHIE ", "PHARMACIE", "APOTHEKE")):
             merchant = clean_card_merchant(detail).title()
@@ -337,8 +344,10 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
         elif contains_any(upper, ("PHANTASIALAND", "SMILE WORLD", "WGFA-ATTRACTIONS")):
             merchant = clean_card_merchant(detail).title()
             category, subcategory = "Entertainment", "Attractions"
-        elif contains_any(upper, ("THEATRE MOGADOR", "T EVENT")):
-            merchant = clean_card_merchant(detail).title()
+        elif "EPPPD" in upper:
+            merchant, category, subcategory = "Palais de la Porte Dorée", "Entertainment", "Museum"
+        elif contains_any(upper, ("THEATRE MOGADOR", "T EVENT", "TICKETS")):
+            merchant = "Billetterie" if "TICKETS" in upper else clean_card_merchant(detail).title()
             category, subcategory = "Entertainment", "Events"
         elif contains_any(upper, ("SPORTS INDOOR", "SALLE DE SPORT", "GYMLET")):
             merchant = "Salle de sport" if "SALLE DE SPORT" in upper else clean_card_merchant(detail).title()
@@ -346,16 +355,22 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
             recurring = "Y" if "SALLE DE SPORT" in upper else "N"
         elif contains_any(upper, ("REGIE ENFANCENET", "AGCME")):
             merchant = clean_card_merchant(detail).title()
+            if "AGCME" in upper:
+                merchant = "AGCME"
             category, subcategory = "Family", "Childcare"
         elif "SMYTHS TOYS" in upper:
             merchant, category, subcategory = "Smyths Toys", "Family", "Toys"
         elif contains_any(upper, ("AMAZON PAYMENTS", "AMAZON EU SARL")):
             merchant, category, subcategory = "Amazon", "Shopping", "Online"
-        elif contains_any(upper, ("PRIMARK", "STRADIVARIUS", "C ET A", "DEICHMANN", "JD  PARIS", "KIABI", "NAUMY", "VS CRETEIL")):
+        elif contains_any(upper, ("PRIMARK", "STRADIVARIUS", "C ET A", "DEICHMANN", "JD  PARIS", "KIABI", "NAUMY", "VS CRETEIL", "FBPM")):
             merchant = clean_card_merchant(detail).title()
+            if "FBPM" in upper:
+                merchant = "FBPM"
             category, subcategory = "Shopping", "Clothing"
-        elif contains_any(upper, ("FNAC", "INTERSPORT")):
+        elif contains_any(upper, ("FNAC", "INTERSPORT", "ZETTLE_*COMMERCE & CO")):
             merchant = clean_card_merchant(detail).title()
+            if "ZETTLE_*COMMERCE & CO" in upper:
+                merchant = "Commerce & Co"
             category, subcategory = "Shopping", "Electronics & Leisure"
         elif contains_any(upper, ("MATY", "LOVISA")):
             merchant = clean_card_merchant(detail).title()
@@ -379,8 +394,10 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
             merchant, category, subcategory = "Pot de départ", "Gifts", "Gift"
         elif "WERO" in upper or "VIR INSTANTANE EMIS" in upper or "VIR EUROPEEN EMIS" in upper:
             merchant, category, subcategory = "Virement sortant", "Transfers", "To Others"
-        elif contains_any(upper, ("ACTION ", "NORMAL ", "HEMA", "CRETEIL SOLEIL", "WESTFIELD", "TILLI TILLI", "ODISCOUNT")):
+        elif contains_any(upper, ("ACTION ", "NORMAL ", "HEMA", "CRETEIL SOLEIL", "WESTFIELD", "TILLI TILLI", "ODISCOUNT", "L OU EXPERT")):
             merchant = clean_card_merchant(detail).title()
+            if "L OU EXPERT" in upper:
+                merchant = "L OU Expert"
             category, subcategory = "Shopping", "General"
         else:
             # A complete taxonomy is preferable to an unusable Uncategorized bucket.
