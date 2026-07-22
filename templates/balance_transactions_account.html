@@ -1,0 +1,174 @@
+{% extends "_base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Solde quotidien · {{ account.account_name if account else account_slug }}{% endblock %}
+
+{% block extra_css %}
+.balance-head { margin-bottom: 24px; }
+.balance-kpis {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, minmax(0, .8fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.balance-kpi {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 19px;
+}
+.balance-kpi.primary {
+  background: linear-gradient(145deg, #173B68, #1E4D8C);
+  border-color: transparent;
+  color: #fff;
+}
+.balance-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.primary .balance-label { color: rgba(255,255,255,.72); }
+.balance-value {
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  margin-top: 5px;
+}
+.balance-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+.empty-state { text-align: center; padding: 52px 24px; }
+.empty-state h2 { font-size: 30px; margin-bottom: 10px; }
+.empty-state p { color: var(--muted); max-width: 620px; margin: 0 auto; }
+.chart-wrap { height: 430px; }
+.balance-note {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 12px;
+}
+@media (max-width: 900px) {
+  .balance-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chart-wrap { height: 340px; }
+}
+@media (max-width: 560px) {
+  .balance-kpis { grid-template-columns: 1fr; }
+}
+{% endblock %}
+
+{% block content %}
+{% if not account %}
+  <div class="balance-card empty-state">
+    <h2>Solde quotidien — à venir</h2>
+    <p>Aucune donnée de transactions n’est encore importée pour ce compte.</p>
+  </div>
+{% elif not account.balance_summary %}
+  <div class="balance-card empty-state">
+    <h2>Solde quotidien — à venir</h2>
+    <p>Les transactions existent, mais aucun point de solde bancaire n’est encore enregistré dans Notion pour ce compte.</p>
+  </div>
+{% else %}
+  <div class="balance-head">
+    {{ m.section_header(eyebrow="PATRIMOINE LIQUIDE", title="Solde quotidien · 6 mois", subtitle="Compte " ~ account.account_name ~ " · évolution jour par jour reconstruite depuis les points de solde enregistrés dans Notion.", accent="#1E4D8C") }}
+  </div>
+
+  <div class="balance-kpis">
+    <div class="balance-kpi primary">
+      <div class="balance-label">Solde au {{ account.balance_summary.end_date }}</div>
+      <div class="balance-value">{{ "{:,.2f}".format(account.balance_summary.current).replace(",", " ").replace(".", ",") }} €</div>
+    </div>
+    <div class="balance-kpi">
+      <div class="balance-label">Évolution période</div>
+      <div class="balance-value">{{ "{:+,.2f}".format(account.balance_summary.change).replace(",", " ").replace(".", ",") }} €</div>
+    </div>
+    <div class="balance-kpi">
+      <div class="balance-label">Point haut</div>
+      <div class="balance-value">{{ "{:,.2f}".format(account.balance_summary.high).replace(",", " ").replace(".", ",") }} €</div>
+    </div>
+    <div class="balance-kpi">
+      <div class="balance-label">Point bas</div>
+      <div class="balance-value">{{ "{:,.2f}".format(account.balance_summary.low).replace(",", " ").replace(".", ",") }} €</div>
+    </div>
+  </div>
+
+  <div class="balance-card">
+    <div class="chart-wrap"><canvas id="balance-chart"></canvas></div>
+    <div class="balance-note">{{ account.balance_summary.start_date }} → {{ account.balance_summary.end_date }} · report du dernier solde connu les jours sans transaction.</div>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if account and account.balance_summary %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+  const history = {{ account.daily_balance_history | tojson }};
+  const labels = history.map((item) => item.date);
+  const values = history.map((item) => item.balance);
+  const maxXTicks = window.innerWidth < 600 ? 4 : 7;
+  const xTickIndexes = new Set(
+    Array.from({ length: maxXTicks }, (_, index) => Math.round(index * (labels.length - 1) / (maxXTicks - 1)))
+  );
+  const canvas = document.getElementById("balance-chart");
+  const ctx = canvas.getContext("2d");
+  const gradient = ctx.createLinearGradient(0, 0, 0, 430);
+  gradient.addColorStop(0, "rgba(30, 77, 140, .32)");
+  gradient.addColorStop(1, "rgba(30, 77, 140, .02)");
+  const euros = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+  new Chart(canvas, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Solde",
+        data: values,
+        borderColor: "#1E4D8C",
+        backgroundColor: gradient,
+        borderWidth: 2.5,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: "#1E4D8C",
+        tension: .18,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          displayColors: false,
+          callbacks: {
+            title: (items) => new Date(`${items[0].label}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
+            label: (item) => euros.format(item.parsed.y),
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            callback: (value) => xTickIndexes.has(value)
+              ? new Date(`${labels[value]}T12:00:00`).toLocaleDateString("fr-FR", { month: "short", year: "2-digit" })
+              : null,
+          },
+        },
+        y: {
+          grace: "8%",
+          grid: { color: (context) => context.tick.value === 0 ? "#94A3B8" : "#E9EEF5" },
+          ticks: { callback: (value) => `${Math.round(value).toLocaleString("fr-FR")} €` },
+        },
+      },
+    },
+  });
+</script>
+{% endif %}
+{% endblock %}

@@ -22,10 +22,13 @@ from dotenv import load_dotenv
 from notion_client import Client
 
 EMBEDS: list[tuple[str, str]] = [
+    ("Solde quotidien · Anthonny", "balance-transactions-account-anthonny"),
     ("Treemap dépenses · Anthonny", "treemap-transactions-account-anthonny"),
     ("Historique dépenses · Anthonny", "history-transactions-account-anthonny"),
+    ("Solde quotidien · Mirane", "balance-transactions-account-mirane"),
     ("Treemap dépenses · Mirane", "treemap-transactions-account-mirane"),
     ("Historique dépenses · Mirane", "history-transactions-account-mirane"),
+    ("Solde quotidien · Compte joint", "balance-transactions-account-joint"),
     ("Treemap dépenses · Compte joint", "treemap-transactions-account-joint"),
     ("Historique dépenses · Compte joint", "history-transactions-account-joint"),
 ]
@@ -148,7 +151,7 @@ def main() -> None:
                 make_divider(),
                 make_heading_2(SECTION_HEADING),
                 make_paragraph(
-                    "Ces visuels se régénèrent depuis life_os. Le treemap permet de changer de mois par compte, et l'historique montre les catégories réelles dans le temps."
+                    "Ces visuels se régénèrent depuis les bases Notion. Le solde couvre six mois jour par jour, le graphe mensuel compare les trois derniers mois et le treemap détaille un mois."
                 ),
             ]
         )

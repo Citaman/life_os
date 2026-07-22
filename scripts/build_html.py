@@ -47,7 +47,11 @@ PILIER_TEMPLATES = [
     "journal_pilier.html",
 ]
 PILIER_SLUGS = ["interieur", "famille", "pro_fi", "creation", "spirituel"]
-ACCOUNT_TEMPLATES = ["treemap_transactions_account.html", "history_transactions_account.html"]
+ACCOUNT_TEMPLATES = [
+    "balance_transactions_account.html",
+    "history_transactions_account.html",
+    "treemap_transactions_account.html",
+]
 ACCOUNT_SLUGS = ["anthonny", "mirane", "joint"]
 
 

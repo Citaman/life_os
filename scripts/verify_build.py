@@ -29,10 +29,13 @@ REQUIRED_HTML = [
     "gantt-pilier-pro-fi.html",
     "tasks-week-pilier-pro-fi.html",
     "journal-pilier-pro-fi.html",
+    "balance-transactions-account-anthonny.html",
     "treemap-transactions-account-anthonny.html",
     "history-transactions-account-anthonny.html",
+    "balance-transactions-account-mirane.html",
     "treemap-transactions-account-mirane.html",
     "history-transactions-account-mirane.html",
+    "balance-transactions-account-joint.html",
     "treemap-transactions-account-joint.html",
     "history-transactions-account-joint.html",
 ]
@@ -57,6 +60,12 @@ REQUIRED_TX_KEYS = [
     "expense_breakdowns_by_month",
     "monthly_history",
     "category_history",
+    "recent_months",
+    "recent_monthly_history",
+    "recent_category_history",
+    "recent_three_month_totals",
+    "daily_balance_history",
+    "balance_summary",
 ]
 
 
@@ -170,16 +179,23 @@ def main() -> None:
         account = transactions.get(account_slug)
         html = (DIST_PATH / f"treemap-transactions-account-{account_slug}.html").read_text()
         history_html = (DIST_PATH / f"history-transactions-account-{account_slug}.html").read_text()
+        balance_html = (DIST_PATH / f"balance-transactions-account-{account_slug}.html").read_text()
         if account:
             if account["account_name"] not in html:
                 fail(f"treemap-transactions-account-{account_slug}.html missing account name")
             if account["latest_month"] not in html:
                 fail(f"treemap-transactions-account-{account_slug}.html missing latest month")
+            if account["balance_summary"] and "Solde quotidien · 6 mois" not in balance_html:
+                fail(f"balance-transactions-account-{account_slug}.html missing balance chart")
+            if not account["balance_summary"] and "Solde quotidien — à venir" not in balance_html:
+                fail(f"balance-transactions-account-{account_slug}.html missing balance empty state")
         else:
             if "Treemap transactions — à venir" not in html:
                 fail(f"treemap-transactions-account-{account_slug}.html missing empty state")
             if "Historique transactions — à venir" not in history_html:
                 fail(f"history-transactions-account-{account_slug}.html missing empty state")
+            if "Solde quotidien — à venir" not in balance_html:
+                fail(f"balance-transactions-account-{account_slug}.html missing empty state")
 
     pro_fi = snapshots.get("piliers", {}).get("pro_fi")
     if not pro_fi:

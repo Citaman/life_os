@@ -19,6 +19,7 @@ import hashlib
 import os
 import sys
 import time
+from collections import Counter
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -38,6 +39,7 @@ REQUIRED_COLUMNS = {
     "is_recurring",
     "is_internal",
     "auto_categorized",
+    "daily_balance",
     "libelle",
     "detail",
 }
@@ -57,6 +59,16 @@ RICH_TEXT_PROPERTIES = {
     "Libellé",
     "Détail",
     "Source clé",
+}
+
+NUMBER_PROPERTIES = {"Montant", "Solde journalier"}
+
+MANUAL_CATEGORY_PROPERTIES = {
+    "Transaction",
+    "Marchand",
+    "Catégorie",
+    "Sous-catégorie",
+    "Auto catégorisé",
 }
 
 
@@ -236,7 +248,7 @@ def notion_value(properties: dict[str, Any], name: str) -> Any:
         return plain_text(prop, "title")
     if name == "Date":
         return (prop.get("date") or {}).get("start")
-    if name == "Montant":
+    if name in NUMBER_PROPERTIES:
         return prop.get("number")
     if name in {"Récurrent", "Interne", "Auto catégorisé"}:
         return prop.get("checkbox")
@@ -286,6 +298,7 @@ def desired_value_names() -> tuple[str, ...]:
         "Date",
         "Mois clé",
         "Montant",
+        "Solde journalier",
         "Direction",
         "Marchand",
         "Catégorie",
@@ -303,11 +316,14 @@ def desired_values(row: dict[str, str]) -> dict[str, Any]:
     recurring = row.get("is_recurring", "") == "Y"
     internal = row.get("is_internal", "") == "Y"
     auto = row.get("auto_categorized", "") == "Y"
+    raw_daily_balance = row.get("daily_balance", "").strip()
+    daily_balance = float(raw_daily_balance) if raw_daily_balance else None
     return {
         "Transaction": title_of(row),
         "Date": row["date"],
         "Mois clé": row["date"][:7],
         "Montant": float(row["amount"]),
+        "Solde journalier": daily_balance,
         "Direction": row.get("direction", ""),
         "Marchand": row.get("merchant", ""),
         "Catégorie": row.get("category", "Uncategorized"),
@@ -328,8 +344,8 @@ def property_payload(values: dict[str, Any]) -> dict[str, Any]:
             payload[name] = {"title": text_prop(str(value))}
         elif name == "Date":
             payload[name] = {"date": {"start": str(value)}}
-        elif name == "Montant":
-            payload[name] = {"number": float(value)}
+        elif name in NUMBER_PROPERTIES:
+            payload[name] = {"number": float(value) if value is not None else None}
         elif name in {"Récurrent", "Interne", "Auto catégorisé"}:
             payload[name] = {"checkbox": bool(value)}
         elif name in RICH_TEXT_PROPERTIES:
@@ -343,8 +359,10 @@ def changed_values(existing: dict[str, Any], desired: dict[str, Any]) -> dict[st
     changes: dict[str, Any] = {}
     for name, desired_value in desired.items():
         existing_value = existing.get(name)
-        if name == "Montant":
-            if existing_value is None or abs(float(existing_value) - desired_value) > 0.000001:
+        if name in NUMBER_PROPERTIES:
+            if existing_value is None and desired_value is None:
+                continue
+            if existing_value is None or desired_value is None or abs(float(existing_value) - desired_value) > 0.000001:
                 changes[name] = desired_value
             continue
         if existing_value != desired_value:
@@ -359,6 +377,26 @@ def page_payload(data_source_id: str, row: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def ensure_daily_balance_property(client: Client, data_source_id: str, account_name: str, *, dry_run: bool) -> None:
+    data_source = client.data_sources.retrieve(data_source_id=data_source_id)
+    properties = data_source.get("properties", {})
+    existing = properties.get("Solde journalier")
+    if existing:
+        if existing.get("type") != "number":
+            sys.exit(f"ERROR: {account_name}.Solde journalier exists but is not a number property.")
+        return
+
+    if dry_run:
+        print(f"{account_name}: would add Notion number property 'Solde journalier'")
+        return
+
+    client.data_sources.update(
+        data_source_id=data_source_id,
+        properties={"Solde journalier": {"type": "number", "number": {"format": "number"}}},
+    )
+    print(f"{account_name}: added Notion number property 'Solde journalier'")
+
+
 def upsert_rows(
     client: Client,
     data_source_id: str,
@@ -370,6 +408,7 @@ def upsert_rows(
     existing = query_existing_pages(client, data_source_id, account_name)
     creates: list[dict[str, str]] = []
     updates: list[tuple[ExistingPage, dict[str, Any]]] = []
+    manual_rows_preserved = 0
 
     for row in rows:
         key = source_key(row)
@@ -379,6 +418,14 @@ def upsert_rows(
             creates.append(row)
             continue
         changes = changed_values(page.values, values)
+        if page.values.get("Auto catégorisé") is False:
+            if any(name in changes for name in MANUAL_CATEGORY_PROPERTIES):
+                manual_rows_preserved += 1
+            changes = {
+                name: value
+                for name, value in changes.items()
+                if name not in MANUAL_CATEGORY_PROPERTIES
+            }
         if changes:
             updates.append((page, changes))
 
@@ -390,9 +437,20 @@ def upsert_rows(
     )
 
     if dry_run:
+        if creates:
+            created_by_month = Counter(row["date"][:7] for row in creates)
+            print(
+                "  creates by month: "
+                + ", ".join(f"{month}={count}" for month, count in sorted(created_by_month.items()))
+            )
         if updates:
-            changed_names = sorted({name for _, changes in updates for name in changes})
-            print(f"  changed property set: {', '.join(changed_names)}")
+            changed_counts = Counter(name for _, changes in updates for name in changes)
+            print(
+                "  updates by property: "
+                + ", ".join(f"{name}={count}" for name, count in sorted(changed_counts.items()))
+            )
+        if manual_rows_preserved:
+            print(f"  manual categorizations preserved: {manual_rows_preserved}")
         return
 
     for idx, row in enumerate(creates, start=1):
@@ -422,6 +480,12 @@ def main() -> None:
     client = Client(auth=token)
 
     for account_name, rows in rows_by_account.items():
+        ensure_daily_balance_property(
+            client,
+            data_sources[account_name],
+            account_name,
+            dry_run=args.dry_run,
+        )
         upsert_rows(
             client,
             data_sources[account_name],

@@ -6,11 +6,38 @@
 .history-head {
   margin-bottom: 26px;
 }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.summary-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+}
+.summary-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.summary-value {
+  color: var(--pro-fi);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  margin-top: 4px;
+}
 .history-grid {
   display: grid;
   grid-template-columns: 1.3fr 0.7fr;
   gap: 20px;
 }
+.history-chart-wrap { height: 560px; }
 .mini-table td:last-child,
 .mini-table th:last-child {
   text-align: right;
@@ -21,9 +48,11 @@
   margin-top: 14px;
 }
 @media (max-width: 900px) {
+  .summary-grid,
   .history-grid {
     grid-template-columns: 1fr;
   }
+  .history-chart-wrap { height: 420px; }
 }
 {% endblock %}
 
@@ -32,13 +61,28 @@
   {{ m.todo_placeholder(title="Historique transactions — à venir", reason="Aucune donnée importée pour ce compte.", needed_db="Transactions bancaires consolidées", accent="#1E4D8C") }}
 {% else %}
   <div class="history-head">
-    {{ m.section_header(eyebrow="TRANSACTIONS RÉELLES", title="Historique des dépenses", subtitle="Compte " ~ account.account_name ~ " · évolution mensuelle et répartition des catégories dans le temps.", accent="#1E4D8C") }}
+    {{ m.section_header(eyebrow="TRANSACTIONS RÉELLES", title="Dépenses des 3 derniers mois", subtitle="Compte " ~ account.account_name ~ " · dépenses réelles par catégorie, revenus et net mensuel depuis Notion.", accent="#1E4D8C") }}
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">Dépenses · 3 mois</div>
+      <div class="summary-value">{{ "{:,.0f}".format(account.recent_three_month_totals.expense).replace(",", " ") }} €</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Revenus · 3 mois</div>
+      <div class="summary-value">{{ "{:,.0f}".format(account.recent_three_month_totals.income).replace(",", " ") }} €</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Net · 3 mois</div>
+      <div class="summary-value">{{ "{:+,.0f}".format(account.recent_three_month_totals.net).replace(",", " ") }} €</div>
+    </div>
   </div>
 
   <div class="history-grid">
     <div class="card">
-      <canvas id="history-chart" height="360"></canvas>
-      <div class="panel-note">Barres empilées = dépenses par catégorie et par mois. Ligne = net mensuel du compte, hors transferts internes.</div>
+      <div class="history-chart-wrap"><canvas id="history-chart"></canvas></div>
+      <div class="panel-note">Barres empilées = dépenses par catégorie. Ligne = net mensuel. Les transferts internes sont exclus.</div>
     </div>
     <div class="card">
       <table class="mini-table">
@@ -50,7 +94,7 @@
         </thead>
         <tbody id="totals-body"></tbody>
       </table>
-      <div class="panel-note">Période disponible : {{ account.months[0] }} → {{ account.months[-1] }} · {{ account.transaction_count }} transactions importées.</div>
+      <div class="panel-note">Fenêtre affichée : {{ account.recent_months[0] }} → {{ account.recent_months[-1] }} · {{ account.transaction_count }} transactions disponibles dans Notion.</div>
     </div>
   </div>
 {% endif %}
@@ -61,10 +105,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
   const account = {{ account | tojson }};
-  const labels = account.months;
-  const palette = ["#1E4D8C", "#3E6FB1", "#5C8CCC", "#7EABDD", "#9AC2EA", "#C4DBF4", "#D9E7F8", "#F3F7FC"];
+  const labels = account.recent_months;
+  const palette = ["#173B68", "#1E4D8C", "#2A63A5", "#3E78B8", "#568DC8", "#70A2D5", "#8BB6E0", "#A7C9E9", "#C3DBF1", "#64748B", "#7C3AED", "#0F766E", "#B45309", "#BE123C", "#475569"];
 
-  const datasets = account.category_history
+  const datasets = account.recent_category_history
     .map((item, index) => ({
       label: item.name,
       data: item.values,
@@ -77,7 +121,7 @@
   datasets.push({
     type: "line",
     label: "Net mensuel",
-    data: account.monthly_history.map((item) => item.net),
+    data: account.recent_monthly_history.map((item) => item.net),
     borderColor: "#111827",
     backgroundColor: "#111827",
     tension: 0.28,
@@ -128,7 +172,7 @@
     }
   });
 
-  const totals = account.category_history
+  const totals = account.recent_category_history
     .map((item) => ({
       name: item.name,
       total: item.values.reduce((sum, value) => sum + value, 0),

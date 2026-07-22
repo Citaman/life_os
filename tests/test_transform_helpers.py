@@ -80,3 +80,33 @@ def test_month_key_from_page_uses_explicit_period_or_title(monkeypatch):
     assert transform.month_key_from_page({"Période": {"start": "2026-05-01"}}) == "2026-05"
     assert transform.month_key_from_page({"Mois": "2026-06 Budget"}) == "2026-06"
     assert transform.month_key_from_page({"Mois": "Budget juin"}) is None
+
+
+def test_transaction_snapshot_builds_three_month_window_and_daily_balance(monkeypatch):
+    transform = import_transform(monkeypatch)
+    pages = []
+    for month, balance in (("2026-01", 100.0), ("2026-02", 90.0), ("2026-03", 85.0), ("2026-04", 80.0)):
+        pages.append(
+            {
+                "Date": {"start": f"{month}-01"},
+                "Mois clé": month,
+                "Montant": -10.0,
+                "Solde journalier": balance,
+                "Direction": "expense",
+                "Marchand": "Test",
+                "Catégorie": "Food",
+                "Sous-catégorie": "Groceries",
+                "Interne": False,
+                "Récurrent": False,
+                "Auto catégorisé": True,
+            }
+        )
+
+    snapshot = transform.transaction_account_snapshot(pages, "Anthonny")
+
+    assert snapshot is not None
+    assert snapshot["recent_months"] == ["2026-02", "2026-03", "2026-04"]
+    assert snapshot["recent_three_month_totals"]["expense"] == 30.0
+    assert snapshot["balance_summary"]["current"] == 80.0
+    assert snapshot["balance_summary"]["change"] == -20.0
+    assert snapshot["daily_balance_history"][1] == {"date": "2026-01-02", "balance": 100.0}

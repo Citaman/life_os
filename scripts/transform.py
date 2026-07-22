@@ -562,6 +562,7 @@ def transaction_account_snapshot(pages: list[dict[str, Any]], account_name: str)
                 "date": date_value,
                 "month": month_key,
                 "amount": amount,
+                "daily_balance": safe_number(page.get("Solde journalier")),
                 "direction": page.get("Direction"),
                 "merchant": page.get("Marchand") or "Sans marchand",
                 "category": page.get("Catégorie") or "Uncategorized",
@@ -639,6 +640,58 @@ def transaction_account_snapshot(pages: list[dict[str, Any]], account_name: str)
             values.append(round(monthly_categories[month].get(category, 0.0), 2))
         category_history.append({"name": category, "values": values})
 
+    recent_months = months[-3:]
+    recent_monthly_history = [item for item in monthly_history if item["month"] in recent_months]
+    recent_category_history = []
+    for item in category_history:
+        values_by_month = dict(zip(months, item["values"]))
+        recent_values = [values_by_month.get(month, 0.0) for month in recent_months]
+        if any(value > 0 for value in recent_values):
+            recent_category_history.append({"name": item["name"], "values": recent_values})
+
+    recent_three_month_totals = {
+        "expense": round(sum(item["expense"] for item in recent_monthly_history), 2),
+        "income": round(sum(item["income"] for item in recent_monthly_history), 2),
+        "net": round(sum(item["net"] for item in recent_monthly_history), 2),
+    }
+
+    balance_anchors = {
+        item["date"]: item["daily_balance"]
+        for item in transactions
+        if item["daily_balance"] is not None
+    }
+    daily_balance_history = []
+    balance_summary = None
+    if balance_anchors:
+        first_anchor = date.fromisoformat(min(balance_anchors))
+        latest_anchor = date.fromisoformat(max(balance_anchors))
+        window_start = max(first_anchor, latest_anchor - timedelta(days=183))
+        current_balance = None
+        day = first_anchor
+        while day <= latest_anchor:
+            day_key = day.isoformat()
+            if day_key in balance_anchors:
+                current_balance = balance_anchors[day_key]
+            if day >= window_start and current_balance is not None:
+                daily_balance_history.append(
+                    {"date": day_key, "balance": round(current_balance, 2)}
+                )
+            day += timedelta(days=1)
+
+        if daily_balance_history:
+            balances = [item["balance"] for item in daily_balance_history]
+            first_balance = balances[0]
+            latest_balance = balances[-1]
+            balance_summary = {
+                "start_date": daily_balance_history[0]["date"],
+                "end_date": daily_balance_history[-1]["date"],
+                "start": first_balance,
+                "current": latest_balance,
+                "change": round(latest_balance - first_balance, 2),
+                "low": min(balances),
+                "high": max(balances),
+            }
+
     latest_totals = next((item for item in monthly_history if item["month"] == latest_month), None)
 
     return {
@@ -650,6 +703,12 @@ def transaction_account_snapshot(pages: list[dict[str, Any]], account_name: str)
         "expense_breakdowns_by_month": expense_breakdowns,
         "monthly_history": monthly_history,
         "category_history": category_history,
+        "recent_months": recent_months,
+        "recent_monthly_history": recent_monthly_history,
+        "recent_category_history": recent_category_history,
+        "recent_three_month_totals": recent_three_month_totals,
+        "daily_balance_history": daily_balance_history,
+        "balance_summary": balance_summary,
         "recent_transactions": transactions[:20],
     }
 
