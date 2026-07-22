@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from scripts.convert_sg_exports_to_transactions import attach_daily_balances, classify
+from scripts.convert_sg_exports_to_transactions import (
+    attach_daily_balances,
+    classify,
+    classify_cost_nature,
+)
 
 
 def test_navigo_is_not_marked_recurring_even_for_monthly_amount():
@@ -112,6 +116,52 @@ def test_fbpm_is_categorized_as_clothing():
     assert converted["merchant"] == "FBPM"
     assert converted["category"] == "Shopping"
     assert converted["subcategory"] == "Clothing"
+
+
+def test_cost_nature_separates_fixed_variable_and_ambiguous_expenses():
+    assert classify_cost_nature(
+        amount=-1193.94,
+        category="Housing",
+        subcategory="Rent",
+        merchant="Loyer ORPI",
+        recurring=True,
+        internal=False,
+    ) == "Fixe récurrent"
+    assert classify_cost_nature(
+        amount=-42.14,
+        category="Food",
+        subcategory="Delivery",
+        merchant="Uber Eats",
+        recurring=False,
+        internal=False,
+    ) == "Variable récurrent"
+    assert classify_cost_nature(
+        amount=-80,
+        category="Cash",
+        subcategory="ATM Withdrawal",
+        merchant="Retrait DAB",
+        recurring=False,
+        internal=False,
+    ) == "À vérifier"
+
+
+def test_cost_nature_leaves_income_and_internal_transfers_blank():
+    assert classify_cost_nature(
+        amount=4000,
+        category="Income",
+        subcategory="Salary",
+        merchant="Salaire DCF",
+        recurring=True,
+        internal=False,
+    ) == ""
+    assert classify_cost_nature(
+        amount=-700,
+        category="Transfers",
+        subcategory="To Joint",
+        merchant="Anthonny -> Compte joint",
+        recurring=True,
+        internal=True,
+    ) == ""
 
 
 def test_daily_balances_are_reconstructed_backwards_from_closing_balance():

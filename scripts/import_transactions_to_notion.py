@@ -36,6 +36,7 @@ REQUIRED_COLUMNS = {
     "merchant",
     "category",
     "subcategory",
+    "cost_nature",
     "is_recurring",
     "is_internal",
     "auto_categorized",
@@ -63,11 +64,23 @@ RICH_TEXT_PROPERTIES = {
 
 NUMBER_PROPERTIES = {"Montant", "Solde journalier"}
 
+SELECT_PROPERTIES = {"Nature du coût"}
+
+COST_NATURE_OPTIONS = (
+    ("Fixe récurrent", "red"),
+    ("Variable récurrent", "orange"),
+    ("Ponctuel planifié", "blue"),
+    ("Ponctuel imprévu", "pink"),
+    ("Épargne/investissement", "green"),
+    ("À vérifier", "yellow"),
+)
+
 MANUAL_CATEGORY_PROPERTIES = {
     "Transaction",
     "Marchand",
     "Catégorie",
     "Sous-catégorie",
+    "Nature du coût",
     "Auto catégorisé",
 }
 
@@ -250,6 +263,8 @@ def notion_value(properties: dict[str, Any], name: str) -> Any:
         return (prop.get("date") or {}).get("start")
     if name in NUMBER_PROPERTIES:
         return prop.get("number")
+    if name in SELECT_PROPERTIES:
+        return (prop.get("select") or {}).get("name") or ""
     if name in {"Récurrent", "Interne", "Auto catégorisé"}:
         return prop.get("checkbox")
     if name in RICH_TEXT_PROPERTIES:
@@ -303,6 +318,7 @@ def desired_value_names() -> tuple[str, ...]:
         "Marchand",
         "Catégorie",
         "Sous-catégorie",
+        "Nature du coût",
         "Récurrent",
         "Interne",
         "Auto catégorisé",
@@ -328,6 +344,7 @@ def desired_values(row: dict[str, str]) -> dict[str, Any]:
         "Marchand": row.get("merchant", ""),
         "Catégorie": row.get("category", "Uncategorized"),
         "Sous-catégorie": row.get("subcategory", "Unknown"),
+        "Nature du coût": row.get("cost_nature", ""),
         "Récurrent": recurring,
         "Interne": internal,
         "Auto catégorisé": auto,
@@ -346,6 +363,8 @@ def property_payload(values: dict[str, Any]) -> dict[str, Any]:
             payload[name] = {"date": {"start": str(value)}}
         elif name in NUMBER_PROPERTIES:
             payload[name] = {"number": float(value) if value is not None else None}
+        elif name in SELECT_PROPERTIES:
+            payload[name] = {"select": {"name": str(value)} if value else None}
         elif name in {"Récurrent", "Interne", "Auto catégorisé"}:
             payload[name] = {"checkbox": bool(value)}
         elif name in RICH_TEXT_PROPERTIES:
@@ -395,6 +414,36 @@ def ensure_daily_balance_property(client: Client, data_source_id: str, account_n
         properties={"Solde journalier": {"type": "number", "number": {"format": "number"}}},
     )
     print(f"{account_name}: added Notion number property 'Solde journalier'")
+
+
+def ensure_cost_nature_property(client: Client, data_source_id: str, account_name: str, *, dry_run: bool) -> None:
+    data_source = client.data_sources.retrieve(data_source_id=data_source_id)
+    properties = data_source.get("properties", {})
+    existing = properties.get("Nature du coût")
+    if existing:
+        if existing.get("type") != "select":
+            sys.exit(f"ERROR: {account_name}.Nature du coût exists but is not a select property.")
+        return
+
+    if dry_run:
+        print(f"{account_name}: would add Notion select property 'Nature du coût'")
+        return
+
+    client.data_sources.update(
+        data_source_id=data_source_id,
+        properties={
+            "Nature du coût": {
+                "type": "select",
+                "select": {
+                    "options": [
+                        {"name": name, "color": color}
+                        for name, color in COST_NATURE_OPTIONS
+                    ]
+                },
+            }
+        },
+    )
+    print(f"{account_name}: added Notion select property 'Nature du coût'")
 
 
 def upsert_rows(
@@ -481,6 +530,12 @@ def main() -> None:
 
     for account_name, rows in rows_by_account.items():
         ensure_daily_balance_property(
+            client,
+            data_sources[account_name],
+            account_name,
+            dry_run=args.dry_run,
+        )
+        ensure_cost_nature_property(
             client,
             data_sources[account_name],
             account_name,

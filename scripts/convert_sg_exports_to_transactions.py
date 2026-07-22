@@ -29,6 +29,7 @@ HEADERS = [
     "merchant",
     "category",
     "subcategory",
+    "cost_nature",
     "is_recurring",
     "is_internal",
     "auto_categorized",
@@ -105,6 +106,102 @@ def clean_card_merchant(detail: str) -> str:
 
 def contains_any(text: str, tokens: tuple[str, ...]) -> bool:
     return any(token in text for token in tokens)
+
+
+def classify_cost_nature(
+    *,
+    amount: float,
+    category: str,
+    subcategory: str,
+    merchant: str,
+    recurring: bool,
+    internal: bool,
+) -> str:
+    """Classify an expense by its impact on the monthly budget.
+
+    Income and internal transfers are intentionally left blank: this property
+    describes costs, not every kind of account movement. Ambiguous debits stay
+    visible as ``À vérifier`` instead of being assigned optimistically.
+    """
+    if amount >= 0 or internal:
+        return ""
+
+    normalized_merchant = merchant.casefold()
+    if category in {"Savings", "Investments"} or subcategory in {"Savings", "Investment"}:
+        return "Épargne/investissement"
+    if normalized_merchant in {"cardif", "maif vie"}:
+        return "À vérifier"
+    if category == "Cash" or (category == "Transfers" and not internal):
+        return "À vérifier"
+    if category == "Bills" and subcategory in {"Other"}:
+        return "À vérifier"
+
+    fixed_subcategories = {
+        "Rent",
+        "Utilities",
+        "Car Loan",
+        "Insurance",
+        "Internet",
+        "Mobile",
+        "Subscription",
+        "Subscriptions",
+        "Phone",
+        "Software",
+        "Sports",
+        "Streaming",
+    }
+    if recurring and subcategory in fixed_subcategories:
+        return "Fixe récurrent"
+    if category == "Transport" and subcategory == "Public Transit":
+        return "Fixe récurrent" if abs(amount) >= 50 else "Variable récurrent"
+    if category == "Bills" and subcategory == "Bank Fees":
+        return "Fixe récurrent" if recurring else "Ponctuel imprévu"
+
+    if category in {"Food", "Health"}:
+        return "Variable récurrent"
+    if category == "Family" and subcategory == "Childcare":
+        return "Fixe récurrent" if recurring else "Variable récurrent"
+    if category == "Transport" and subcategory in {
+        "Fuel",
+        "Ride Hailing",
+        "Ride-hailing",
+        "Tolls",
+        "Parking",
+        "Car Care",
+        "Car Service",
+    }:
+        return "Variable récurrent"
+
+    if category == "Bills" and subcategory == "Fines":
+        return "Ponctuel imprévu"
+    if category in {"Shopping", "Travel", "Personal Care", "Home", "Gifts"}:
+        return "Ponctuel planifié"
+    if category == "Housing" and subcategory == "Furniture":
+        return "Ponctuel planifié"
+    if category == "Entertainment" and subcategory in {
+        "Attractions",
+        "Cinema",
+        "Digital Content",
+        "Events",
+        "Museum",
+        "Sports",
+    }:
+        return "Ponctuel planifié"
+    if category == "Family" and subcategory in {
+        "Activities",
+        "Clothing",
+        "Education",
+        "Toys",
+    }:
+        return "Ponctuel planifié"
+    if category == "Bills" and subcategory in {"Local Government", "Postal"}:
+        return "Ponctuel planifié"
+    if category == "Services" and subcategory in {"Laundry", "Professional"}:
+        return "Ponctuel planifié"
+    if "la poste" in normalized_merchant:
+        return "Ponctuel planifié"
+
+    return "À vérifier"
 
 
 def classify(row: dict[str, str], account: str) -> dict[str, str]:
@@ -407,6 +504,15 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
             if not is_card:
                 category, subcategory = "Bills", "Other"
 
+    cost_nature = classify_cost_nature(
+        amount=amount,
+        category=category,
+        subcategory=subcategory,
+        merchant=merchant,
+        recurring=recurring == "Y",
+        internal=internal == "Y",
+    )
+
     return {
         "account": account,
         "date": row["date"],
@@ -415,6 +521,7 @@ def classify(row: dict[str, str], account: str) -> dict[str, str]:
         "merchant": merchant.strip(),
         "category": category,
         "subcategory": subcategory,
+        "cost_nature": cost_nature,
         "is_recurring": recurring,
         "is_internal": internal,
         "auto_categorized": "Y",
